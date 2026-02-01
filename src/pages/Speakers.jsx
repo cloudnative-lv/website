@@ -4,6 +4,7 @@ import PageHeader from '../components/PageHeader';
 import CTASection from '../components/CTASection';
 import Button from '../components/Button';
 import SEO from '../components/SEO';
+import { SpeakersPageJsonLd } from '../components/JsonLd';
 
 function getSpeakersFromEvents() {
   const speakersMap = new Map();
@@ -51,6 +52,7 @@ export default function Speakers() {
         path="/speakers"
         image="/images/og/speakers.png"
       />
+      <SpeakersPageJsonLd speakers={speakers} />
       <PageHeader 
         title="Speakers" 
         subtitle="Meet the amazing speakers who have shared their knowledge at our meetups"

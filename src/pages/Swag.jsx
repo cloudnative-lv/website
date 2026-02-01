@@ -1,4 +1,5 @@
 import SEO from '../components/SEO';
+import { ProductListJsonLd } from '../components/JsonLd';
 
 const stickers = [
   {
@@ -49,6 +50,7 @@ export default function Swag() {
         path="/swag"
         image="/images/og/swag.png"
       />
+      <ProductListJsonLd products={stickers} pageName="Cloud Native Latvia Swag & Stickers" />
       <div className="bg-linear-to-r from-rose-400 to-rose-700 text-white py-16">
         <div className="max-w-6xl mx-auto px-4">
           <h1 className="text-4xl font-black mb-4">Swag & Stickers</h1>

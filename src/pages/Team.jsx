@@ -2,6 +2,7 @@ import PageHeader from '../components/PageHeader';
 import CTASection from '../components/CTASection';
 import Button from '../components/Button';
 import SEO from '../components/SEO';
+import { TeamPageJsonLd } from '../components/JsonLd';
 import { LinkedInIcon, TwitterIcon, SocialLink } from '../components/SocialIcons';
 
 const team = [
@@ -37,6 +38,7 @@ export default function Team() {
         path="/team"
         image="/images/og/team.png"
       />
+      <TeamPageJsonLd members={team} />
       <PageHeader 
         title="Our Team" 
         subtitle="The people behind Cloud Native Latvia"
