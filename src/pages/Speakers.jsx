@@ -6,41 +6,42 @@ import Button from '../components/Button';
 import SEO from '../components/SEO';
 import { SpeakersPageJsonLd } from '../components/JsonLd';
 
-function getSpeakersFromEvents() {
-  const speakersMap = new Map();
+function getTalksWithSpeakers() {
+  const talks = [];
   
   events.forEach(event => {
     if (event.talks) {
       event.talks.forEach(talk => {
-        const speakerName = talk.speaker;
-        if (!speakersMap.has(speakerName)) {
-          speakersMap.set(speakerName, {
-            name: speakerName,
-            talks: [],
-            events: []
-          });
-        }
-        const speaker = speakersMap.get(speakerName);
-        speaker.talks.push({
+        talks.push({
+          speaker: talk.speaker,
           title: talk.title,
           description: talk.description,
           eventSlug: event.slug,
           eventTitle: event.title,
           eventDate: event.date
         });
-        if (!speaker.events.includes(event.slug)) {
-          speaker.events.push(event.slug);
-        }
       });
     }
   });
   
-  return Array.from(speakersMap.values()).sort((a, b) => 
-    a.name.localeCompare(b.name)
-  );
+  // Sort by date (newest first), then by speaker name
+  return talks.sort((a, b) => {
+    const dateCompare = new Date(b.eventDate) - new Date(a.eventDate);
+    if (dateCompare !== 0) return dateCompare;
+    return a.speaker.localeCompare(b.speaker);
+  });
 }
 
-const speakers = getSpeakersFromEvents();
+function getUniqueSpeakers(talks) {
+  const speakers = [...new Set(talks.map(t => t.speaker))];
+  return speakers.map(name => ({
+    name,
+    talks: talks.filter(t => t.speaker === name)
+  }));
+}
+
+const allTalks = getTalksWithSpeakers();
+const speakers = getUniqueSpeakers(allTalks);
 
 export default function Speakers() {
   return (
@@ -66,33 +67,32 @@ export default function Speakers() {
         ) : (
           <>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-              {speakers.map((speaker, idx) => (
+              {allTalks.map((talk, idx) => (
                 <div key={idx} className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
-                  <div className="h-24 bg-linear-to-r from-rose-400 to-rose-600 flex items-center justify-center">
-                    <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center">
-                      <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="h-20 bg-linear-to-r from-rose-400 to-rose-600 flex items-center px-6">
+                    <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center shrink-0">
+                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                       </svg>
                     </div>
+                    <div className="ml-4 text-white">
+                      <h3 className="font-bold text-lg">{talk.speaker}</h3>
+                    </div>
                   </div>
                   <div className="p-6">
-                    <h3 className="text-xl font-bold text-burgundy mb-2">{speaker.name}</h3>
-                    <p className="text-pink font-semibold text-sm mb-4">
-                      {speaker.talks.length} talk{speaker.talks.length !== 1 ? 's' : ''} at {speaker.events.length} event{speaker.events.length !== 1 ? 's' : ''}
-                    </p>
-                    <div className="space-y-3">
-                      {speaker.talks.map((talk, tidx) => (
-                        <div key={tidx} className="border-l-2 border-rose-200 pl-3">
-                          <p className="text-sm font-medium text-gray-800 line-clamp-2">{talk.title}</p>
-                          <Link 
-                            to={`/events/${talk.eventSlug}`}
-                            className="text-xs text-pink hover:text-burgundy transition-colors"
-                          >
-                            {talk.eventTitle} →
-                          </Link>
-                        </div>
-                      ))}
-                    </div>
+                    <h4 className="text-lg font-bold text-burgundy mb-3 line-clamp-2">{talk.title}</h4>
+                    {talk.description && (
+                      <p className="text-gray-600 text-sm mb-4 line-clamp-3">{talk.description}</p>
+                    )}
+                    <Link 
+                      to={`/events/${talk.eventSlug}`}
+                      className="inline-flex items-center text-sm text-pink hover:text-burgundy font-semibold transition-colors"
+                    >
+                      <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                      {talk.eventTitle}
+                    </Link>
                   </div>
                 </div>
               ))}

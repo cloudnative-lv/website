@@ -26,12 +26,9 @@ export default function Home() {
       {/* Hero Section */}
       <section className="relative bg-pink-light overflow-hidden">
         <AnimatedBackground />
-        <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-20"
-          style={{ backgroundImage: 'url(/images/riga-skyline.png)' }}
-        />
+{/* Background image - add /images/riga-skyline.png for Riga skyline effect */}
         <div className="relative max-w-6xl mx-auto px-4 py-24 text-center">
-          <img src="/images/logo.png" alt="Cloud Native Latvia - Kubernetes and DevOps Community in Riga" className="h-32 w-auto mx-auto mb-6" />
+          <img src="/images/logo.svg" alt="Cloud Native Latvia - Kubernetes and DevOps Community in Riga" className="h-32 w-auto mx-auto mb-6" />
           <h1 className="text-5xl md:text-6xl font-black mb-4">
             <span className="text-pink">Cloud Native</span>
             <br />

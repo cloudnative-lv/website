@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { useLanguage } from '../i18n/LanguageContext';
 import LanguageSwitcher from './LanguageSwitcher';
+import { SubscribeButton } from './SubscribeModal';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -35,7 +36,7 @@ export default function Navbar() {
       <div className="max-w-6xl mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <Link to="/" className="flex items-center space-x-3 group">
-            <img src="/images/logo.png" alt="Cloud Native Latvia" className="h-10 w-auto" />
+            <img src="/images/logo.svg" alt="Cloud Native Latvia" className="h-10 w-auto" />
             <div className="hidden sm:flex flex-col leading-tight">
               <span className="text-white font-bold text-lg tracking-tight">Cloud Native</span>
               <span className="text-white/90 font-black text-sm tracking-wide">LATVIA</span>
@@ -49,6 +50,9 @@ export default function Navbar() {
                 {link.label}
               </NavLink>
             ))}
+            <div className="ml-2">
+              <SubscribeButton variant="primary" />
+            </div>
             <div className="ml-2">
               <LanguageSwitcher />
             </div>
@@ -87,7 +91,8 @@ export default function Navbar() {
                   {link.label}
                 </NavLink>
               ))}
-              <div className="pt-4 border-t border-white/20 mt-4">
+              <div className="pt-4 border-t border-white/20 mt-4 flex items-center gap-4">
+                <SubscribeButton variant="outline" />
                 <LanguageSwitcher />
               </div>
             </div>

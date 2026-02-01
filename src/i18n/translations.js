@@ -150,6 +150,17 @@ export const translations = {
       learnMore: 'Learn More',
       contactUs: 'Contact Us',
       viewAll: 'View All'
+    },
+    // Subscribe
+    subscribe: {
+      title: 'Stay Updated',
+      description: 'Get notified about upcoming meetups, new speakers, and cloud native news in Latvia.',
+      placeholder: 'Enter your email',
+      button: 'Subscribe',
+      buttonShort: 'Subscribe',
+      loading: 'Subscribing...',
+      success: 'Redirecting to CNCF Community...',
+      followUs: 'Or follow us on social media'
     }
   },
   lv: {
@@ -303,6 +314,17 @@ export const translations = {
       learnMore: 'Uzzināt vairāk',
       contactUs: 'Sazināties ar mums',
       viewAll: 'Skatīt visu'
+    },
+    // Subscribe
+    subscribe: {
+      title: 'Esi informēts',
+      description: 'Saņem paziņojumus par gaidāmajām tikšanās reizēm, jauniem runātājiem un mākoņdatošanas jaunumiem Latvijā.',
+      placeholder: 'Ievadi savu e-pastu',
+      button: 'Abonēt',
+      buttonShort: 'Abonēt',
+      loading: 'Abonē...',
+      success: 'Pāradresē uz CNCF Community...',
+      followUs: 'Vai seko mums sociālajos tīklos'
     }
   }
 };

@@ -9,7 +9,7 @@ export default function Footer() {
         <div className="grid md:grid-cols-3 gap-8">
           <div>
             <div className="flex items-center gap-3 mb-4">
-              <img src="/images/logo.png" alt="Cloud Native Latvia" className="h-10 w-auto" />
+              <img src="/images/logo.svg" alt="Cloud Native Latvia" className="h-10 w-auto" />
               <div>
                 <span className="font-bold">Cloud Native</span>
                 <span className="font-black block text-sm">LATVIA</span>
