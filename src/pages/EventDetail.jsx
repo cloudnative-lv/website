@@ -1,5 +1,6 @@
 import { useParams, Link } from 'react-router-dom';
 import { getEventBySlug } from '../data/events';
+import EventQRCode from '../components/EventQRCode';
 
 export default function EventDetail() {
   const { slug } = useParams();
@@ -146,6 +147,15 @@ export default function EventDetail() {
                     View on CNCF Community
                   </a>
                 )}
+
+                {/* QR Code */}
+                <div className="mt-6 pt-6 border-t border-gray-100">
+                  <p className="text-sm text-gray-500 uppercase tracking-wide mb-3 text-center">Share Event</p>
+                  <EventQRCode 
+                    url={`https://cloudnative.lv/events/${event.slug}`}
+                    title={event.title}
+                  />
+                </div>
               </div>
             </div>
           </div>

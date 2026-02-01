@@ -1,5 +1,10 @@
 import SEO from '../components/SEO';
 import { SponsorsPageJsonLd } from '../components/JsonLd';
+import PageHeader from '../components/PageHeader';
+import FeatureCard from '../components/FeatureCard';
+import CTASection from '../components/CTASection';
+import Button from '../components/Button';
+import { Container, Section, SectionHeading } from '../components/layout';
 
 const sponsorshipTiers = [
   {
@@ -106,35 +111,23 @@ export default function Sponsors() {
         image="/images/og/sponsors.png"
       />
       <SponsorsPageJsonLd />
-      <div className="bg-linear-to-r from-rose-400 to-rose-700 text-white py-16">
-        <div className="max-w-6xl mx-auto px-4">
-          <h1 className="text-4xl font-black mb-4">Become a Sponsor</h1>
-          <p className="text-xl text-white/90 max-w-2xl">
-            Support the cloud native community in Latvia and connect with talented engineers and technology leaders.
-          </p>
-        </div>
-      </div>
+      <PageHeader 
+        title="Become a Sponsor"
+        subtitle="Support the cloud native community in Latvia and connect with talented engineers and technology leaders."
+      />
 
-      <div className="max-w-6xl mx-auto px-4 py-12">
-        {/* Why Sponsor */}
-        <section className="mb-16">
-          <h2 className="text-2xl font-black text-burgundy mb-8 text-center">Why Sponsor Cloud Native Latvia?</h2>
+      <Container className="py-12">
+        <Section>
+          <SectionHeading className="text-center">Why Sponsor Cloud Native Latvia?</SectionHeading>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {sponsorshipBenefits.map((benefit, idx) => (
-              <div key={idx} className="bg-white rounded-2xl shadow-lg p-6 text-center hover:shadow-xl transition-shadow">
-                <div className="w-16 h-16 bg-rose-100 rounded-full flex items-center justify-center mx-auto mb-4 text-pink">
-                  {benefit.icon}
-                </div>
-                <h3 className="text-lg font-bold text-burgundy mb-2">{benefit.title}</h3>
-                <p className="text-gray-600 text-sm">{benefit.description}</p>
-              </div>
+              <FeatureCard key={idx} icon={benefit.icon} title={benefit.title} description={benefit.description} />
             ))}
           </div>
-        </section>
+        </Section>
 
-        {/* Sponsorship Tiers */}
-        <section className="mb-16">
-          <h2 className="text-2xl font-black text-burgundy mb-8 text-center">Sponsorship Tiers</h2>
+        <Section>
+          <SectionHeading className="text-center">Sponsorship Tiers</SectionHeading>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {sponsorshipTiers.map((tier, idx) => (
               <div key={idx} className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
@@ -158,29 +151,19 @@ export default function Sponsors() {
               </div>
             ))}
           </div>
-        </section>
+        </Section>
 
-        {/* Custom Sponsorship */}
-        <section className="mb-16">
-          <div className="bg-white rounded-2xl shadow-lg p-8 text-center">
-            <h2 className="text-2xl font-black text-burgundy mb-4">Custom Sponsorship</h2>
-            <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
-              Looking for something different? We're happy to discuss custom sponsorship packages 
-              tailored to your organization's goals. Whether it's venue sponsorship, catering, 
-              swag, or something unique - let's talk!
-            </p>
-            <a
-              href="mailto:sponsors@cloudnative.lv"
-              className="inline-block bg-pink text-white px-8 py-3 rounded-full font-semibold hover:bg-rose-500 transition-all shadow-lg hover:shadow-xl"
-            >
-              Contact Us About Sponsorship
-            </a>
-          </div>
-        </section>
+        <Section>
+          <CTASection
+            title="Custom Sponsorship"
+            description="Looking for something different? We're happy to discuss custom sponsorship packages tailored to your organization's goals. Whether it's venue sponsorship, catering, swag, or something unique - let's talk!"
+          >
+            <Button href="mailto:sponsors@cloudnative.lv">Contact Us About Sponsorship</Button>
+          </CTASection>
+        </Section>
 
-        {/* Current Sponsors */}
-        <section>
-          <h2 className="text-2xl font-black text-burgundy mb-8 text-center">Our Sponsors</h2>
+        <Section className="mb-0">
+          <SectionHeading className="text-center">Our Sponsors</SectionHeading>
           <div className="bg-white rounded-2xl shadow-lg p-8 text-center">
             <p className="text-gray-600 mb-6">
               Be the first to support Cloud Native Latvia! Your logo could be here.
@@ -197,8 +180,8 @@ export default function Sponsors() {
               </div>
             </div>
           </div>
-        </section>
-      </div>
+        </Section>
+      </Container>
     </div>
   );
 }
