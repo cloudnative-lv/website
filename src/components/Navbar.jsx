@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
+import { useLanguage } from '../i18n/LanguageContext';
+import LanguageSwitcher from './LanguageSwitcher';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const { t } = useLanguage();
 
   const linkClass = ({ isActive }) =>
     `px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${
@@ -19,16 +22,16 @@ export default function Navbar() {
     }`;
 
   const navLinks = [
-    { to: '/', label: 'Home', end: true },
-    { to: '/events', label: 'Events' },
-    { to: '/speakers', label: 'Speakers' },
-    { to: '/team', label: 'Team' },
-    { to: '/swag', label: 'Swag' },
-    { to: '/sponsors', label: 'Sponsors' }
+    { to: '/', label: t('nav.home'), end: true },
+    { to: '/events', label: t('nav.events') },
+    { to: '/speakers', label: t('nav.speakers') },
+    { to: '/team', label: t('nav.team') },
+    { to: '/swag', label: t('nav.swag') },
+    { to: '/sponsors', label: t('nav.sponsors') }
   ];
 
   return (
-    <nav className="bg-gradient-to-r from-rose-400 to-rose-700 shadow-lg sticky top-0 z-50">
+    <nav className="bg-linear-to-r from-rose-400 to-rose-700 shadow-lg sticky top-0 z-50">
       <div className="max-w-6xl mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <Link to="/" className="flex items-center space-x-3 group">
@@ -46,6 +49,9 @@ export default function Navbar() {
                 {link.label}
               </NavLink>
             ))}
+            <div className="ml-2">
+              <LanguageSwitcher />
+            </div>
           </div>
 
           {/* Mobile Menu Button */}
@@ -81,6 +87,9 @@ export default function Navbar() {
                   {link.label}
                 </NavLink>
               ))}
+              <div className="pt-4 border-t border-white/20 mt-4">
+                <LanguageSwitcher />
+              </div>
             </div>
           </div>
         )}

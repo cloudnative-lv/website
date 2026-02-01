@@ -1,6 +1,7 @@
 import PageHeader from '../components/PageHeader';
 import CTASection from '../components/CTASection';
 import Button from '../components/Button';
+import SEO from '../components/SEO';
 import { LinkedInIcon, TwitterIcon, SocialLink } from '../components/SocialIcons';
 
 const team = [
@@ -29,6 +30,13 @@ const team = [
 export default function Team() {
   return (
     <div className="min-h-screen bg-pink-light">
+      <SEO 
+        title="Team - Cloud Native Latvia Organizers"
+        description="Meet the organizers behind Cloud Native Latvia. Platform engineers and DevOps enthusiasts building the Kubernetes and cloud native community in Riga."
+        keywords={['Cloud Native Latvia team', 'meetup organizers Riga', 'platform engineers Latvia']}
+        path="/team"
+        image="/images/og/team.png"
+      />
       <PageHeader 
         title="Our Team" 
         subtitle="The people behind Cloud Native Latvia"

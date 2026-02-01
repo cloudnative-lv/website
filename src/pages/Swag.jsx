@@ -1,3 +1,5 @@
+import SEO from '../components/SEO';
+
 const stickers = [
   {
     id: 1,
@@ -40,7 +42,14 @@ const stickers = [
 export default function Swag() {
   return (
     <div className="min-h-screen bg-pink-light">
-      <div className="bg-gradient-to-r from-rose-400 to-rose-700 text-white py-16">
+      <SEO 
+        title="Swag & Stickers - Cloud Native Latvia Merchandise"
+        description="Get Cloud Native Latvia stickers and swag at our meetups. Unique Kubernetes, DevOps, and CNCF-themed designs for the tech community in Riga."
+        keywords={['tech stickers Latvia', 'Kubernetes swag', 'DevOps merchandise', 'CNCF stickers']}
+        path="/swag"
+        image="/images/og/swag.png"
+      />
+      <div className="bg-linear-to-r from-rose-400 to-rose-700 text-white py-16">
         <div className="max-w-6xl mx-auto px-4">
           <h1 className="text-4xl font-black mb-4">Swag & Stickers</h1>
           <p className="text-xl text-white/90">

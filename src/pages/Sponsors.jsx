@@ -1,3 +1,5 @@
+import SEO from '../components/SEO';
+
 const sponsorshipTiers = [
   {
     name: "Gold",
@@ -95,7 +97,14 @@ const sponsorshipBenefits = [
 export default function Sponsors() {
   return (
     <div className="min-h-screen bg-pink-light">
-      <div className="bg-gradient-to-r from-rose-400 to-rose-700 text-white py-16">
+      <SEO 
+        title="Sponsor Cloud Native Latvia - Tech Community Sponsorship"
+        description="Sponsor Cloud Native Latvia meetups and connect with Kubernetes, DevOps, and platform engineering professionals in Riga. Reach tech talent in the Baltic region."
+        keywords={['sponsor tech event Latvia', 'IT sponsorship Riga', 'DevOps community sponsor', 'Baltic tech recruitment']}
+        path="/sponsors"
+        image="/images/og/sponsors.png"
+      />
+      <div className="bg-linear-to-r from-rose-400 to-rose-700 text-white py-16">
         <div className="max-w-6xl mx-auto px-4">
           <h1 className="text-4xl font-black mb-4">Become a Sponsor</h1>
           <p className="text-xl text-white/90 max-w-2xl">
@@ -127,7 +136,7 @@ export default function Sponsors() {
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {sponsorshipTiers.map((tier, idx) => (
               <div key={idx} className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
-                <div className={`bg-gradient-to-r ${tier.color} text-white p-6 text-center`}>
+                <div className={`bg-linear-to-r ${tier.color} text-white p-6 text-center`}>
                   <h3 className="text-2xl font-black">{tier.name}</h3>
                   <p className="text-3xl font-bold mt-2">{tier.price}</p>
                   <p className="text-sm opacity-90">{tier.period}</p>

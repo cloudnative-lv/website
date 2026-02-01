@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { LanguageProvider } from './i18n/LanguageContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
@@ -11,10 +12,11 @@ import Speakers from './pages/Speakers';
 
 function App() {
   return (
+    <LanguageProvider>
     <BrowserRouter>
       <div className="flex flex-col min-h-screen">
         <Navbar />
-        <main className="flex-grow">
+        <main className="grow">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/events" element={<Events />} />
@@ -28,6 +30,7 @@ function App() {
         <Footer />
       </div>
     </BrowserRouter>
+    </LanguageProvider>
   );
 }
 

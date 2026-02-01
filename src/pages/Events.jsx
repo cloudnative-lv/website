@@ -1,13 +1,26 @@
 import { upcomingEvents, pastEvents } from '../data/events';
 import EventCard from '../components/EventCard';
 import PageHeader from '../components/PageHeader';
+import SEO from '../components/SEO';
+import { EventsListJsonLd } from '../components/JsonLd';
+import { useLanguage } from '../i18n/LanguageContext';
 
 export default function Events() {
+  const { t } = useLanguage();
+  
   return (
     <div className="min-h-screen bg-pink-light">
+      <SEO 
+        title="Cloud Native Meetup Events in Riga, Latvia"
+        description="Browse upcoming and past Cloud Native Latvia meetup events. Free tech events covering Kubernetes, DevOps, observability, and platform engineering in Riga."
+        keywords={['Kubernetes events Riga', 'DevOps meetup Latvia', 'tech events Riga', 'cloud native conference Baltic']}
+        path="/events"
+        image="/images/og/events.png"
+      />
+      <EventsListJsonLd events={[...upcomingEvents, ...pastEvents]} />
       <PageHeader 
-        title="Events" 
-        subtitle="Join us for bi-monthly meetups exploring cloud native technologies"
+        title={t('events.title')} 
+        subtitle={t('events.subtitle')}
       />
 
       <div className="max-w-6xl mx-auto px-4 py-12">

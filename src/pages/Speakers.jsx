@@ -3,6 +3,7 @@ import { events } from '../data/events';
 import PageHeader from '../components/PageHeader';
 import CTASection from '../components/CTASection';
 import Button from '../components/Button';
+import SEO from '../components/SEO';
 
 function getSpeakersFromEvents() {
   const speakersMap = new Map();
@@ -43,6 +44,13 @@ const speakers = getSpeakersFromEvents();
 export default function Speakers() {
   return (
     <div className="min-h-screen bg-pink-light">
+      <SEO 
+        title="Cloud Native Speakers - Tech Talks in Latvia"
+        description="Meet the speakers who share their expertise at Cloud Native Latvia meetups. Kubernetes, DevOps, and platform engineering experts from Latvia and beyond."
+        keywords={['tech speakers Latvia', 'Kubernetes expert', 'DevOps speaker Riga', 'cloud native talks']}
+        path="/speakers"
+        image="/images/og/speakers.png"
+      />
       <PageHeader 
         title="Speakers" 
         subtitle="Meet the amazing speakers who have shared their knowledge at our meetups"
@@ -58,7 +66,7 @@ export default function Speakers() {
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
               {speakers.map((speaker, idx) => (
                 <div key={idx} className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
-                  <div className="h-24 bg-gradient-to-r from-rose-400 to-rose-600 flex items-center justify-center">
+                  <div className="h-24 bg-linear-to-r from-rose-400 to-rose-600 flex items-center justify-center">
                     <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center">
                       <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />

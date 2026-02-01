@@ -48,6 +48,22 @@
       "script": "lint",
       "problemMatcher": ["$eslint-stylish"],
       "group": "build"
+    },
+    {
+      "label": "E2E Tests",
+      "type": "npm",
+      "script": "test:e2e",
+      "problemMatcher": [],
+      "group": "build",
+      "dependsOn": ["Build"]
+    },
+    {
+      "label": "E2E Tests (Headed)",
+      "type": "npm",
+      "script": "test:e2e:headed",
+      "problemMatcher": [],
+      "group": "build",
+      "dependsOn": ["Build"]
     }
   ]
 }

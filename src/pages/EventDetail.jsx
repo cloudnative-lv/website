@@ -30,7 +30,7 @@ export default function EventDetail() {
 
   return (
     <div className="min-h-screen bg-pink-light">
-      <div className={`${isUpcoming ? 'bg-gradient-to-r from-rose-400 to-rose-700' : 'bg-gray-600'} text-white py-16`}>
+      <div className={`${isUpcoming ? 'bg-linear-to-r from-rose-400 to-rose-700' : 'bg-gray-600'} text-white py-16`}>
         <div className="max-w-4xl mx-auto px-4">
           <Link to="/events" className="inline-flex items-center text-white/80 hover:text-white mb-6">
             <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

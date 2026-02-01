@@ -1,4 +1,8 @@
+import { useLanguage } from '../i18n/LanguageContext';
+
 export default function Footer() {
+  const { t } = useLanguage();
+  
   return (
     <footer className="bg-rose-900 text-white py-12">
       <div className="max-w-6xl mx-auto px-4">
@@ -12,21 +16,21 @@ export default function Footer() {
               </div>
             </div>
             <p className="text-rose-200">
-              A community of cloud native enthusiasts in Latvia. Breaking through cognitive load together.
+              {t('footer.description')}
             </p>
           </div>
           <div>
-            <h4 className="font-semibold mb-4">Quick Links</h4>
+            <h4 className="font-semibold mb-4">{t('footer.quickLinks')}</h4>
             <ul className="space-y-2 text-rose-200">
-              <li><a href="/events" className="hover:text-white transition-colors">Events</a></li>
-              <li><a href="/speakers" className="hover:text-white transition-colors">Speakers</a></li>
-              <li><a href="/team" className="hover:text-white transition-colors">Team</a></li>
-              <li><a href="/swag" className="hover:text-white transition-colors">Swag</a></li>
-              <li><a href="/sponsors" className="hover:text-white transition-colors">Sponsors</a></li>
+              <li><a href="/events" className="hover:text-white transition-colors">{t('nav.events')}</a></li>
+              <li><a href="/speakers" className="hover:text-white transition-colors">{t('nav.speakers')}</a></li>
+              <li><a href="/team" className="hover:text-white transition-colors">{t('nav.team')}</a></li>
+              <li><a href="/swag" className="hover:text-white transition-colors">{t('nav.swag')}</a></li>
+              <li><a href="/sponsors" className="hover:text-white transition-colors">{t('nav.sponsors')}</a></li>
             </ul>
           </div>
           <div>
-            <h4 className="font-semibold mb-4">Connect</h4>
+            <h4 className="font-semibold mb-4">{t('footer.connect')}</h4>
             <div className="flex space-x-4">
               <a
                 href="https://community.cncf.io/cloud-native-latvia/"
