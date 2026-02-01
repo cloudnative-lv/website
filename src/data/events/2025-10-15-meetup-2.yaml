@@ -1,0 +1,36 @@
+id: "2025-10-15-meetup-2"
+title: "Meetup #2: OpenTelemetry & Guardrails in Action"
+slug: "meetup-2-opentelemetry-guardrails"
+date: "2025-10-15"
+time: "17:45"
+endTime: "20:30"
+status: "past"
+eventbriteUrl: "https://www.eventbrite.com/e/1779173368439"
+cncfUrl: "https://community.cncf.io/e/m5bfkt/"
+venue:
+  name: "Accenture"
+  address: "Brīvības gatve 214, Rīga, LV-1039"
+  mapUrl: "https://www.google.com/maps/dir//Br%C4%ABv%C4%ABbas%20gat.%20214%20214%20Br%C4%ABv%C4%ABbas%20gatve%20R%C4%ABga,%201039"
+description: |
+  Deep dive into observability with OpenTelemetry and learn how to implement guardrails for your cloud native applications.
+  
+  17:45: Doors open
+  18:00: Welcome by Cloud Native Latvia
+  18:15: Talk 1
+  19:00: Break with snacks
+  19:15: Talk 2
+  20:00: Networking
+  20:30: Doors close
+talks:
+  - title: "OpenTelemetry: From Core Concepts to Scaling Insights"
+    speaker: "Gundega Dekena"
+    description: "Are you curious about OpenTelemetry and how it can boost your cloud systems? We'll explain the difference between monitoring and observability—think of it as the difference between checking the weather and understanding the climate. We'll explore how OpenTelemetry helps you see what's really going on inside your systems. Discover how it works, why it's beneficial, and how we've successfully integrated it into our platform."
+  - title: "Guardrails in Action: Policy as Code with Kyverno"
+    speaker: "Linda Ārende"
+    description: "Designing scalable and secure Kubernetes environments requires balancing the flexibility for application teams with centralized control. In this session, we will examine a real-world use case demonstrating how Kyverno—a Kubernetes-native policy engine—can be used to automate, enforce, and monitor policy-driven guardrails across clusters, helping platform teams maintain consistency, compliance, and operational safety at scale."
+tags:
+  - opentelemetry
+  - observability
+  - kyverno
+  - policy-as-code
+  - kubernetes

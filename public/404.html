@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Cloud Native Latvia</title>
+    <script>
+      // SPA redirect for GitHub Pages - preserves path for client-side routing
+      sessionStorage.redirect = location.href;
+      location.replace(location.pathname.split('/').slice(0, 1).join('/') + '/?');
+    </script>
+  </head>
+  <body></body>
+</html>

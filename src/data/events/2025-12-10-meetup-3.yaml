@@ -1,0 +1,37 @@
+id: "2025-12-10-meetup-3"
+title: "Meetup #3: Lessons from Self-Hosting K8s & Greenscaling with Karpenter"
+slug: "meetup-3-self-hosted-k8s-greenscaling"
+date: "2025-12-10"
+time: "18:15"
+endTime: "21:00"
+status: "past"
+eventbriteUrl: "https://www.eventbrite.com/e/1975643539008"
+cncfUrl: "https://community.cncf.io/e/m886gp/"
+venue:
+  name: "Accenture"
+  address: "Brīvības gatve 214, Rīga, LV-1039"
+  mapUrl: "https://www.google.com/maps/dir//Accenture%20214%20Br%C4%ABv%C4%ABbas%20gatve%20R%C4%ABga,%201039"
+description: |
+  Join us for a deep dive into lessons learned around self-hosted Kubernetes setup and how to use Karpenter for Greenscaling!
+  
+  18:15: Doors open
+  18:30: Welcome by Cloud Native Latvia
+  18:45: Talk 1
+  19:30: Break with snacks
+  19:45: Talk 2
+  20:30: Networking
+  21:00: Doors close
+talks:
+  - title: "Halfway Home: Lessons from Our First Year Running Self-Hosted Kubernetes"
+    speaker: "Per Hedegaard Christiansen and Kārlis Akots Gribulis"
+    description: "Cloud exits sound simple in theory - build your own Kubernetes, save money, gain control. In practice, the road is long, messy, and full of lessons. Saxo Bank is in the middle of this exit. We'll explore how we tackled networking complexity, security baselines, and the operational learning curve of self-hosting Kubernetes at scale. We'll share what went well, what failed fast, and how we're iterating toward stability and efficiency."
+  - title: "Greenscaling: Karpenter + Kube Green for GKE"
+    speaker: "Igor Golm"
+    description: "Learn how to make your GKE clusters faster, more cost-efficient, and environmentally friendlier. This talk explores how Karpenter brings next-generation autoscaling to GCP and how Kube Green reduces unused workload footprint by pausing non-essential environments. A practical guide to building a smarter, greener, and more efficient Kubernetes platform on GKE."
+tags:
+  - kubernetes
+  - self-hosted
+  - karpenter
+  - kube-green
+  - gke
+  - sustainability

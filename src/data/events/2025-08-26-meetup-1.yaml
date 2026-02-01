@@ -1,0 +1,35 @@
+id: "2025-08-26-meetup-1"
+title: "Meetup #1: No More Secrets (in Code) & Practical Hybrid Cloud"
+slug: "meetup-1-no-more-secrets-hybrid-cloud"
+date: "2025-08-26"
+time: "17:30"
+endTime: "20:30"
+status: "past"
+eventbriteUrl: "https://www.eventbrite.com/e/1558423920899"
+cncfUrl: "https://community.cncf.io/e/mnw5ue/"
+venue:
+  name: "Accenture"
+  address: "Brīvības gatve 214, Rīga, LV-1039"
+  mapUrl: "https://www.google.com/maps/dir//Accenture%20214%20Br%C4%ABv%C4%ABbas%20gatve%20R%C4%ABga,%201039"
+description: |
+  The inaugural meetup of Cloud Native Latvia community!
+  
+  17:30: Doors open
+  18:00: Welcome by Cloud Native Latvia
+  18:15: Talk 1
+  19:00: Break with food
+  19:15: Talk 2
+  20:00: Networking
+  20:30: Doors close
+talks:
+  - title: "No More Secrets (in Code): How We Built our Secret Management Solution"
+    speaker: "Māris Titovs and Ieva Lapiņa"
+    description: "When the manual management of secrets becomes unsustainable, a new way to conveniently handle them is needed. In this talk we will share our journey to create a secret management solution that allows our teams to work autonomously in an ever growing hybrid environment. We will touch on challenges faced, the decisions made, and the solutions implemented in this journey we continue to refine."
+  - title: "Practical Hybrid Cloud"
+    speaker: "Alex Rimlin"
+    description: "Most modern tech companies rely on cloud hyperscalers and some wouldn't survive a day without it, but what we save in time today may come at a huge financial cost tomorrow. With Kubernetes, eBPF and mesh networking we can save money and connect our clouds, all while securing the traffic and tackling latency without it becoming a maintenance hell."
+tags:
+  - secrets-management
+  - hybrid-cloud
+  - kubernetes
+  - ebpf

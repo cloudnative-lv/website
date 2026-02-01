@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 80" fill="none">
+  <!-- Cloud shape -->
+  <path d="M75 35c0-11-9-20-20-20-8.5 0-15.8 5.3-18.7 12.8C34.5 26.5 32.3 26 30 26c-8.3 0-15 6.7-15 15 0 .5 0 1 .1 1.5C10.5 44.3 7 49.3 7 55c0 8.3 6.7 15 15 15h50c9.4 0 17-7.6 17-17 0-8.5-6.2-15.5-14.3-16.8-.5-1.1-.7-2.3-.7-3.2z" stroke="#9F1239" stroke-width="3" fill="none"/>
+  <!-- Cube inside cloud -->
+  <g transform="translate(35, 28)">
+    <!-- Cube top face -->
+    <path d="M15 0 L30 8 L15 16 L0 8 Z" fill="#FDA4AF" stroke="#9F1239" stroke-width="1.5"/>
+    <!-- Cube left face -->
+    <path d="M0 8 L15 16 L15 32 L0 24 Z" fill="#FB7185" stroke="#9F1239" stroke-width="1.5"/>
+    <!-- Cube right face -->
+    <path d="M30 8 L15 16 L15 32 L30 24 Z" fill="#BE123C" stroke="#9F1239" stroke-width="1.5"/>
+  </g>
+</svg>
