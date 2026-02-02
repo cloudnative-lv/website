@@ -28,7 +28,7 @@ export default function Events() {
           <section className="mb-16">
             <h2 className="text-2xl font-black text-burgundy mb-6 flex items-center">
               <span className="w-3 h-3 bg-pink rounded-full mr-3 animate-pulse"></span>
-              Upcoming Events
+              {t('events.upcoming')}
             </h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {upcomingEvents.map(event => (
@@ -40,7 +40,7 @@ export default function Events() {
 
         {pastEvents.length > 0 && (
           <section>
-            <h2 className="text-2xl font-black text-burgundy mb-6">Past Events</h2>
+            <h2 className="text-2xl font-black text-burgundy mb-6">{t('events.past')}</h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {pastEvents.map(event => (
                 <EventCard key={event.id} event={event} />

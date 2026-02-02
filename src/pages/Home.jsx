@@ -4,8 +4,10 @@ import EventCard from '../components/EventCard';
 import AnimatedBackground from '../components/AnimatedBackground';
 import SEO from '../components/SEO';
 import { WebPageJsonLd } from '../components/JsonLd';
+import { useLanguage } from '../i18n/LanguageContext';
 
 export default function Home() {
+  const { t } = useLanguage();
   const featuredEvents = [...upcomingEvents, ...pastEvents].slice(0, 3);
 
   return (
@@ -34,20 +36,17 @@ export default function Home() {
             <span className="block text-5xl md:text-7xl text-burgundy">Latvia</span>
           </h1>
           <p className="text-2xl md:text-3xl font-bold mb-4 uppercase tracking-wide">
-            <span className="text-pink">Navigating Through</span>
+            <span className="text-pink">{t('home.motto1')}</span>
             <br />
-            <span className="text-burgundy">CNCF Landscape</span>
+            <span className="text-burgundy">{t('home.motto2')}</span>
           </p>
-          <p className="text-lg text-gray-700 mb-8 max-w-2xl mx-auto">
-            The premier <strong>Kubernetes and DevOps community</strong> in Latvia. Join us for free bi-monthly meetups 
-            in Riga exploring <strong>cloud native technologies</strong>, observability, platform engineering, and more.
-          </p>
+          <p className="text-lg text-gray-700 mb-8 max-w-2xl mx-auto" dangerouslySetInnerHTML={{ __html: t('home.heroDescription') }} />
           <div className="flex flex-wrap justify-center gap-4">
             <Link
               to="/events"
               className="bg-pink text-white px-8 py-3 rounded-full font-semibold hover:bg-rose-500 transition-all shadow-lg hover:shadow-xl"
             >
-              View Events
+              {t('home.viewEvents')}
             </Link>
             <a
               href="https://community.cncf.io/cloud-native-latvia/"
@@ -55,7 +54,7 @@ export default function Home() {
               rel="noopener noreferrer"
               className="bg-burgundy text-white px-8 py-3 rounded-full font-semibold hover:bg-rose-800 transition-all shadow-lg hover:shadow-xl"
             >
-              Join Community
+              {t('home.joinCommunity')}
             </a>
           </div>
         </div>
@@ -67,19 +66,19 @@ export default function Home() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             <div className="p-6 rounded-2xl bg-rose-50 hover:shadow-lg transition-shadow">
               <p className="text-5xl font-black text-burgundy">{pastEvents.length}</p>
-              <p className="text-gray-600 font-medium mt-2">Events Held</p>
+              <p className="text-gray-600 font-medium mt-2">{t('home.stats.eventsHeld')}</p>
             </div>
             <div className="p-6 rounded-2xl bg-rose-50 hover:shadow-lg transition-shadow">
               <p className="text-5xl font-black text-burgundy">{upcomingEvents.length}</p>
-              <p className="text-gray-600 font-medium mt-2">Upcoming</p>
+              <p className="text-gray-600 font-medium mt-2">{t('home.stats.upcoming')}</p>
             </div>
             <div className="p-6 rounded-2xl bg-rose-50 hover:shadow-lg transition-shadow">
               <p className="text-5xl font-black text-burgundy">6</p>
-              <p className="text-gray-600 font-medium mt-2">Planned for 2026</p>
+              <p className="text-gray-600 font-medium mt-2">{t('home.stats.plannedFor2026')}</p>
             </div>
             <div className="p-6 rounded-2xl bg-rose-50 hover:shadow-lg transition-shadow">
-              <p className="text-3xl font-black text-burgundy">Bi-monthly</p>
-              <p className="text-gray-600 font-medium mt-2">Meetup Frequency</p>
+              <p className="text-3xl font-black text-burgundy">{t('home.stats.bimonthly')}</p>
+              <p className="text-gray-600 font-medium mt-2">{t('home.stats.meetupFrequency')}</p>
             </div>
           </div>
         </div>
@@ -89,9 +88,9 @@ export default function Home() {
       <section className="py-16 bg-pink-light">
         <div className="max-w-6xl mx-auto px-4">
           <div className="flex items-center justify-between mb-8">
-            <h2 className="text-3xl font-black text-burgundy">Recent & Upcoming Events</h2>
+            <h2 className="text-3xl font-black text-burgundy">{t('home.recentEvents')}</h2>
             <Link to="/events" className="text-pink hover:text-burgundy font-semibold transition-colors">
-              View all →
+              {t('home.viewAll')}
             </Link>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -105,38 +104,25 @@ export default function Home() {
       {/* About Section */}
       <section className="py-16 bg-white">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-3xl font-black text-burgundy mb-6">About Cloud Native Latvia</h2>
-          <p className="text-lg text-gray-600 mb-6 leading-relaxed">
-            We are a community of <strong>developers, DevOps engineers, SREs, and platform engineers</strong> based in Latvia. 
-            Our mission is to share knowledge and experiences around <strong>cloud native technologies</strong> including 
-            <strong> Kubernetes, Docker, containers, microservices, observability tools like Prometheus and Grafana</strong>, 
-            and modern <strong>platform engineering practices</strong>.
-          </p>
-          <p className="text-lg text-gray-600 mb-6 leading-relaxed">
-            We meet bi-monthly (every 2 months) in <strong>Riga</strong> to hear talks from local and international 
-            speakers, network with fellow practitioners, and learn together. Our events cover topics like 
-            <strong> GitOps, ArgoCD, Helm, Terraform, Infrastructure as Code, service mesh technologies like Istio</strong>, 
-            and cloud platforms including <strong>AWS, Azure, and Google Cloud</strong>.
-          </p>
-          <p className="text-lg text-gray-600 leading-relaxed">
-            As part of the <strong>CNCF (Cloud Native Computing Foundation) community</strong>, we're connected to 
-            the global cloud native ecosystem and bring the latest trends and best practices to the Latvian tech community.
-          </p>
+          <h2 className="text-3xl font-black text-burgundy mb-6">{t('home.about.title')}</h2>
+          <p className="text-lg text-gray-600 mb-6 leading-relaxed" dangerouslySetInnerHTML={{ __html: t('home.about.p1') }} />
+          <p className="text-lg text-gray-600 mb-6 leading-relaxed" dangerouslySetInnerHTML={{ __html: t('home.about.p2') }} />
+          <p className="text-lg text-gray-600 leading-relaxed" dangerouslySetInnerHTML={{ __html: t('home.about.p3') }} />
         </div>
       </section>
 
       {/* CTA Section */}
       <section className="py-20 bg-linear-to-r from-rose-400 to-rose-700 text-white">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-3xl font-black mb-4">Want to speak at our meetup?</h2>
+          <h2 className="text-3xl font-black mb-4">{t('home.cta.title')}</h2>
           <p className="text-xl text-white/90 mb-8">
-            We're always looking for speakers to share their experiences with cloud native technologies.
+            {t('home.cta.description')}
           </p>
           <a
             href="mailto:hello@cloudnative.lv"
             className="inline-block bg-white text-burgundy px-8 py-3 rounded-full font-semibold hover:bg-rose-50 transition-all shadow-lg hover:shadow-xl"
           >
-            Get in Touch
+            {t('home.cta.contact')}
           </a>
         </div>
       </section>

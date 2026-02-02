@@ -1,8 +1,10 @@
 import { useParams, Link } from 'react-router-dom';
 import { getEventBySlug } from '../data/events';
 import EventQRCode from '../components/EventQRCode';
+import { useLanguage } from '../i18n/LanguageContext';
 
 export default function EventDetail() {
+  const { t } = useLanguage();
   const { slug } = useParams();
   const event = getEventBySlug(slug);
 
@@ -10,9 +12,9 @@ export default function EventDetail() {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Event not found</h1>
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">{t('eventDetail.notFound')}</h1>
           <Link to="/events" className="text-rose-600 hover:text-rose-700">
-            ← Back to events
+            ← {t('eventDetail.backToEvents')}
           </Link>
         </div>
       </div>
@@ -37,10 +39,10 @@ export default function EventDetail() {
             <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
-            Back to events
+            {t('eventDetail.backToEvents')}
           </Link>
           <span className={`inline-block px-4 py-1 rounded-full text-sm font-semibold mb-4 ${isUpcoming ? 'bg-white/20' : 'bg-white/10'}`}>
-            {isUpcoming ? 'Upcoming Event' : 'Past Event'}
+            {isUpcoming ? t('eventDetail.upcoming') : t('eventDetail.past')}
           </span>
           <h1 className="text-4xl font-black mb-4">{event.title}</h1>
           <div className="flex flex-wrap gap-6 text-white/90">
@@ -64,7 +66,7 @@ export default function EventDetail() {
         <div className="grid md:grid-cols-3 gap-8">
           <div className="md:col-span-2">
             <section className="bg-white rounded-2xl shadow-lg p-6 mb-8">
-              <h2 className="text-2xl font-black text-burgundy mb-4">About this event</h2>
+              <h2 className="text-2xl font-black text-burgundy mb-4">{t('eventDetail.about')}</h2>
               <div className="prose prose-gray max-w-none">
                 {event.description.split('\n').map((paragraph, idx) => (
                   paragraph.trim() && <p key={idx} className="text-gray-600 mb-4">{paragraph}</p>
@@ -74,7 +76,7 @@ export default function EventDetail() {
 
             {event.talks && event.talks.length > 0 && (
               <section className="bg-white rounded-2xl shadow-lg p-6">
-                <h2 className="text-2xl font-black text-burgundy mb-6">Talks</h2>
+                <h2 className="text-2xl font-black text-burgundy mb-6">{t('eventDetail.talks')}</h2>
                 <div className="space-y-6">
                   {event.talks.map((talk, idx) => {
                     const speakers = talk.speakers && Array.isArray(talk.speakers) 
@@ -85,7 +87,7 @@ export default function EventDetail() {
                         <h3 className="text-lg font-bold text-burgundy">{talk.title}</h3>
                         {speakers.length > 0 && (
                           <p className="text-pink text-sm font-semibold mt-1">
-                            {speakers.length === 1 ? 'Speaker' : 'Speakers'}: {speakers.join(', ')}
+                            {speakers.length === 1 ? t('eventDetail.speaker') : t('eventDetail.speakers')}: {speakers.join(', ')}
                           </p>
                         )}
                         <p className="text-gray-600 mt-2">{talk.description}</p>
@@ -99,18 +101,18 @@ export default function EventDetail() {
 
           <div className="md:col-span-1">
             <div className="bg-white rounded-2xl shadow-lg p-6 sticky top-20">
-              <h3 className="text-lg font-bold text-burgundy mb-4">Event Details</h3>
+              <h3 className="text-lg font-bold text-burgundy mb-4">{t('eventDetail.details')}</h3>
               
               <div className="space-y-4">
                 <div>
-                  <p className="text-sm text-gray-500 uppercase tracking-wide">Venue</p>
+                  <p className="text-sm text-gray-500 uppercase tracking-wide">{t('eventDetail.venue')}</p>
                   <p className="text-burgundy font-medium">{event.venue.name}</p>
                   <p className="text-gray-600 text-sm">{event.venue.address}</p>
                 </div>
 
                 {event.tags && event.tags.length > 0 && (
                   <div>
-                    <p className="text-sm text-gray-500 uppercase tracking-wide mb-2">Topics</p>
+                    <p className="text-sm text-gray-500 uppercase tracking-wide mb-2">{t('eventDetail.topics')}</p>
                     <div className="flex flex-wrap gap-2">
                       {event.tags.map(tag => (
                         <span
@@ -131,7 +133,7 @@ export default function EventDetail() {
                     rel="noopener noreferrer"
                     className="block w-full bg-pink text-white text-center py-3 px-4 rounded-full font-semibold hover:bg-rose-500 transition-all shadow-md hover:shadow-lg mt-6"
                   >
-                    Register on Eventbrite
+                    {t('eventDetail.registerEventbrite')}
                   </a>
                 )}
 
@@ -142,7 +144,7 @@ export default function EventDetail() {
                     rel="noopener noreferrer"
                     className="block w-full bg-gray-200 text-gray-700 text-center py-3 px-4 rounded-full font-semibold hover:bg-gray-300 transition-colors mt-6"
                   >
-                    View on Eventbrite
+                    {t('eventDetail.viewEventbrite')}
                   </a>
                 )}
 
@@ -153,13 +155,13 @@ export default function EventDetail() {
                     rel="noopener noreferrer"
                     className="block w-full bg-burgundy text-white text-center py-3 px-4 rounded-full font-semibold hover:bg-rose-800 transition-all shadow-md hover:shadow-lg mt-3"
                   >
-                    View on CNCF Community
+                    {t('eventDetail.viewCNCF')}
                   </a>
                 )}
 
                 {/* QR Code */}
                 <div className="mt-6 pt-6 border-t border-gray-100">
-                  <p className="text-sm text-gray-500 uppercase tracking-wide mb-3 text-center">Share Event</p>
+                  <p className="text-sm text-gray-500 uppercase tracking-wide mb-3 text-center">{t('eventDetail.shareEvent')}</p>
                   <EventQRCode 
                     url={`https://cloudnative.lv/events/${event.slug}`}
                     title={event.title}

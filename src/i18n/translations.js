@@ -11,26 +11,30 @@ export const translations = {
     },
     // Home page
     home: {
-      tagline: 'Breaking through cognitive load',
-      subtitle: 'A community of cloud native enthusiasts in Riga, Latvia. Join us for meetups, talks, and networking.',
-      joinCommunity: 'Join Our Community',
+      motto1: 'Navigating Through',
+      motto2: 'CNCF Landscape',
+      heroDescription: 'The premier <strong>Kubernetes and DevOps community</strong> in Latvia. Join us for free bi-monthly meetups in Riga exploring <strong>cloud native technologies</strong>, observability, platform engineering, and more.',
       viewEvents: 'View Events',
+      joinCommunity: 'Join Community',
       stats: {
-        meetups: 'Meetups',
-        speakers: 'Speakers',
-        members: 'Members'
+        eventsHeld: 'Events Held',
+        upcoming: 'Upcoming',
+        plannedFor2026: 'Planned for 2026',
+        bimonthly: 'Bi-monthly',
+        meetupFrequency: 'Meetup Frequency'
       },
-      featuredEvents: 'Featured Events',
-      viewAllEvents: 'View All Events',
+      recentEvents: 'Recent & Upcoming Events',
+      viewAll: 'View all →',
       about: {
         title: 'About Cloud Native Latvia',
-        description: 'We are a community group dedicated to sharing knowledge about cloud native technologies. Our bi-monthly meetups feature talks from local and international speakers on Kubernetes, observability, platform engineering, and more.',
-        learnMore: 'Learn More About Us'
+        p1: 'We are a community of <strong>developers, DevOps engineers, SREs, and platform engineers</strong> based in Latvia. Our mission is to share knowledge and experiences around <strong>cloud native technologies</strong> including <strong>Kubernetes, Docker, containers, microservices, observability tools like Prometheus and Grafana</strong>, and modern <strong>platform engineering practices</strong>.',
+        p2: 'We meet bi-monthly (every 2 months) in <strong>Riga</strong> to hear talks from local and international speakers, network with fellow practitioners, and learn together. Our events cover topics like <strong>GitOps, ArgoCD, Helm, Terraform, Infrastructure as Code, service mesh technologies like Istio</strong>, and cloud platforms including <strong>AWS, Azure, and Google Cloud</strong>.',
+        p3: 'As part of the <strong>CNCF (Cloud Native Computing Foundation) community</strong>, we\'re connected to the global cloud native ecosystem and bring the latest trends and best practices to the Latvian tech community.'
       },
       cta: {
-        title: 'Ready to Join?',
-        description: 'Whether you want to learn, share, or just connect with fellow cloud native enthusiasts, we\'d love to have you!',
-        register: 'Register for Next Meetup'
+        title: 'Want to speak at our meetup?',
+        description: 'We\'re always looking for speakers to share their experiences with cloud native technologies.',
+        contact: 'Get in Touch'
       }
     },
     // Events page
@@ -50,12 +54,20 @@ export const translations = {
       about: 'About this event',
       talks: 'Talks',
       speaker: 'Speaker',
+      speakers: 'Speakers',
       details: 'Event Details',
       venue: 'Venue',
       topics: 'Topics',
       registerEventbrite: 'Register on Eventbrite',
       viewEventbrite: 'View on Eventbrite',
-      viewCNCF: 'View on CNCF Community'
+      viewCNCF: 'View on CNCF Community',
+      notFound: 'Event not found',
+      shareEvent: 'Share Event'
+    },
+    // Event card
+    eventCard: {
+      upcoming: 'Upcoming',
+      pastEvent: 'Past Event'
     },
     // Speakers page
     speakers: {
@@ -82,6 +94,16 @@ export const translations = {
         title: 'Join the Team',
         description: 'Interested in helping organize Cloud Native Latvia? We\'re always looking for volunteers!',
         contact: 'Contact Us'
+      },
+      members: {
+        linda: {
+          role: 'Platform Engineer',
+          bio: 'Platform engineer passionate about Kubernetes, policy-as-code, and building secure cloud native platforms.'
+        },
+        andrey: {
+          role: 'Fractional CTO, Trainer',
+          bio: 'Cloud native enthusiast and community builder. Helping bring the cloud native community together in Latvia.'
+        }
       }
     },
     // Swag page
@@ -101,6 +123,26 @@ export const translations = {
         title: 'Want Custom Swag?',
         description: 'If you\'re interested in sponsoring swag for our events, we\'d love to hear from you!',
         contact: 'Contact Us About Sponsorship'
+      },
+      merchandise: 'Merchandise',
+      merchandiseDescription: 'Show your Cloud Native Latvia pride with our branded merchandise!',
+      cupName: 'Cloud Native Latvia Cup',
+      cupDescription: 'Stay caffeinated while navigating the CNCF landscape with our branded cup.',
+      stickerNames: {
+        linda: 'Breaking Through Cognitive Load - Linda',
+        andrey: 'Breaking Through Cognitive Load - Andrey',
+        cloudTech: 'Cloud Tech',
+        cncfLandscape: 'Navigating CNCF Landscape',
+        navigatingClouds: 'Navigating Clouds',
+        logo: 'Cloud Native Latvia Logo'
+      },
+      stickerDescriptions: {
+        linda: 'Linda breaking through cognitive load barriers with Kubernetes, Prometheus, and Knative icons.',
+        andrey: 'Andrey breaking through with Kubernetes, Prometheus, and Knative tools flying around.',
+        cloudTech: 'Cute kawaii cloud mascot surrounded by CNCF tools: Kubernetes, Helm, Prometheus, Argo, Istio, and more.',
+        cncfLandscape: 'Friendly cloud reading the CNCF landscape map - because we all need a guide!',
+        navigatingClouds: 'Cloud Native Latvia themed sticker for the cloud native explorer.',
+        logo: 'Our official logo sticker featuring the cloud cube design in rose/burgundy colors.'
       }
     },
     // Sponsors page
@@ -136,7 +178,30 @@ export const translations = {
       },
       ourSponsors: 'Our Sponsors',
       beFirst: 'Be the first to support Cloud Native Latvia! Your logo could be here.',
-      yourLogo: 'Your Logo'
+      yourLogo: 'Your Logo',
+      tierNames: {
+        gold: 'Gold',
+        silver: 'Silver',
+        bronze: 'Bronze',
+        event: 'Event Sponsor'
+      },
+      tierBenefits: {
+        logoHomepage: 'Logo on website homepage',
+        logoAllMaterials: 'Logo on all event materials',
+        introEachMeetup: '5-minute intro at each meetup',
+        socialShoutouts: 'Social media shoutouts',
+        boothTable: 'Booth/table at events',
+        jobNewsletter: 'Job postings in newsletter',
+        logoSponsorsPage: 'Logo on website sponsors page',
+        logoMaterials: 'Logo on event materials',
+        socialMentions: 'Social media mentions',
+        jobQuarterly: 'Job posting (quarterly)',
+        mentionEvents: 'Mention at events',
+        logoSpecificEvent: 'Logo at specific event',
+        introEvent: '5-minute intro at event',
+        socialPromotion: 'Social media promotion',
+        swagDistribution: 'Swag distribution'
+      }
     },
     // Footer
     footer: {
@@ -175,26 +240,30 @@ export const translations = {
     },
     // Home page
     home: {
-      tagline: 'Pārvarot kognitīvo slodzi',
-      subtitle: 'Mākoņdatošanas tehnoloģiju entuziastu kopiena Rīgā, Latvijā. Pievienojies mūsu tikšanās reizēm, prezentācijām un tīklošanai.',
-      joinCommunity: 'Pievienojies kopienai',
+      motto1: 'Navigējot cauri',
+      motto2: 'CNCF ainavai',
+      heroDescription: 'Vadošā <strong>Kubernetes un DevOps kopiena</strong> Latvijā. Pievienojies bezmaksas tikšanās reizēm Rīgā, kas notiek reizi divos mēnešos, lai izpētītu <strong>mākoņdatošanas tehnoloģijas</strong>, novērojamību, platformu inženieriju un daudz ko citu.',
       viewEvents: 'Skatīt pasākumus',
+      joinCommunity: 'Pievienoties kopienai',
       stats: {
-        meetups: 'Tikšanās',
-        speakers: 'Runātāji',
-        members: 'Dalībnieki'
+        eventsHeld: 'Notikuši pasākumi',
+        upcoming: 'Gaidāmie',
+        plannedFor2026: 'Plānoti 2026. gadam',
+        bimonthly: 'Reizi 2 mēnešos',
+        meetupFrequency: 'Tikšanās biežums'
       },
-      featuredEvents: 'Izceltie pasākumi',
-      viewAllEvents: 'Skatīt visus pasākumus',
+      recentEvents: 'Nesenie un gaidāmie pasākumi',
+      viewAll: 'Skatīt visus →',
       about: {
         title: 'Par Cloud Native Latvia',
-        description: 'Mēs esam kopienas grupa, kas veltīta zināšanu apmaiņai par mākoņdatošanas tehnoloģijām. Mūsu tikšanās reizes notiek reizi divos mēnešos ar vietējo un starptautisko runātāju prezentācijām par Kubernetes, novērojamību, platformu inženieriju un citām tēmām.',
-        learnMore: 'Uzzini vairāk par mums'
+        p1: 'Mēs esam <strong>izstrādātāju, DevOps inženieru, SRE un platformu inženieru</strong> kopiena Latvijā. Mūsu misija ir dalīties ar zināšanām un pieredzi par <strong>mākoņdatošanas tehnoloģijām</strong>, tostarp <strong>Kubernetes, Docker, konteineriem, mikropakalpojumiem, novērojamības rīkiem kā Prometheus un Grafana</strong>, un modernām <strong>platformu inženierijas praksēm</strong>.',
+        p2: 'Mēs tiekamies reizi divos mēnešos <strong>Rīgā</strong>, lai klausītos vietējo un starptautisko runātāju prezentācijas, veidotu kontaktus ar kolēģiem un mācītos kopā. Mūsu pasākumi aptver tēmas kā <strong>GitOps, ArgoCD, Helm, Terraform, Infrastructure as Code, service mesh tehnoloģijas kā Istio</strong> un mākoņu platformas, ieskaitot <strong>AWS, Azure un Google Cloud</strong>.',
+        p3: 'Kā daļa no <strong>CNCF (Cloud Native Computing Foundation) kopienas</strong>, mēs esam saistīti ar globālo mākoņdatošanas ekosistēmu un ienesam jaunākās tendences un labākās prakses Latvijas tehnoloģiju kopienā.'
       },
       cta: {
-        title: 'Gatavs pievienoties?',
-        description: 'Vai vēlies mācīties, dalīties vai vienkārši sazināties ar citiem mākoņdatošanas entuziastiem – mēs priecāsimies tevi redzēt!',
-        register: 'Reģistrējies nākamajai tikšanās reizei'
+        title: 'Vēlies uzstāties mūsu tikšanās reizē?',
+        description: 'Mēs vienmēr meklējam runātājus, kas vēlas dalīties ar savu pieredzi mākoņdatošanas tehnoloģijās.',
+        contact: 'Sazināties'
       }
     },
     // Events page
@@ -214,12 +283,20 @@ export const translations = {
       about: 'Par šo pasākumu',
       talks: 'Prezentācijas',
       speaker: 'Runātājs',
+      speakers: 'Runātāji',
       details: 'Pasākuma detaļas',
       venue: 'Norises vieta',
       topics: 'Tēmas',
       registerEventbrite: 'Reģistrēties Eventbrite',
       viewEventbrite: 'Skatīt Eventbrite',
-      viewCNCF: 'Skatīt CNCF Community'
+      viewCNCF: 'Skatīt CNCF Community',
+      notFound: 'Pasākums nav atrasts',
+      shareEvent: 'Dalīties ar pasākumu'
+    },
+    // Event card
+    eventCard: {
+      upcoming: 'Gaidāmais',
+      pastEvent: 'Pagājušais pasākums'
     },
     // Speakers page
     speakers: {
@@ -246,6 +323,16 @@ export const translations = {
         title: 'Pievienojies komandai',
         description: 'Vai vēlies palīdzēt organizēt Cloud Native Latvia? Mēs vienmēr meklējam brīvprātīgos!',
         contact: 'Sazinies ar mums'
+      },
+      members: {
+        linda: {
+          role: 'Platformu inženiere',
+          bio: 'Platformu inženiere, kas aizraujas ar Kubernetes, politiku-kā-kodu un drošu mākoņdatošanas platformu veidošanu.'
+        },
+        andrey: {
+          role: 'Daļlaika CTO, Apmācītājs',
+          bio: 'Mākoņdatošanas entuziasts un kopienas veidotājs. Palīdz apvienot mākoņdatošanas kopienu Latvijā.'
+        }
       }
     },
     // Swag page
@@ -265,6 +352,26 @@ export const translations = {
         title: 'Vēlies pielāgotus suvenīrus?',
         description: 'Ja esi ieinteresēts sponsorēt suvenīrus mūsu pasākumiem, mēs labprāt uzklausītu!',
         contact: 'Sazinies par sponsorēšanu'
+      },
+      merchandise: 'Preces',
+      merchandiseDescription: 'Parādi savu Cloud Native Latvia lepnumu ar mūsu zīmola precēm!',
+      cupName: 'Cloud Native Latvia krūze',
+      cupDescription: 'Paliec mundrā, navigējot CNCF ainavā ar mūsu zīmola krūzi.',
+      stickerNames: {
+        linda: 'Pārraut kognitīvo slodzi - Linda',
+        andrey: 'Pārraut kognitīvo slodzi - Andrey',
+        cloudTech: 'Mākoņu tehnoloģijas',
+        cncfLandscape: 'Navigējot CNCF ainavā',
+        navigatingClouds: 'Navigējot mākoņos',
+        logo: 'Cloud Native Latvia logo'
+      },
+      stickerDescriptions: {
+        linda: 'Linda pārrauj kognitīvās slodzes barjeras ar Kubernetes, Prometheus un Knative ikonām.',
+        andrey: 'Andrey pārrauj ar Kubernetes, Prometheus un Knative rīkiem apkārt.',
+        cloudTech: 'Jauks kawaii mākoņa talismans, ko ieskauj CNCF rīki: Kubernetes, Helm, Prometheus, Argo, Istio un citi.',
+        cncfLandscape: 'Draudzīgs mākonis lasa CNCF ainavas karti - jo mums visiem vajag ceļvedi!',
+        navigatingClouds: 'Cloud Native Latvia tematiska uzlīme mākoņdatošanas pētniekam.',
+        logo: 'Mūsu oficiālā logo uzlīme ar mākoņa kuba dizainu rozā/bordo krāsās.'
       }
     },
     // Sponsors page
@@ -300,7 +407,30 @@ export const translations = {
       },
       ourSponsors: 'Mūsu sponsori',
       beFirst: 'Esi pirmais, kas atbalsta Cloud Native Latvia! Tavs logo varētu būt šeit.',
-      yourLogo: 'Tavs logo'
+      yourLogo: 'Tavs logo',
+      tierNames: {
+        gold: 'Zelts',
+        silver: 'Sudrabs',
+        bronze: 'Bronza',
+        event: 'Pasākuma sponsors'
+      },
+      tierBenefits: {
+        logoHomepage: 'Logo mājaslapas sākumlapā',
+        logoAllMaterials: 'Logo visos pasākumu materiālos',
+        introEachMeetup: '5 minūšu ievads katrā tikšanās reizē',
+        socialShoutouts: 'Sociālo mediju izcēlumi',
+        boothTable: 'Stends/galds pasākumos',
+        jobNewsletter: 'Darba sludinājumi jaunumu vēstulē',
+        logoSponsorsPage: 'Logo sponsoru lapā',
+        logoMaterials: 'Logo pasākumu materiālos',
+        socialMentions: 'Sociālo mediju pieminējumi',
+        jobQuarterly: 'Darba sludinājums (reizi ceturksnī)',
+        mentionEvents: 'Pieminēšana pasākumos',
+        logoSpecificEvent: 'Logo konkrētā pasākumā',
+        introEvent: '5 minūšu ievads pasākumā',
+        socialPromotion: 'Sociālo mediju reklamēšana',
+        swagDistribution: 'Suvenīru izdalīšana'
+      }
     },
     // Footer
     footer: {

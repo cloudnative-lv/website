@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
+import { useLanguage } from '../i18n/LanguageContext';
 
 export default function EventCard({ event }) {
+  const { t } = useLanguage();
   const dateObj = new Date(event.date);
   const formattedDate = dateObj.toLocaleDateString('en-US', {
     weekday: 'short',
@@ -18,7 +20,7 @@ export default function EventCard({ event }) {
     >
       <div className={`px-6 py-3 ${isUpcoming ? 'bg-pink' : 'bg-gray-600'}`}>
         <span className="text-white text-sm font-semibold uppercase tracking-wider">
-          {isUpcoming ? 'Upcoming' : 'Past Event'}
+          {isUpcoming ? t('eventCard.upcoming') : t('eventCard.pastEvent')}
         </span>
       </div>
       <div className="p-6">

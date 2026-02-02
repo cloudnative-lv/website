@@ -4,31 +4,38 @@ import Button from '../components/Button';
 import SEO from '../components/SEO';
 import { TeamPageJsonLd } from '../components/JsonLd';
 import { LinkedInIcon, TwitterIcon, SocialLink } from '../components/SocialIcons';
+import { useLanguage } from '../i18n/LanguageContext';
 
-const team = [
+const teamConfigs = [
   {
-    name: "Linda Austra Ārende",
-    role: "Platform Engineer",
-    bio: "Platform engineer passionate about Kubernetes, policy-as-code, and building secure cloud native platforms.",
-    image: "/images/team/linda_card.png",
+    key: 'linda',
+    name: 'Linda Austra Ārende',
+    image: '/images/team/linda_card.png',
     social: {
-      linkedin: "https://www.linkedin.com/in/lindaarende/",
+      linkedin: 'https://www.linkedin.com/in/lindaarende/',
       twitter: null
     }
   },
   {
-    name: "Andrey Adamovich",
-    role: "Fractional CTO, Trainer",
-    bio: "Cloud native enthusiast and community builder. Helping bring the cloud native community together in Latvia.",
-    image: "/images/team/andrey_card.png",
+    key: 'andrey',
+    name: 'Andrey Adamovich',
+    image: '/images/team/andrey_card.png',
     social: {
-      linkedin: "https://www.linkedin.com/in/andreysadamovich/",
-      twitter: "https://x.com/codingandrey"
+      linkedin: 'https://www.linkedin.com/in/andreysadamovich/',
+      twitter: 'https://x.com/codingandrey'
     }
   }
 ];
 
 export default function Team() {
+  const { t } = useLanguage();
+
+  const team = teamConfigs.map(m => ({
+    ...m,
+    role: t(`team.members.${m.key}.role`),
+    bio: t(`team.members.${m.key}.bio`)
+  }));
+
   return (
     <div className="min-h-screen bg-pink-light">
       <SEO 
@@ -40,8 +47,8 @@ export default function Team() {
       />
       <TeamPageJsonLd members={team} />
       <PageHeader 
-        title="Our Team" 
-        subtitle="The people behind Cloud Native Latvia"
+        title={t('team.title')}
+        subtitle={t('team.subtitle')}
       />
 
       <div className="max-w-6xl mx-auto px-4 py-12">
@@ -78,10 +85,10 @@ export default function Team() {
 
         <div className="mt-16">
           <CTASection
-            title="Join the Team"
-            description="Interested in helping organize Cloud Native Latvia? We're always looking for volunteers!"
+            title={t('team.cta.title')}
+            description={t('team.cta.description')}
           >
-            <Button href="mailto:hello@cloudnative.lv">Contact Us</Button>
+            <Button href="mailto:hello@cloudnative.lv">{t('team.cta.contact')}</Button>
           </CTASection>
         </div>
       </div>

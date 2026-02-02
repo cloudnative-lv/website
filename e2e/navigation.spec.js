@@ -1,5 +1,34 @@
 import { test, expect } from '@playwright/test';
 
+// Helper function to slowly scroll through a page
+async function slowScroll(page, steps = 5) {
+  const scrollHeight = await page.evaluate(() => document.body.scrollHeight);
+  const viewportHeight = await page.evaluate(() => window.innerHeight);
+  const scrollDistance = scrollHeight - viewportHeight;
+  
+  if (scrollDistance <= 0) return;
+  
+  const stepSize = scrollDistance / steps;
+  
+  for (let i = 1; i <= steps; i++) {
+    await page.evaluate((y) => window.scrollTo({ top: y, behavior: 'smooth' }), stepSize * i);
+    await page.waitForTimeout(300);
+  }
+  
+  // Scroll back to top
+  await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  await page.waitForTimeout(300);
+}
+
+const pages = [
+  { path: '/', enTitle: /Cloud Native/, lvTitle: /Cloud Native/, name: 'Home' },
+  { path: '/events', enTitle: 'Events', lvTitle: 'Pasākumi', name: 'Events' },
+  { path: '/speakers', enTitle: 'Speakers', lvTitle: 'Runātāji', name: 'Speakers' },
+  { path: '/team', enTitle: 'Our Team', lvTitle: 'Mūsu komanda', name: 'Team' },
+  { path: '/swag', enTitle: 'Swag', lvTitle: 'Suvenīri', name: 'Swag' },
+  { path: '/sponsors', enTitle: 'Become a Sponsor', lvTitle: 'Kļūsti par sponsoru', name: 'Sponsors' }
+];
+
 test.describe('Site Navigation', () => {
   test('navigate through all pages', async ({ page }) => {
     // Start at home page
@@ -35,6 +64,52 @@ test.describe('Site Navigation', () => {
     // Return to Home
     await page.click('a[href="/"]');
     await page.waitForTimeout(1000);
+  });
+
+  test('slow scroll through each page', async ({ page }) => {
+    for (const p of pages) {
+      await page.goto(p.path);
+      await page.waitForTimeout(500);
+      await slowScroll(page, 5);
+      await page.waitForTimeout(300);
+    }
+  });
+
+  test('language switch on each page', async ({ page }) => {
+    for (const p of pages) {
+      await page.goto(p.path);
+      await page.waitForTimeout(500);
+      
+      // Switch to Latvian
+      await page.click('button:has-text("LV")');
+      await page.waitForTimeout(500);
+      await expect(page.locator('h1')).toContainText(p.lvTitle);
+      
+      // Switch back to English
+      await page.click('button:has-text("EN")');
+      await page.waitForTimeout(500);
+      await expect(page.locator('h1')).toContainText(p.enTitle);
+    }
+  });
+
+  test('scroll and language switch combined for each page', async ({ page }) => {
+    for (const p of pages) {
+      // English version - scroll
+      await page.goto(p.path);
+      await page.waitForTimeout(500);
+      await expect(page.locator('h1')).toContainText(p.enTitle);
+      await slowScroll(page, 3);
+      
+      // Switch to Latvian - scroll
+      await page.click('button:has-text("LV")');
+      await page.waitForTimeout(500);
+      await expect(page.locator('h1')).toContainText(p.lvTitle);
+      await slowScroll(page, 3);
+      
+      // Switch back to English for next page
+      await page.click('button:has-text("EN")');
+      await page.waitForTimeout(300);
+    }
   });
 
   test('language switcher works', async ({ page }) => {

@@ -10,9 +10,9 @@ export default function Footer() {
           <div>
             <div className="flex items-center gap-3 mb-4">
               <img src="/images/logo.svg" alt="Cloud Native Latvia" className="h-10 w-auto" />
-              <div>
-                <span className="font-bold">Cloud Native</span>
-                <span className="font-black block text-sm">LATVIA</span>
+              <div className="flex flex-col leading-tight uppercase text-center">
+                <span className="text-white font-bold text-sm tracking-tight">Cloud Native</span>
+                <span className="text-pink font-black text-lg tracking-wide">LATVIA</span>
               </div>
             </div>
             <p className="text-rose-200">

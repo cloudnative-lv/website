@@ -8,15 +8,15 @@ const toolIcons = [
   { name: 'kyverno', src: '/images/tools/kyverno.svg' }
 ];
 
-const floatingElements = Array.from({ length: 15 }, (_, i) => ({
+const floatingElements = Array.from({ length: 18 }, (_, i) => ({
   id: i,
   icon: toolIcons[i % toolIcons.length],
-  size: 20 + Math.random() * 40,
+  size: 24 + Math.random() * 48,
   left: Math.random() * 100,
   top: Math.random() * 100,
-  duration: 15 + Math.random() * 20,
-  delay: Math.random() * -20,
-  opacity: 0.05 + Math.random() * 0.1
+  duration: 10 + Math.random() * 30,
+  delay: Math.random() * -25,
+  opacity: 0.06 + Math.random() * 0.12
 }));
 
 export default function AnimatedBackground({ className = '' }) {

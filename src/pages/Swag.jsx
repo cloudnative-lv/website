@@ -5,77 +5,41 @@ import FeatureCard from '../components/FeatureCard';
 import CTASection from '../components/CTASection';
 import Button from '../components/Button';
 import { Container, Section, SectionHeading } from '../components/layout';
+import { useLanguage } from '../i18n/LanguageContext';
 
-const stickers = [
-  {
-    id: 1,
-    name: "Breaking Through Cognitive Load - Linda",
-    description: "Linda breaking through cognitive load barriers with Kubernetes, Prometheus, and Knative icons.",
-    image: "/images/stickers/sticker_linda.svg"
-  },
-  {
-    id: 2,
-    name: "Breaking Through Cognitive Load - Andrey",
-    description: "Andrey breaking through with Kubernetes, Prometheus, and Knative tools flying around.",
-    image: "/images/stickers/sticker_andrey.svg"
-  },
-  {
-    id: 3,
-    name: "Cloud Tech",
-    description: "Cute kawaii cloud mascot surrounded by CNCF tools: Kubernetes, Helm, Prometheus, Argo, Istio, and more.",
-    image: "/images/stickers/sticker_cloud_tech.svg"
-  },
-  {
-    id: 4,
-    name: "Navigating CNCF Landscape",
-    description: "Friendly cloud reading the CNCF landscape map - because we all need a guide!",
-    image: "/images/stickers/sticker_cncf_landscape.svg"
-  },
-  {
-    id: 5,
-    name: "Navigating Clouds",
-    description: "Cloud Native Latvia themed sticker for the cloud native explorer.",
-    image: "/images/stickers/sticker_navigating_clouds.svg"
-  },
-  {
-    id: 6,
-    name: "Cloud Native Latvia Logo",
-    description: "Our official logo sticker featuring the cloud cube design in rose/burgundy colors.",
-    image: "/images/stickers/sticker_cn_lv.svg"
-  }
+const stickerConfigs = [
+  { id: 1, key: 'linda', image: '/images/stickers/sticker_linda.svg' },
+  { id: 2, key: 'andrey', image: '/images/stickers/sticker_andrey.svg' },
+  { id: 3, key: 'cloudTech', image: '/images/stickers/sticker_cloud_tech.svg' },
+  { id: 4, key: 'cncfLandscape', image: '/images/stickers/sticker_cncf_landscape.svg' },
+  { id: 5, key: 'navigatingClouds', image: '/images/stickers/sticker_navigating_clouds.svg' },
+  { id: 6, key: 'logo', image: '/images/stickers/sticker_cn_lv.svg' }
 ];
 
-const swagMethods = [
-  {
-    icon: (
-      <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-      </svg>
-    ),
-    title: "Attend Meetups",
-    description: "Free stickers available at every meetup event"
-  },
-  {
-    icon: (
-      <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
-      </svg>
-    ),
-    title: "Speak at Events",
-    description: "Speakers receive exclusive swag packs"
-  },
-  {
-    icon: (
-      <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-      </svg>
-    ),
-    title: "Help Organize",
-    description: "Volunteers get special edition items"
-  }
+const methodIcons = [
+  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" key="attend">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+  </svg>,
+  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" key="speak">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+  </svg>,
+  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" key="help">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+  </svg>
 ];
+
+const methodKeys = ['attendMeetups', 'speakAtEvents', 'helpOrganize'];
+const methodDescKeys = ['attendDescription', 'speakDescription', 'helpDescription'];
 
 export default function Swag() {
+  const { t } = useLanguage();
+
+  const stickers = stickerConfigs.map(s => ({
+    ...s,
+    name: t(`swag.stickerNames.${s.key}`),
+    description: t(`swag.stickerDescriptions.${s.key}`)
+  }));
+
   return (
     <div className="min-h-screen bg-pink-light">
       <SEO 
@@ -87,15 +51,15 @@ export default function Swag() {
       />
       <ProductListJsonLd products={stickers} pageName="Cloud Native Latvia Swag & Stickers" />
       <PageHeader 
-        title="Swag & Stickers"
-        subtitle="Show your Cloud Native Latvia pride!"
+        title={t('swag.title')}
+        subtitle={t('swag.subtitle')}
       />
 
       <Container className="py-12">
         <Section>
-          <SectionHeading>Stickers</SectionHeading>
+          <SectionHeading>{t('swag.stickers')}</SectionHeading>
           <p className="text-gray-600 mb-8">
-            Collect our stickers at meetup events! Each event features unique designs.
+            {t('swag.stickersDescription')}
           </p>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {stickers.map(sticker => (
@@ -121,37 +85,37 @@ export default function Swag() {
         </Section>
 
         <Section>
-          <SectionHeading>Merchandise</SectionHeading>
+          <SectionHeading>{t('swag.merchandise')}</SectionHeading>
           <p className="text-gray-600 mb-8">
-            Show your Cloud Native Latvia pride with our branded merchandise!
+            {t('swag.merchandiseDescription')}
           </p>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
               <div className="h-48 bg-rose-50 flex items-center justify-center">
-                <img src="/images/swag/cup.png" alt="Cloud Native Latvia Cup" className="w-full h-full object-contain p-4" />
+                <img src="/images/swag/cup.png" alt={t('swag.cupName')} className="w-full h-full object-contain p-4" />
               </div>
               <div className="p-6">
-                <h3 className="text-lg font-bold text-burgundy mb-2">Cloud Native Latvia Cup</h3>
-                <p className="text-gray-600">Stay caffeinated while navigating the CNCF landscape with our branded cup.</p>
+                <h3 className="text-lg font-bold text-burgundy mb-2">{t('swag.cupName')}</h3>
+                <p className="text-gray-600">{t('swag.cupDescription')}</p>
               </div>
             </div>
           </div>
         </Section>
 
         <Section>
-          <SectionHeading>How to Get Swag</SectionHeading>
+          <SectionHeading>{t('swag.howToGet')}</SectionHeading>
           <div className="grid md:grid-cols-3 gap-6">
-            {swagMethods.map((method, idx) => (
-              <FeatureCard key={idx} icon={method.icon} title={method.title} description={method.description} />
+            {methodKeys.map((key, idx) => (
+              <FeatureCard key={key} icon={methodIcons[idx]} title={t(`swag.${key}`)} description={t(`swag.${methodDescKeys[idx]}`)} />
             ))}
           </div>
         </Section>
 
         <CTASection
-          title="Want Custom Swag?"
-          description="If you're interested in sponsoring swag for our events, we'd love to hear from you!"
+          title={t('swag.cta.title')}
+          description={t('swag.cta.description')}
         >
-          <Button href="mailto:hello@cloudnative.lv">Contact Us About Sponsorship</Button>
+          <Button href="mailto:hello@cloudnative.lv">{t('swag.cta.contact')}</Button>
         </CTASection>
       </Container>
     </div>
