@@ -37,9 +37,9 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16">
           <Link to="/" className="flex items-center space-x-3 group">
             <img src="/images/logo_light.svg" alt="Cloud Native Latvia" className="h-10 w-auto" />
-            <div className="hidden sm:flex flex-col leading-tight">
-              <span className="text-white font-bold text-lg tracking-tight">Cloud Native</span>
-              <span className="text-white/90 font-black text-sm tracking-wide">LATVIA</span>
+            <div className="hidden sm:flex flex-col leading-tight uppercase text-center">
+              <span className="text-white font-bold text-sm tracking-tight">Cloud Native</span>
+              <span className="text-burgundy font-black text-lg tracking-wide" style={{ textShadow: '-1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff' }}>LATVIA</span>
             </div>
           </Link>
           

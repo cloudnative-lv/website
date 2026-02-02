@@ -10,7 +10,7 @@ const team = [
     name: "Linda Austra Ārende",
     role: "Platform Engineer",
     bio: "Platform engineer passionate about Kubernetes, policy-as-code, and building secure cloud native platforms.",
-    image: "/images/team/linda-arende.png",
+    image: "/images/team/linda_card.png",
     social: {
       linkedin: "https://www.linkedin.com/in/lindaarende/",
       twitter: null
@@ -20,7 +20,7 @@ const team = [
     name: "Andrey Adamovich",
     role: "Fractional CTO, Trainer",
     bio: "Cloud native enthusiast and community builder. Helping bring the cloud native community together in Latvia.",
-    image: "/images/team/andrey-adamovich.png",
+    image: "/images/team/andrey_card.png",
     social: {
       linkedin: "https://www.linkedin.com/in/andreysadamovich/",
       twitter: "https://x.com/codingandrey"

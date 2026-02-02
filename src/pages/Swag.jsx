@@ -11,37 +11,37 @@ const stickers = [
     id: 1,
     name: "Breaking Through Cognitive Load - Linda",
     description: "Linda breaking through cognitive load barriers with Kubernetes, Prometheus, and Knative icons.",
-    image: "/images/stickers/cognitive-load-linda.png"
+    image: "/images/stickers/sticker_linda.svg"
   },
   {
     id: 2,
     name: "Breaking Through Cognitive Load - Andrey",
     description: "Andrey breaking through with Kubernetes, Prometheus, and Knative tools flying around.",
-    image: "/images/stickers/cognitive-load-andrey.png"
+    image: "/images/stickers/sticker_andrey.svg"
   },
   {
     id: 3,
-    name: "Kawaii Cloud",
+    name: "Cloud Tech",
     description: "Cute kawaii cloud mascot surrounded by CNCF tools: Kubernetes, Helm, Prometheus, Argo, Istio, and more.",
-    image: "/images/stickers/kawaii-cloud.png"
+    image: "/images/stickers/sticker_cloud_tech.svg"
   },
   {
     id: 4,
     name: "Navigating CNCF Landscape",
     description: "Friendly cloud reading the CNCF landscape map - because we all need a guide!",
-    image: "/images/stickers/cncf-landscape.png"
+    image: "/images/stickers/sticker_cncf_landscape.svg"
   },
   {
     id: 5,
-    name: "Riga Skyline",
-    description: "Cloud Native Latvia logo with beautiful Riga skyline featuring the Freedom Monument and Vanšu Bridge.",
-    image: "/images/stickers/riga-skyline.png"
+    name: "Navigating Clouds",
+    description: "Cloud Native Latvia themed sticker for the cloud native explorer.",
+    image: "/images/stickers/sticker_navigating_clouds.svg"
   },
   {
     id: 6,
     name: "Cloud Native Latvia Logo",
     description: "Our official logo sticker featuring the cloud cube design in rose/burgundy colors.",
-    image: "/images/stickers/logo.png"
+    image: "/images/stickers/sticker_cn_lv.svg"
   }
 ];
 
@@ -117,6 +117,24 @@ export default function Swag() {
                 </div>
               </div>
             ))}
+          </div>
+        </Section>
+
+        <Section>
+          <SectionHeading>Merchandise</SectionHeading>
+          <p className="text-gray-600 mb-8">
+            Show your Cloud Native Latvia pride with our branded merchandise!
+          </p>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+              <div className="h-48 bg-rose-50 flex items-center justify-center">
+                <img src="/images/swag/cup.png" alt="Cloud Native Latvia Cup" className="w-full h-full object-contain p-4" />
+              </div>
+              <div className="p-6">
+                <h3 className="text-lg font-bold text-burgundy mb-2">Cloud Native Latvia Cup</h3>
+                <p className="text-gray-600">Stay caffeinated while navigating the CNCF landscape with our branded cup.</p>
+              </div>
+            </div>
           </div>
         </Section>
 

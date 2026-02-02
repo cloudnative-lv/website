@@ -21,7 +21,10 @@
       "type": "npm",
       "script": "build",
       "problemMatcher": [],
-      "group": "build"
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
     },
     {
       "label": "Preview",
@@ -29,7 +32,10 @@
       "script": "preview",
       "problemMatcher": [],
       "isBackground": true,
-      "group": "build",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
       "presentation": {
         "reveal": "always",
         "panel": "new"
@@ -40,21 +46,30 @@
       "type": "npm",
       "script": "install",
       "problemMatcher": [],
-      "group": "build"
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
     },
     {
       "label": "Lint",
       "type": "npm",
       "script": "lint",
       "problemMatcher": ["$eslint-stylish"],
-      "group": "build"
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
     },
     {
       "label": "E2E Tests",
       "type": "npm",
       "script": "test:e2e",
       "problemMatcher": [],
-      "group": "build",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
       "dependsOn": ["Build"]
     },
     {
@@ -62,7 +77,10 @@
       "type": "npm",
       "script": "test:e2e:headed",
       "problemMatcher": [],
-      "group": "build",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
       "dependsOn": ["Build"]
     },
     {
@@ -71,7 +89,10 @@
       "script": "test:e2e:ui",
       "problemMatcher": [],
       "isBackground": true,
-      "group": "test",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
       "dependsOn": ["Build"],
       "presentation": {
         "reveal": "always",
@@ -83,7 +104,10 @@
       "type": "shell",
       "command": "npx playwright show-report",
       "problemMatcher": [],
-      "group": "test",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
       "presentation": {
         "reveal": "always",
         "panel": "new"

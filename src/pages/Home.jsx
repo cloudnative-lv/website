@@ -29,13 +29,14 @@ export default function Home() {
 {/* Background image - add /images/riga-skyline.png for Riga skyline effect */}
         <div className="relative max-w-6xl mx-auto px-4 py-24 text-center">
           <img src="/images/logo.svg" alt="Cloud Native Latvia - Kubernetes and DevOps Community in Riga" className="h-32 w-auto mx-auto mb-6" />
-          <h1 className="text-5xl md:text-6xl font-black mb-4">
-            <span className="text-pink">Cloud Native</span>
-            <br />
-            <span className="text-burgundy">LATVIA</span>
+          <h1 className="font-black mb-4 uppercase tracking-tight">
+            <span className="block text-4xl md:text-5xl text-pink">Cloud Native</span>
+            <span className="block text-5xl md:text-7xl text-burgundy">Latvia</span>
           </h1>
-          <p className="text-2xl md:text-3xl text-rose-600 font-semibold mb-4">
-            Breaking Through Cognitive Load
+          <p className="text-2xl md:text-3xl font-bold mb-4 uppercase tracking-wide">
+            <span className="text-pink">Navigating Through</span>
+            <br />
+            <span className="text-burgundy">CNCF Landscape</span>
           </p>
           <p className="text-lg text-gray-700 mb-8 max-w-2xl mx-auto">
             The premier <strong>Kubernetes and DevOps community</strong> in Latvia. Join us for free bi-monthly meetups 
