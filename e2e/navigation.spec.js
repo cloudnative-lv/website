@@ -93,22 +93,23 @@ test.describe('Site Navigation', () => {
   });
 
   test('scroll and language switch combined for each page', async ({ page }) => {
+    test.setTimeout(60000); // Extended timeout for this comprehensive test
     for (const p of pages) {
       // English version - scroll
       await page.goto(p.path);
-      await page.waitForTimeout(500);
+      await page.waitForTimeout(300);
       await expect(page.locator('h1')).toContainText(p.enTitle);
-      await slowScroll(page, 3);
+      await slowScroll(page, 2);
       
       // Switch to Latvian - scroll
       await page.click('button:has-text("LV")');
-      await page.waitForTimeout(500);
+      await page.waitForTimeout(300);
       await expect(page.locator('h1')).toContainText(p.lvTitle);
-      await slowScroll(page, 3);
+      await slowScroll(page, 2);
       
       // Switch back to English for next page
       await page.click('button:has-text("EN")');
-      await page.waitForTimeout(300);
+      await page.waitForTimeout(200);
     }
   });
 

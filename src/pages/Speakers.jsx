@@ -5,6 +5,7 @@ import CTASection from '../components/CTASection';
 import Button from '../components/Button';
 import SEO from '../components/SEO';
 import { SpeakersPageJsonLd } from '../components/JsonLd';
+import { useLanguage } from '../i18n/LanguageContext';
 
 function getSpeakersFromTalk(talk) {
   if (talk.speakers && Array.isArray(talk.speakers)) {
@@ -58,6 +59,7 @@ const allTalks = getTalksWithSpeakers();
 const speakers = getUniqueSpeakers(allTalks);
 
 export default function Speakers() {
+  const { t } = useLanguage();
   return (
     <div className="min-h-screen bg-pink-light">
       <SEO 
@@ -69,14 +71,14 @@ export default function Speakers() {
       />
       <SpeakersPageJsonLd speakers={speakers} />
       <PageHeader 
-        title="Speakers" 
-        subtitle="Meet the amazing speakers who have shared their knowledge at our meetups"
+        title={t('speakers.title')} 
+        subtitle={t('speakers.subtitle')}
       />
 
       <div className="max-w-6xl mx-auto px-4 py-12">
         {speakers.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-gray-600 text-lg">No speakers yet. Stay tuned for upcoming events!</p>
+            <p className="text-gray-600 text-lg">{t('speakers.noSpeakers')}</p>
           </div>
         ) : (
           <>
@@ -116,12 +118,12 @@ export default function Speakers() {
             </div>
 
             <CTASection
-              title="Want to Speak?"
-              description="We're always looking for speakers to share their experiences with cloud native technologies. Whether it's a 20-minute talk or a lightning talk, we'd love to hear from you!"
+              title={t('speakers.cta.title')}
+              description={t('speakers.cta.description')}
             >
               <div className="flex flex-wrap justify-center gap-4">
-                <Button href="mailto:speakers@cloudnative.lv">Submit a Talk Proposal</Button>
-                <Button to="/events" variant="secondary">View Upcoming Events</Button>
+                <Button href="mailto:speakers@cloudnative.lv">{t('speakers.cta.submit')}</Button>
+                <Button to="/events" variant="secondary">{t('speakers.cta.viewEvents')}</Button>
               </div>
             </CTASection>
           </>
