@@ -1,6 +1,6 @@
-id: "2025-12-10-meetup-3"
-title: "Meetup #3: Lessons from Self-Hosting K8s & Greenscaling with Karpenter"
-slug: "meetup-3-self-hosted-k8s-greenscaling"
+id: "2025-12-10-meetup-003"
+title: "Meetup #003: Lessons from Self-Hosting K8s & Greenscaling with Karpenter"
+slug: "meetup-003-self-hosted-k8s-greenscaling"
 date: "2025-12-10"
 time: "18:15"
 endTime: "21:00"
@@ -23,7 +23,9 @@ description: |
   21:00: Doors close
 talks:
   - title: "Halfway Home: Lessons from Our First Year Running Self-Hosted Kubernetes"
-    speaker: "Per Hedegaard Christiansen and Kārlis Akots Gribulis"
+    speakers:
+      - "Per Hedegaard Christiansen"
+      - "Kārlis Akots Gribulis"
     description: "Cloud exits sound simple in theory - build your own Kubernetes, save money, gain control. In practice, the road is long, messy, and full of lessons. Saxo Bank is in the middle of this exit. We'll explore how we tackled networking complexity, security baselines, and the operational learning curve of self-hosting Kubernetes at scale. We'll share what went well, what failed fast, and how we're iterating toward stability and efficiency."
   - title: "Greenscaling: Karpenter + Kube Green for GKE"
     speaker: "Igor Golm"

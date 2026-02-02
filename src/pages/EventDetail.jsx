@@ -76,13 +76,22 @@ export default function EventDetail() {
               <section className="bg-white rounded-2xl shadow-lg p-6">
                 <h2 className="text-2xl font-black text-burgundy mb-6">Talks</h2>
                 <div className="space-y-6">
-                  {event.talks.map((talk, idx) => (
-                    <div key={idx} className="border-l-4 border-pink pl-4">
-                      <h3 className="text-lg font-bold text-burgundy">{talk.title}</h3>
-                      <p className="text-pink text-sm font-semibold mt-1">Speaker: {talk.speaker}</p>
-                      <p className="text-gray-600 mt-2">{talk.description}</p>
-                    </div>
-                  ))}
+                  {event.talks.map((talk, idx) => {
+                    const speakers = talk.speakers && Array.isArray(talk.speakers) 
+                      ? talk.speakers 
+                      : (talk.speaker ? [talk.speaker] : []);
+                    return (
+                      <div key={idx} className="border-l-4 border-pink pl-4">
+                        <h3 className="text-lg font-bold text-burgundy">{talk.title}</h3>
+                        {speakers.length > 0 && (
+                          <p className="text-pink text-sm font-semibold mt-1">
+                            {speakers.length === 1 ? 'Speaker' : 'Speakers'}: {speakers.join(', ')}
+                          </p>
+                        )}
+                        <p className="text-gray-600 mt-2">{talk.description}</p>
+                      </div>
+                    );
+                  })}
                 </div>
               </section>
             )}

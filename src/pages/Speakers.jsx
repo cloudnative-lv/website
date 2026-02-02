@@ -6,19 +6,33 @@ import Button from '../components/Button';
 import SEO from '../components/SEO';
 import { SpeakersPageJsonLd } from '../components/JsonLd';
 
+function getSpeakersFromTalk(talk) {
+  if (talk.speakers && Array.isArray(talk.speakers)) {
+    return talk.speakers;
+  }
+  if (talk.speaker) {
+    return [talk.speaker];
+  }
+  return [];
+}
+
 function getTalksWithSpeakers() {
   const talks = [];
   
   events.forEach(event => {
     if (event.talks) {
       event.talks.forEach(talk => {
-        talks.push({
-          speaker: talk.speaker,
-          title: talk.title,
-          description: talk.description,
-          eventSlug: event.slug,
-          eventTitle: event.title,
-          eventDate: event.date
+        const speakers = getSpeakersFromTalk(talk);
+        speakers.forEach(speaker => {
+          talks.push({
+            speaker: speaker,
+            title: talk.title,
+            description: talk.description,
+            eventSlug: event.slug,
+            eventTitle: event.title,
+            eventDate: event.date,
+            coSpeakers: speakers.length > 1 ? speakers.filter(s => s !== speaker) : []
+          });
         });
       });
     }
@@ -81,6 +95,9 @@ export default function Speakers() {
                   </div>
                   <div className="p-6">
                     <h4 className="text-lg font-bold text-burgundy mb-3 line-clamp-2">{talk.title}</h4>
+                    {talk.coSpeakers.length > 0 && (
+                      <p className="text-pink text-sm mb-2">with {talk.coSpeakers.join(', ')}</p>
+                    )}
                     {talk.description && (
                       <p className="text-gray-600 text-sm mb-4 line-clamp-3">{talk.description}</p>
                     )}

@@ -1,6 +1,6 @@
-id: "2025-08-26-meetup-1"
-title: "Meetup #1: No More Secrets (in Code) & Practical Hybrid Cloud"
-slug: "meetup-1-no-more-secrets-hybrid-cloud"
+id: "2025-08-26-meetup-001"
+title: "Meetup #001: No More Secrets (in Code) & Practical Hybrid Cloud"
+slug: "meetup-001-no-more-secrets-hybrid-cloud"
 date: "2025-08-26"
 time: "17:30"
 endTime: "20:30"
@@ -23,7 +23,9 @@ description: |
   20:30: Doors close
 talks:
   - title: "No More Secrets (in Code): How We Built our Secret Management Solution"
-    speaker: "Māris Titovs and Ieva Lapiņa"
+    speakers:
+      - "Māris Titovs"
+      - "Ieva Lapiņa"
     description: "When the manual management of secrets becomes unsustainable, a new way to conveniently handle them is needed. In this talk we will share our journey to create a secret management solution that allows our teams to work autonomously in an ever growing hybrid environment. We will touch on challenges faced, the decisions made, and the solutions implemented in this journey we continue to refine."
   - title: "Practical Hybrid Cloud"
     speaker: "Alex Rimlin"
