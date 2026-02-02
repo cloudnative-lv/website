@@ -8,4 +8,3 @@
 [ ] integrate with forms for subscribe
 [ ] add eventbrite logo
 [ ] add cncf logo
-[ ] 
