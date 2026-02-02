@@ -64,6 +64,30 @@
       "problemMatcher": [],
       "group": "build",
       "dependsOn": ["Build"]
+    },
+    {
+      "label": "E2E Tests (UI Mode)",
+      "type": "npm",
+      "script": "test:e2e:ui",
+      "problemMatcher": [],
+      "isBackground": true,
+      "group": "test",
+      "dependsOn": ["Build"],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "Show E2E Report",
+      "type": "shell",
+      "command": "npx playwright show-report",
+      "problemMatcher": [],
+      "group": "test",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
     }
   ]
 }
