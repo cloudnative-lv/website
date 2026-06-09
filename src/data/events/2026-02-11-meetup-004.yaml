@@ -1,16 +1,38 @@
 id: "2026-02-11-meetup-004"
-title: "Meetup #004: Coming Soon"
-slug: "meetup-004-coming-soon"
+title: "Meetup #004: GitOps with ArgoCD"
+slug: "meetup-004-gitops-argocd"
 date: "2026-02-11"
-time: "18:00"
+time: "18:15"
 endTime: "21:00"
-status: "upcoming"
+status: "past"
 eventbriteUrl: ""
+cncfUrl: "https://ocgroups.dev/cncf/group/xggmcq8/event/55exfmn"
 venue:
-  name: "TBA"
-  address: "Riga, Latvia"
-  mapUrl: ""
+  name: "Accenture"
+  address: "Brīvības gatve 214, Rīga, LV-1039"
+  mapUrl: "https://www.google.com/maps/dir//Accenture%20214%20Br%C4%ABv%C4%ABbas%20gatve%20R%C4%ABga,%201039"
 description: |
-  Stay tuned for our first meetup of 2026! Topics and speakers to be announced.
-talks: []
-tags: []
+  Join us for a GitOps deep dive! Two teams share hard-won lessons from running ArgoCD in production at scale.
+
+  18:15: Doors open
+  18:30: Welcome by Cloud Native Latvia
+  18:45: Talk 1
+  19:30: Break with refreshments
+  19:45: Talk 2
+  20:30: Networking
+  21:00: Doors close
+talks:
+  - title: "Getting the Most out of ArgoCD"
+    speaker: "Jānis Orlovs"
+    description: "Drawing on CWISE's last six years of experience running ArgoCD, this session shares practical strategies, patterns, and hard-won insights for getting the most out of GitOps. Learn what works, what to avoid, and how to keep ArgoCD maintainable as your platform grows."
+  - title: "LMT's Argo Project Journey"
+    speakers:
+      - "Aleksejs Gordons"
+      - "Didzis Dzvinko"
+    description: "A case study tracing LMT's path from the first decision to adopt ArgoCD, through its promotion across the organization, and into event-driven automation with the wider Argo project. We'll cover the wins, the friction points, and how GitOps reshaped the way teams ship."
+tags:
+  - gitops
+  - argocd
+  - kubernetes
+  - devops
+  - automation

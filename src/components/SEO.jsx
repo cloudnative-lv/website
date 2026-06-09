@@ -19,15 +19,8 @@ export default function SEO({
   image = null
 }) {
   const { language } = useLanguage();
-  
-  const defaultKeywords = [
-    'Cloud Native', 'Kubernetes', 'K8s', 'DevOps', 'Platform Engineering',
-    'Riga', 'Latvia', 'Meetup', 'CNCF', 'Docker', 'Containers',
-    'Observability', 'Prometheus', 'Grafana', 'GitOps', 'ArgoCD'
-  ];
-  
-  const allKeywords = [...new Set([...keywords, ...defaultKeywords])];
-  const fullTitle = title 
+
+  const fullTitle = title
     ? `${title} | ${siteConfig.siteName}` 
     : `${siteConfig.siteName} - Kubernetes & DevOps Meetups in Riga`;
   const fullDescription = description || siteConfig.defaultDescription[language] || siteConfig.defaultDescription.en;
@@ -38,7 +31,14 @@ export default function SEO({
 
   useEffect(() => {
     document.title = fullTitle;
-    
+
+    const defaultKeywords = [
+      'Cloud Native', 'Kubernetes', 'K8s', 'DevOps', 'Platform Engineering',
+      'Riga', 'Latvia', 'Meetup', 'CNCF', 'Docker', 'Containers',
+      'Observability', 'Prometheus', 'Grafana', 'GitOps', 'ArgoCD'
+    ];
+    const allKeywords = [...new Set([...keywords, ...defaultKeywords])];
+
     const updateMeta = (name, content, isProperty = false) => {
       const attr = isProperty ? 'property' : 'name';
       let meta = document.querySelector(`meta[${attr}="${name}"]`);
@@ -70,7 +70,7 @@ export default function SEO({
     }
     
     document.documentElement.lang = language;
-  }, [fullTitle, fullDescription, allKeywords, canonicalUrl, ogImage, language]);
+  }, [fullTitle, fullDescription, keywords, canonicalUrl, ogImage, language]);
 
   return null;
 }

@@ -137,26 +137,43 @@ Use appropriate schema component from `JsonLd.jsx`:
 
 ## Events Data
 
-Events are defined in YAML files in `src/data/events/`:
+Events are defined in YAML files in `src/data/events/`. Filenames are date-prefixed
+(`YYYY-MM-DD-meetup-00N.yaml`) so they sort chronologically:
 ```yaml
-id: "meetup-1"
-slug: "meetup-1"
-title: "Meetup #1: Topic"
-date: "2025-01-15"
-time: "18:00"
+id: "2026-02-11-meetup-004"
+slug: "meetup-004-gitops-argocd"
+title: "Meetup #004: Topic"
+date: "2026-02-11"
+time: "18:15"        # doors open
 endTime: "21:00"
-status: "past"  # or "upcoming"
+eventbriteUrl: "https://..."   # leave "" if none
+cncfUrl: "https://..."         # CNCF community event page
 venue:
   name: "Venue Name"
   address: "Address, Riga"
-eventbriteUrl: "https://..."
-cncfUrl: "https://..."
-tags: ["Kubernetes", "DevOps"]
+  mapUrl: "https://www.google.com/maps/dir//..."
+description: |
+  Multi-line description and agenda.
 talks:
-  - title: "Talk Title"
-    speaker: "Speaker Name"
+  - title: "Solo Talk"
+    speaker: "Speaker Name"          # single speaker
     description: "Talk description"
+  - title: "Co-presented Talk"
+    speakers:                        # OR multiple speakers
+      - "Speaker One"
+      - "Speaker Two"
+    description: "Talk description"
+tags: ["kubernetes", "devops"]
 ```
+
+**Status is derived, not stored.** `src/data/events.js` computes `status`
+(`upcoming` / `past`) in the browser from `date` + `endTime`: an event is `past` by
+default and only `upcoming` while its end time is still in the future. Don't add a
+`status:` field to the YAML — it is ignored.
+
+> **Note (June 2026):** CNCF migrated its event-publishing platform. New events live
+> on `ocgroups.dev/cncf/group/...` (reached via the old `community.cncf.io` links,
+> which now redirect). Older events keep their `community.cncf.io/e/<code>` URLs.
 
 ## Social Links
 
