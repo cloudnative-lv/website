@@ -2,15 +2,18 @@ import PageHeader from '../components/PageHeader';
 import CTASection from '../components/CTASection';
 import Button from '../components/Button';
 import SEO from '../components/SEO';
+import SpeakerAvatar from '../components/SpeakerAvatar';
 import { TeamPageJsonLd } from '../components/JsonLd';
 import { LinkedInIcon, TwitterIcon, SocialLink } from '../components/SocialIcons';
 import { useLanguage } from '../i18n/useLanguage';
 
+// Headshots live in public/images/team/ (<key>.jpg). A missing photo falls back
+// to a brand-colored initials avatar, same as speakers without a photo.
 const teamConfigs = [
   {
     key: 'linda',
     name: 'Linda Austra Ārende',
-    image: '/images/team/linda_card.png',
+    photo: null,
     social: {
       linkedin: 'https://www.linkedin.com/in/lindaarende/',
       twitter: null
@@ -19,7 +22,7 @@ const teamConfigs = [
   {
     key: 'andrey',
     name: 'Andrey Adamovich',
-    image: '/images/team/andrey_card.png',
+    photo: '/images/team/andrey.jpg',
     social: {
       linkedin: 'https://www.linkedin.com/in/andreysadamovich/',
       twitter: 'https://x.com/codingandrey'
@@ -38,7 +41,7 @@ export default function Team() {
 
   return (
     <div className="min-h-screen bg-pink-light">
-      <SEO 
+      <SEO
         title="Team - Cloud Native Latvia Organizers"
         description="Meet the organizers behind Cloud Native Latvia. Platform engineers and DevOps enthusiasts building the Kubernetes and cloud native community in Riga."
         keywords={['Cloud Native Latvia team', 'meetup organizers Riga', 'platform engineers Latvia']}
@@ -46,7 +49,7 @@ export default function Team() {
         image="/images/og/team.png"
       />
       <TeamPageJsonLd members={team} />
-      <PageHeader 
+      <PageHeader
         title={t('team.title')}
         subtitle={t('team.subtitle')}
       />
@@ -54,30 +57,25 @@ export default function Team() {
       <div className="max-w-6xl mx-auto px-4 py-12">
         <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
           {team.map((member, idx) => (
-            <div key={idx} className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
-              <div className="aspect-square bg-pink-light flex items-center justify-center">
-                {member.image ? (
-                  <img src={member.image} alt={member.name} className="w-full h-full object-cover" />
-                ) : (
-                  <div className="w-24 h-24 bg-rose-200 rounded-full flex items-center justify-center">
-                    <svg className="w-12 h-12 text-pink" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                    </svg>
-                  </div>
+            <div
+              key={idx}
+              className="flex flex-col items-center text-center bg-white rounded-2xl shadow-lg p-8 hover:shadow-xl transition-shadow"
+            >
+              <SpeakerAvatar
+                name={member.name}
+                photo={member.photo}
+                className="w-32 h-32 text-3xl shrink-0 ring-4 ring-rose-100"
+              />
+              <h3 className="mt-5 text-xl font-bold text-burgundy">{member.name}</h3>
+              <p className="text-pink font-semibold">{member.role}</p>
+              <p className="mt-3 text-gray-600">{member.bio}</p>
+              <div className="mt-4 flex gap-3">
+                {member.social.linkedin && (
+                  <SocialLink href={member.social.linkedin} icon={<LinkedInIcon />} title="LinkedIn" />
                 )}
-              </div>
-              <div className="p-6">
-                <h3 className="text-xl font-bold text-burgundy">{member.name}</h3>
-                <p className="text-pink font-semibold mb-3">{member.role}</p>
-                <p className="text-gray-600 mb-4">{member.bio}</p>
-                <div className="flex gap-3">
-                  {member.social.linkedin && (
-                    <SocialLink href={member.social.linkedin} icon={<LinkedInIcon />} title="LinkedIn" />
-                  )}
-                  {member.social.twitter && (
-                    <SocialLink href={member.social.twitter} icon={<TwitterIcon />} title="X/Twitter" />
-                  )}
-                </div>
+                {member.social.twitter && (
+                  <SocialLink href={member.social.twitter} icon={<TwitterIcon />} title="X/Twitter" />
+                )}
               </div>
             </div>
           ))}
