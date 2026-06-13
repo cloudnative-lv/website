@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 import { useLanguage } from '../i18n/useLanguage';
 import LanguageSwitcher from './LanguageSwitcher';
 import { SubscribeButton } from './SubscribeModal';
@@ -7,6 +7,25 @@ import { SubscribeButton } from './SubscribeModal';
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const { t } = useLanguage();
+  const location = useLocation();
+  const isHome = location.pathname === '/';
+
+  // The "Cloud Native Latvia" wordmark stays hidden while the hero is on screen
+  // (home, not scrolled) and reveals once the hero scrolls under the navbar.
+  // Off the home page there is no hero, so it shows immediately.
+  const [scrolledPastHero, setScrolledPastHero] = useState(false);
+  useEffect(() => {
+    if (!isHome) return;
+    const hero = document.getElementById('hero');
+    if (!hero) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setScrolledPastHero(!entry.isIntersecting),
+      { rootMargin: '-72px 0px 0px 0px' }
+    );
+    observer.observe(hero);
+    return () => observer.disconnect();
+  }, [isHome]);
+  const showWordmark = !isHome || scrolledPastHero;
 
   const linkClass = ({ isActive }) =>
     `px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${
@@ -35,8 +54,13 @@ export default function Navbar() {
     <nav className="bg-white border-b border-rose-100 shadow-sm sticky top-0 z-50">
       <div className="max-w-6xl mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          <Link to="/" className="flex items-center group">
-            <img src="/images/logo-horizontal.svg" alt="Cloud Native Latvia" className="h-9 md:h-10 w-auto" />
+          <Link to="/" className="flex items-center gap-2.5" aria-label="Cloud Native Latvia">
+            <img src="/images/logo.svg" alt="" className="h-9 md:h-10 w-auto shrink-0" />
+            <img
+              src="/images/wordmark.svg"
+              alt="Cloud Native Latvia"
+              className={`h-5 md:h-6 w-auto transition-opacity duration-300 ${showWordmark ? 'opacity-100' : 'opacity-0'}`}
+            />
           </Link>
 
           {/* Desktop Navigation */}

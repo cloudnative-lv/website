@@ -13,7 +13,7 @@ export const translations = {
     home: {
       motto1: 'Navigating Through',
       motto2: 'CNCF Landscape',
-      heroDescription: 'The premier <strong>Kubernetes and DevOps community</strong> in Latvia. Join us for free meetups in Riga exploring <strong>cloud native technologies</strong>, observability, platform engineering, and more.',
+      heroDescription: 'The <strong>Kubernetes and DevOps community</strong> in Latvia. Join us for free meetups in Riga exploring <strong>cloud native technologies</strong>, observability, platform engineering, and more.',
       viewEvents: 'View Events',
       joinCommunity: 'Join Community',
       recentEvents: 'Recent & Upcoming Events',
@@ -250,7 +250,7 @@ export const translations = {
     home: {
       motto1: 'Navigējot cauri',
       motto2: 'CNCF ainavai',
-      heroDescription: 'Vadošā <strong>Kubernetes un DevOps kopiena</strong> Latvijā. Pievienojies bezmaksas tikšanās reizēm Rīgā, lai izpētītu <strong>mākoņdatošanas tehnoloģijas</strong>, novērojamību, platformu inženieriju un daudz ko citu.',
+      heroDescription: '<strong>Kubernetes un DevOps kopiena</strong> Latvijā. Pievienojies bezmaksas tikšanās reizēm Rīgā, lai izpētītu <strong>mākoņdatošanas tehnoloģijas</strong>, novērojamību, platformu inženieriju un daudz ko citu.',
       viewEvents: 'Skatīt pasākumus',
       joinCommunity: 'Pievienoties kopienai',
       recentEvents: 'Nesenie un gaidāmie pasākumi',

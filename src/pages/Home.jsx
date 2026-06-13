@@ -24,19 +24,21 @@ export default function Home() {
       />
       <WebPageJsonLd 
         title="Cloud Native Latvia - Kubernetes & DevOps Meetups in Riga"
-        description="The premier Kubernetes and DevOps community in Latvia. Free meetups exploring cloud native technologies, observability, and platform engineering."
+        description="The Kubernetes and DevOps community in Latvia. Free meetups exploring cloud native technologies, observability, and platform engineering."
         path="/"
       />
       
       {/* Hero Section */}
-      <section className="relative bg-pink-light overflow-hidden">
+      <section id="hero" className="relative bg-pink-light overflow-hidden">
         <AnimatedBackground />
 {/* Background image - add /images/riga-skyline.png for Riga skyline effect */}
         <div className="relative max-w-6xl mx-auto px-4 py-24 text-center">
-          <img src="/images/logo.svg" alt="Cloud Native Latvia - Kubernetes and DevOps Community in Riga" className="h-32 w-auto mx-auto mb-6" />
-          <h1 className="font-black mb-4 uppercase tracking-tight">
-            <span className="block text-4xl md:text-5xl text-pink">Cloud Native</span>
-            <span className="block text-5xl md:text-7xl text-burgundy">Latvia</span>
+          <h1 className="mb-6">
+            <img
+              src="/images/wordmark.svg"
+              alt="Cloud Native Latvia"
+              className="mx-auto w-full max-w-xl"
+            />
           </h1>
           <p className="text-2xl md:text-3xl font-bold mb-4 uppercase tracking-wide">
             <span className="text-pink">{t('home.motto1')}</span>
