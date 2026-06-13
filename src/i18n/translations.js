@@ -271,7 +271,7 @@ export const translations = {
       viewAll: 'Skatīt visus →',
       about: {
         title: 'Par Cloud Native Latvia',
-        p1: 'Mēs esam <strong>izstrādātāju, DevOps inženieru, SRE un platformu inženieru</strong> kopiena Latvijā. Mūsu misija ir dalīties ar zināšanām un pieredzi par <strong>mākoņdatošanas tehnoloģijām</strong>, tostarp <strong>Kubernetes, Docker, konteineriem, mikropakalpojumiem, novērojamības rīkiem kā Prometheus un Grafana</strong>, un modernām <strong>platformu inženierijas praksēm</strong>.',
+        p1: 'Mēs esam <strong>izstrādātāju, DevOps inženieru, SRE un platformu inženieru</strong> kopiena Latvijā. Mūsu misija ir dalīties ar zināšanām un pieredzi par <strong>mākoņdatošanas tehnoloģijām</strong>, tostarp <strong>Kubernetes, Docker, konteineriem, mikropakalpojumiem, novērojamības rīkiem, piemēram, Prometheus un Grafana</strong>, un modernām <strong>platformu inženierijas praksēm</strong>.',
         p2: 'Mēs tiekamies <strong>Rīgā</strong>, lai klausītos vietējo un starptautisko runātāju prezentācijas, veidotu kontaktus ar kolēģiem un mācītos kopā. Mūsu pasākumi aptver tēmas kā <strong>GitOps, ArgoCD, Helm, Terraform, Infrastructure as Code, service mesh tehnoloģijas kā Istio</strong> un mākoņu platformas, ieskaitot <strong>AWS, Azure un Google Cloud</strong>.',
         p3: 'Kā daļa no <strong>CNCF (Cloud Native Computing Foundation) kopienas</strong>, mēs esam saistīti ar globālo mākoņdatošanas ekosistēmu un ienesam jaunākās tendences un labākās prakses Latvijas tehnoloģiju kopienā.'
       },
@@ -363,7 +363,7 @@ export const translations = {
       members: {
         linda: {
           role: 'Platformu inženiere',
-          bio: 'Platformu inženiere, kas aizraujas ar Kubernetes, politiku-kā-kodu un drošu mākoņdatošanas platformu veidošanu.'
+          bio: 'Platformu inženiere, kas aizraujas ar Kubernetes, politiku kā kodu un drošu mākoņdatošanas platformu veidošanu.'
         },
         andrey: {
           role: 'CTO, Apmācītājs',
@@ -494,8 +494,8 @@ export const translations = {
       placeholder: 'Ievadi savu e-pastu',
       button: 'Abonēt',
       buttonShort: 'Abonēt',
-      loading: 'Abonē...',
-      success: 'Pāradresē uz CNCF Community...',
+      loading: 'Notiek abonēšana...',
+      success: 'Pāradresē uz CNCF kopienu...',
       subscribed: 'Paldies, ka pieteicies!',
       error: 'Kaut kas nogāja greizi - lūdzu, mēģini vēlreiz.',
       followUs: 'Vai seko mums sociālajos tīklos'
