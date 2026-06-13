@@ -25,6 +25,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Validate (lint, translation coverage, event data, unit tests)
+        run: npm run validate
+
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps chromium
 
