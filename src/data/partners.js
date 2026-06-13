@@ -6,7 +6,7 @@ export const venueProviders = [
 ];
 
 export const supporters = [
-  { name: 'Extreme Automation', logo: '/images/sponsors/extreme-automation.svg', url: '' },
+  { name: 'Extreme Automation', logo: '/images/sponsors/extreme-automation.svg', url: 'https://extremeautomation.io' },
   { name: 'VELUX', logo: '/images/sponsors/velux.svg', url: 'https://www.velux.com' },
   { name: 'Nuoxera', logo: '/images/sponsors/nuoxera.svg', url: 'https://nuoxera.com' },
 ];
