@@ -142,11 +142,13 @@ downloadable `event-artifacts` workflow artifact.
 - **Slides:** put decks in `public/slides/<event-id>/` (PDF previews in-browser) and
   point each talk's `slidesUrl` at them. Compress large PDFs first:
   `gs -sDEVICE=pdfwrite -dPDFSETTINGS=/ebook -o out.pdf in.pdf`.
-- **Photos:** drop hand-picked full-res photos into `photos-inbox/<event-id>/` (prefix
-  `01-`, `02-`, … to set gallery order), then `npm run process:photos` — it resizes
-  them to 800px into `src/assets/events/<event-id>/`, where the gallery auto-discovers
-  them. Set the event's `photosUrl` to the Google Photos album for the "view all" link.
-  Commit `src/assets/events/`; `photos-inbox/` is gitignored (originals stay local).
+- **Photos:** drop web-sized images (~800px wide, optimized JPEG ~100–150 KB) straight
+  into `src/assets/events/<event-id>/`, named so they sort in display order
+  (`photo-01.jpg`, `photo-02.jpg`, …) — `EventPhotoGallery` auto-discovers them, no
+  config. Resize full-res originals first (macOS Preview → Tools → Adjust Size, or
+  `magick mogrify -resize 800x *.jpg`) so you don't commit multi-MB files. Then set the
+  event's `photosUrl` to the Google Photos album for the "view all" link and commit
+  `src/assets/events/`.
 
 ## Scripts
 
@@ -159,9 +161,7 @@ downloadable `event-artifacts` workflow artifact.
 | `npm run validate:events` | Validate event YAML (fields + formats) |
 | `npm run validate:i18n` | Check EN/LV translation-key parity |
 | `npm run generate:artifacts` | Generate every event's artifacts → `dist/artifacts/` |
-| `npm run prerender` | Bake per-route SEO/OG meta into static HTML (crawlers don't run JS) |
-| `npm run process:photos` | Resize `photos-inbox/` photos into event galleries |
-| `npm run test:unit` | Unit tests (`src/artifacts/*.test.js`) |
+| `npm run prerender` | Bake per-route SEO/OG meta into static HTML (crawlers don't run JS) || `npm run test:unit` | Unit tests (`src/artifacts/*.test.js`) |
 | `npm run test:e2e` | Playwright E2E tests |
 
 `generate:artifacts` and `prerender` need a running server (dev or preview) and a
