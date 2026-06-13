@@ -36,9 +36,10 @@ export default function Home() {
           <h1 className="mb-6">
             <img
               src="/images/wordmark.svg"
-              alt="Cloud Native Latvia"
+              alt=""
               className="mx-auto w-full max-w-xl"
             />
+            <span className="sr-only">Cloud Native Latvia</span>
           </h1>
           <p className="text-2xl md:text-3xl font-bold mb-4 uppercase tracking-wide">
             <span className="text-pink">{t('home.motto1')}</span>
