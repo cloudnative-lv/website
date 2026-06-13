@@ -41,7 +41,7 @@ const page = await browser.newPage();
 // eval. The text is parsed with JSON.parse, never executed.)
 await page.goto(`${BASE}/kit/manifest`, { waitUntil: 'networkidle' });
 const { events } = JSON.parse(await page.$eval('[data-manifest]', (el) => el.textContent));
-const routes = ['/', '/events', '/speakers', '/team', '/swag', '/sponsors',
+const routes = ['/', '/events', '/speakers', '/team', '/swag', '/sponsors', '/privacy',
   ...events.flatMap((e) => [
     `/events/${e.slug}`,
     ...(e.talks || []).map((talkSlug) => `/events/${e.slug}/talks/${talkSlug}`),

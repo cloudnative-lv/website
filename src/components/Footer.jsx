@@ -48,6 +48,9 @@ export default function Footer() {
         </div>
         <div className="border-t border-rose-800 mt-8 pt-8 text-center text-rose-200">
           <p>&copy; {new Date().getFullYear()} Cloud Native Latvia. All rights reserved.</p>
+          <p className="mt-2">
+            <a href="/privacy" className="hover:text-white transition-colors underline">{t('privacy.title')}</a>
+          </p>
         </div>
       </div>
     </footer>

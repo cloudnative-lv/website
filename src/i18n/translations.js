@@ -248,6 +248,35 @@ export const translations = {
       subscribed: 'Thanks for subscribing!',
       error: 'Something went wrong - please try again.',
       followUs: 'Or follow us on social media'
+    },
+    privacy: {
+      title: 'Privacy Policy',
+      updated: 'Last updated: June 2026',
+      intro: 'Cloud Native Latvia is a volunteer-run community and we keep data collection to a minimum. This notice explains what we collect and your rights under the GDPR.',
+      collect: {
+        title: 'What we collect',
+        body: 'If you subscribe to updates, we store the email address you give us. We don\'t use advertising or tracking cookies, and we don\'t run analytics that identify you.'
+      },
+      basis: {
+        title: 'Why we process it',
+        body: 'We process your email on the basis of your consent, given when you subscribe. You can withdraw it at any time.'
+      },
+      storage: {
+        title: 'How it\'s stored',
+        body: 'Subscriber emails are kept in a private file on Cloudflare R2, accessible only to the organizers.'
+      },
+      retention: {
+        title: 'How long we keep it',
+        body: 'We keep your email until you unsubscribe or ask us to remove it.'
+      },
+      sharing: {
+        title: 'Sharing',
+        body: 'We never share your data with sponsors or third parties, and we never sell it.'
+      },
+      rights: {
+        title: 'Your rights',
+        body: 'You can ask us to access, correct, or delete your data at any time — just email <a href="mailto:hello@cloudnative.lv" class="text-pink hover:text-burgundy underline">hello@cloudnative.lv</a> and we\'ll handle it promptly.'
+      }
     }
   },
   lv: {
@@ -499,6 +528,35 @@ export const translations = {
       subscribed: 'Paldies, ka pieteicies!',
       error: 'Kaut kas nogāja greizi - lūdzu, mēģini vēlreiz.',
       followUs: 'Vai seko mums sociālajos tīklos'
+    },
+    privacy: {
+      title: 'Privātuma politika',
+      updated: 'Atjaunināts: 2026. gada jūnijs',
+      intro: 'Cloud Native Latvia ir brīvprātīgo veidota kopiena, un mēs vācam pēc iespējas mazāk datu. Šis paziņojums izskaidro, kādus datus mēs vācam un kādas ir tavas tiesības saskaņā ar VDAR.',
+      collect: {
+        title: 'Kādus datus mēs vācam',
+        body: 'Ja piesakies jaunumiem, mēs saglabājam tavu norādīto e-pasta adresi. Mēs neizmantojam reklāmas vai izsekošanas sīkdatnes un neveicam analītiku, kas tevi identificē.'
+      },
+      basis: {
+        title: 'Kāpēc mēs tos apstrādājam',
+        body: 'Mēs apstrādājam tavu e-pastu, pamatojoties uz tavu piekrišanu, ko sniedz, piesakoties. Tu vari to atsaukt jebkurā laikā.'
+      },
+      storage: {
+        title: 'Kā tie tiek glabāti',
+        body: 'Abonentu e-pasti tiek glabāti privātā failā Cloudflare R2, pieejami tikai organizatoriem.'
+      },
+      retention: {
+        title: 'Cik ilgi mēs tos glabājam',
+        body: 'Mēs glabājam tavu e-pastu, līdz tu atsakies no abonēšanas vai lūdz to dzēst.'
+      },
+      sharing: {
+        title: 'Datu kopīgošana',
+        body: 'Mēs nekad nedalāmies ar taviem datiem ar sponsoriem vai trešajām pusēm un nekad tos nepārdodam.'
+      },
+      rights: {
+        title: 'Tavas tiesības',
+        body: 'Tu vari jebkurā laikā lūgt piekļūt saviem datiem, tos labot vai dzēst — vienkārši raksti uz <a href="mailto:hello@cloudnative.lv" class="text-pink hover:text-burgundy underline">hello@cloudnative.lv</a>, un mēs to ātri nokārtosim.'
+      }
     }
   }
 };
