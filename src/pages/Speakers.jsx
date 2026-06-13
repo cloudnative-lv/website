@@ -90,23 +90,21 @@ export default function Speakers() {
                 const info = getSpeakerInfo(talk.speaker);
                 return (
                 <div key={idx} className="flex flex-col bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
-                  <div className="h-20 bg-linear-to-r from-rose-400 to-rose-600 flex items-center px-6">
+                  <div className="min-h-20 bg-linear-to-r from-rose-400 to-rose-600 flex items-center px-6 py-4">
                     <SpeakerAvatar
                       name={talk.speaker}
                       photo={info.photo}
                       className="w-12 h-12 text-base shrink-0 ring-2 ring-white/40"
                     />
                     <div className="ml-4 text-white">
-                      <h3 className="font-bold text-lg leading-tight">
-                        {talk.speaker}
-                        <SpeakerSocials info={info} iconClass="text-white/70 hover:text-white" />
-                      </h3>
+                      <h3 className="font-bold text-lg leading-tight">{talk.speaker}</h3>
                       {info.title && (
                         <p className="text-white text-xs font-bold mt-0.5 leading-tight">{info.title}</p>
                       )}
                       {info.company && (
                         <p className="text-white/80 text-xs italic leading-tight">{info.company}</p>
                       )}
+                      <SpeakerSocials info={info} iconClass="text-white/70 hover:text-white" className="mt-1.5" />
                     </div>
                   </div>
                   <div className="p-6">
