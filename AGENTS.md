@@ -146,6 +146,7 @@ previousSlugs: ["meetup-004-coming-soon"]  # former slugs; old URLs redirect (om
 title: "Meetup #004: Topic"
 date: "2026-02-11"   # quoted "YYYY-MM-DD"
 time: "18:15"        # doors open, quoted "HH:MM"
+startTime: "18:30"   # talks start, for promo art; omit -> falls back to time
 endTime: "21:00"
 eventbriteUrl: "https://..."   # omit if none
 cncfUrl: "https://..."         # CNCF community event page
@@ -203,6 +204,35 @@ avatars are the fallback.
 > **Note (June 2026):** CNCF migrated its event-publishing platform. New events live
 > on `ocgroups.dev/cncf/group/...` (reached via the old `community.cncf.io` links,
 > which now redirect). Older events keep their `community.cncf.io/e/<code>` URLs.
+
+## Event Artifacts (banners, OG, QR, social copy)
+
+Per-event promo artifacts are **generated from the event metadata** — never
+hand-edited. The templates are React components (`src/artifacts/templates/`) that
+reproduce the Figma banner designs; they are screenshotted to PNG/WebP by
+Playwright. One design source powers three things: the downloadable files, the
+organizer kit page, and the event-page hero/OG image.
+
+- **Templates & matrix:** `src/artifacts/` — `fields.js` (metadata derivations),
+  `artifactSpec.js` (the matrix + `/kit/manifest`), `socialCopy.js` (deterministic
+  EN post copy), `templates/*` (banner components). Add or change a banner by
+  editing a template + `artifactSpec`.
+- **Generate locally:** `npm run dev` then
+  `ARTIFACT_BASE=http://localhost:5173 node scripts/generate-artifacts.mjs [slugFilter]`.
+  Outputs to `dist/artifacts/<event-id>/` (and `dist/artifacts/brand/` for the
+  set-once OCG banners). **Build-time only — not committed**; CI regenerates them
+  and publishes to Pages + uploads them as workflow artifacts.
+- **Organizer kit (unlisted):** `/kit` (index) and `/kit/:slug` (one event) show
+  live previews with per-file + zip download and copy-to-clipboard social text.
+  Not in the nav — reach by direct link.
+- **On the event page:** the generated `og.png` is the per-event `og:image`, and
+  `linkedin-event-speakers.png` is shown as the page hero (both hidden gracefully
+  in dev, where the files don't exist yet).
+- **Platforms:** banners cover LinkedIn (event 1600×900, post 1280×720, speaker
+  1280×720), Eventbrite (2160×1080), Bevy (2560×650, **legacy**), OG (1200×630),
+  and OCG — the decorative breadcrumb strip that replaced Bevy (desktop 2428×192 +
+  mobile 1220×192 WebP, ≤1 MiB). See
+  `docs/superpowers/specs/2026-06-13-event-artifact-generation-design.md`.
 
 ## Social Links
 

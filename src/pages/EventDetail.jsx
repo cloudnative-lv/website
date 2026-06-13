@@ -48,6 +48,7 @@ export default function EventDetail() {
         description={event.description.split('\n')[0]}
         keywords={event.tags || []}
         path={`/events/${event.slug}`}
+        image={`/artifacts/${event.id}/og.png`}
       />
       <EventJsonLd event={event} />
       <div className={`${isUpcoming ? 'bg-linear-to-r from-rose-400 to-rose-700' : 'bg-gray-600'} text-white py-16`}>
@@ -77,6 +78,18 @@ export default function EventDetail() {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Share banner — generated at build time into /artifacts/<id>/; hidden
+          gracefully when absent (e.g. local dev before generation runs). */}
+      <div className="max-w-4xl mx-auto px-4 -mt-8">
+        <img
+          src={`/artifacts/${event.id}/linkedin-event-speakers.png`}
+          alt={`${event.title} banner`}
+          className="w-full rounded-2xl shadow-lg ring-1 ring-rose-200"
+          loading="lazy"
+          onError={(e) => { e.currentTarget.style.display = 'none'; }}
+        />
       </div>
 
       <div className="max-w-4xl mx-auto px-4 py-12">

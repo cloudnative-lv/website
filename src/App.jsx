@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
 import { LanguageProvider } from './i18n/LanguageContext';
 import ErrorBoundary from './components/ErrorBoundary';
 import Navbar from './components/Navbar';
@@ -15,30 +15,50 @@ const Team = lazy(() => import('./pages/Team'));
 const Swag = lazy(() => import('./pages/Swag'));
 const Sponsors = lazy(() => import('./pages/Sponsors'));
 const Speakers = lazy(() => import('./pages/Speakers'));
+// Organizer "kit" routes (unlisted): download pages, manifest + screenshot target.
+const KitIndex = lazy(() => import('./artifacts/KitIndex'));
+const KitPage = lazy(() => import('./artifacts/KitPage'));
+const KitRaw = lazy(() => import('./artifacts/KitRaw'));
+const KitManifest = lazy(() => import('./artifacts/KitManifest'));
+
+// Site chrome wrapping the public pages. The Suspense sits *inside* the layout so
+// the navbar/footer stay mounted (no flicker) while a lazy page loads.
+function SiteLayout() {
+  return (
+    <div className="flex flex-col min-h-screen">
+      <Navbar />
+      <main className="grow">
+        <Suspense fallback={<div className="min-h-screen bg-pink-light" />}>
+          <Outlet />
+        </Suspense>
+      </main>
+      <Footer />
+    </div>
+  );
+}
 
 function App() {
   return (
     <LanguageProvider>
     <BrowserRouter>
-      <div className="flex flex-col min-h-screen">
-        <Navbar />
-        <main className="grow">
-          <ErrorBoundary>
-            <Suspense fallback={<div className="min-h-screen bg-pink-light" />}>
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/events" element={<Events />} />
-                <Route path="/events/:slug" element={<EventDetail />} />
-                <Route path="/team" element={<Team />} />
-                <Route path="/swag" element={<Swag />} />
-                <Route path="/sponsors" element={<Sponsors />} />
-                <Route path="/speakers" element={<Speakers />} />
-              </Routes>
-            </Suspense>
-          </ErrorBoundary>
-        </main>
-        <Footer />
-      </div>
+      <ErrorBoundary>
+        <Routes>
+          <Route element={<SiteLayout />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/events" element={<Events />} />
+            <Route path="/events/:slug" element={<EventDetail />} />
+            <Route path="/team" element={<Team />} />
+            <Route path="/swag" element={<Swag />} />
+            <Route path="/sponsors" element={<Sponsors />} />
+            <Route path="/speakers" element={<Speakers />} />
+          </Route>
+          {/* Unlisted artifact routes (no site chrome). */}
+          <Route path="/kit" element={<Suspense fallback={null}><KitIndex /></Suspense>} />
+          <Route path="/kit/manifest" element={<Suspense fallback={null}><KitManifest /></Suspense>} />
+          <Route path="/kit/:slug" element={<Suspense fallback={null}><KitPage /></Suspense>} />
+          <Route path="/kit/:slug/raw/:variant" element={<Suspense fallback={null}><KitRaw /></Suspense>} />
+        </Routes>
+      </ErrorBoundary>
     </BrowserRouter>
     </LanguageProvider>
   );
