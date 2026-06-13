@@ -43,6 +43,7 @@ export default function KitPage() {
   const { slug } = useParams();
   const event = getEventBySlug(slug);
   const [zipping, setZipping] = useState(false);
+  const [deckBusy, setDeckBusy] = useState(false);
 
   if (!event) {
     return (
@@ -55,6 +56,16 @@ export default function KitPage() {
   const dir = base(event.id);
   const images = artifactsFor(event);
   const social = eventSocial(event);
+
+  const pubSteps = [
+    { title: 'CNCF / OCG (ocgroups.dev)', body: 'Create or confirm the event. Upload the OCG banner (under <code>brand/</code>) once per group — every event inherits it.', link: event.cncfUrl },
+    { title: 'Eventbrite', body: 'Use <code>eventbrite.png</code> (or <code>eventbrite-speakers.png</code>) as the event cover.', link: event.eventbriteUrl },
+    { title: 'LinkedIn', body: 'Create a LinkedIn Event and post <code>linkedin-event-speakers.png</code> with the Announcement copy below.', link: event.linkedinUrl },
+    { title: 'Bluesky', body: 'Post the Announcement copy with <code>linkedin-post.png</code>.' },
+    { title: 'Speaker spotlights', body: 'A few days out, post each <code>speaker-N.png</code> with its Speaker intro copy.' },
+    { title: 'Opening deck', body: 'Download the <code>.pptx</code> above, tweak it, and present it at the venue.' },
+    { title: 'After the event', body: `Add ~800px photos to <code>src/assets/events/${event.id}/</code>, set <code>photosUrl</code>, and add <code>slidesUrl</code> per talk.` },
+  ];
 
   const downloadAll = async () => {
     setZipping(true);
@@ -92,10 +103,42 @@ export default function KitPage() {
           >
             {zipping ? 'Preparing…' : 'Download all (.zip)'}
           </button>
+          <button
+            onClick={async () => {
+              setDeckBusy(true);
+              try {
+                const { downloadDeck } = await import('./deck');
+                await downloadDeck(event);
+              } finally {
+                setDeckBusy(false);
+              }
+            }}
+            disabled={deckBusy}
+            className="mt-4 ml-3 rounded-full bg-white px-5 py-2 font-semibold text-rose-700 hover:bg-rose-50 disabled:opacity-60"
+          >
+            {deckBusy ? 'Building…' : 'Opening deck (.pptx)'}
+          </button>
         </div>
       </header>
 
       <main className="mx-auto max-w-6xl px-6">
+        {/* Publishing checklist */}
+        <section className="mt-10">
+          <h2 className="mb-4 text-xl font-bold text-burgundy">Publishing checklist</h2>
+          <ol className="space-y-3">
+            {pubSteps.map((step, i) => (
+              <li key={i} className="flex gap-3 rounded-xl bg-white p-4 shadow-sm">
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-pink text-sm font-bold text-white">{i + 1}</span>
+                <div>
+                  <p className="font-semibold text-gray-800">{step.title}</p>
+                  <p className="text-sm text-gray-600" dangerouslySetInnerHTML={{ __html: step.body }} />
+                  {step.link && <a href={step.link} target="_blank" rel="noopener noreferrer" className="text-sm font-semibold text-pink underline hover:text-burgundy">Open →</a>}
+                </div>
+              </li>
+            ))}
+          </ol>
+        </section>
+
         {/* Banners */}
         <section className="mt-10">
           <h2 className="mb-4 text-xl font-bold text-burgundy">Banners</h2>

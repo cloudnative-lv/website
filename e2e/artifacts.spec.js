@@ -47,7 +47,7 @@ test.describe('Event artifacts', () => {
     await page.goto(`/kit/${SLUG}`);
     await expect(page.getByRole('heading', { name: /Organizer kit/ })).toBeVisible();
     await expect(page.getByText('Banners')).toBeVisible();
-    await expect(page.getByText('Announcement')).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Announcement' })).toBeVisible();
     await expect(page.getByText('GPUs and AI Agents', { exact: false }).first()).toBeVisible();
   });
 });
