@@ -1,0 +1,32 @@
+name: Deploy Workers
+
+# Manual for now. Once the prerequisites are set (see workers/README.md — R2
+# bucket, verified email destination, CLOUDFLARE_ACCOUNT_ID secret), uncomment
+# the push trigger to auto-deploy on changes under workers/.
+on:
+  workflow_dispatch:
+  # push:
+  #   branches: [main]
+  #   paths: ['workers/**', '.github/workflows/workers.yml']
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        worker: [subscribe]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+
+      - name: Deploy ${{ matrix.worker }}
+        working-directory: workers/${{ matrix.worker }}
+        run: npx --yes wrangler@4 deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_KEY }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

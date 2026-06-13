@@ -36,6 +36,10 @@ jobs:
 
       - name: Build
         run: npm run build
+        env:
+          # Cloudflare subscribe Worker URL; unset -> the form falls back to the
+          # CNCF/OCG group page. Set repo variable SUBSCRIBE_ENDPOINT to enable.
+          VITE_SUBSCRIBE_ENDPOINT: ${{ vars.SUBSCRIBE_ENDPOINT }}
 
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium

@@ -1,0 +1,25 @@
+name = "cloudnative-lv-subscribe"
+main = "src/index.js"
+compatibility_date = "2026-06-01"
+
+# Set your account id here, or pass CLOUDFLARE_ACCOUNT_ID in the environment
+# (the Deploy Workers GitHub Action does the latter).
+# account_id = "..."
+
+[vars]
+ALLOWED_ORIGINS = "https://cloudnative.lv,http://localhost:5173,http://localhost:4173"
+NOTIFY_TO = "hello@cloudnative.lv"
+NOTIFY_FROM = "noreply@cloudnative.lv"
+SUBSCRIBERS_KEY = "subscribers.csv"
+
+# R2 bucket that stores subscribers.csv — the single source of truth.
+# Create it once: npx wrangler r2 bucket create cloudnative-lv
+[[r2_buckets]]
+binding = "SUBSCRIBERS"
+bucket_name = "cloudnative-lv"
+
+# Cloudflare Email Routing send binding. destination_address must be a *verified*
+# Email Routing address on the cloudnative.lv zone.
+[[send_email]]
+name = "NOTIFY"
+destination_address = "hello@cloudnative.lv"
