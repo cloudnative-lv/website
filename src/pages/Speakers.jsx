@@ -88,26 +88,31 @@ export default function Speakers() {
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
               {allTalks.map((talk, idx) => {
                 const info = getSpeakerInfo(talk.speaker);
+                const hasMeta = info.title || info.company || info.linkedin || info.github || info.cncf;
                 return (
                 <div key={idx} className="flex flex-col bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
-                  <div className="min-h-20 bg-linear-to-r from-rose-400 to-rose-600 flex items-center px-6 py-4">
+                  {/* Identity band: avatar + name only, fixed height so every card lines up
+                      regardless of title/company/social-link combinations. */}
+                  <div className="flex h-24 items-center gap-4 bg-linear-to-r from-rose-400 to-rose-600 px-6">
                     <SpeakerAvatar
                       name={talk.speaker}
                       photo={info.photo}
-                      className="w-12 h-12 text-base shrink-0 ring-2 ring-white/40"
+                      className="w-14 h-14 text-lg shrink-0 ring-2 ring-white/40"
                     />
-                    <div className="ml-4 text-white">
-                      <h3 className="font-bold text-lg leading-tight">{talk.speaker}</h3>
-                      {info.title && (
-                        <p className="text-white text-xs font-bold mt-0.5 leading-tight">{info.title}</p>
-                      )}
-                      {info.company && (
-                        <p className="text-white/80 text-xs italic leading-tight">{info.company}</p>
-                      )}
-                      <SpeakerSocials info={info} iconClass="text-white/70 hover:text-white" className="mt-1.5" />
-                    </div>
+                    <h3 className="font-bold text-lg leading-tight text-white line-clamp-2">{talk.speaker}</h3>
                   </div>
-                  <div className="p-6">
+                  <div className="flex grow flex-col p-6">
+                    {hasMeta && (
+                      <div className="mb-4 border-b border-rose-100 pb-4">
+                        {info.title && (
+                          <p className="text-sm font-bold text-burgundy leading-tight">{info.title}</p>
+                        )}
+                        {info.company && (
+                          <p className="text-sm italic text-gray-500 leading-tight">{info.company}</p>
+                        )}
+                        <SpeakerSocials info={info} className="mt-2" />
+                      </div>
+                    )}
                     <h4 className="text-lg font-bold text-burgundy mb-3 line-clamp-2">{talk.title}</h4>
                     {talk.coSpeakers.length > 0 && (
                       <p className="text-pink text-sm mb-2">{t('speakers.with')} {talk.coSpeakers.join(', ')}</p>
@@ -116,11 +121,12 @@ export default function Speakers() {
                       <p className="text-gray-600 text-sm line-clamp-3">{talk.description}</p>
                     )}
                   </div>
+                  {/* Event link: same grey as the "past event" badges used elsewhere. */}
                   <Link
                     to={`/events/${talk.eventSlug}`}
-                    className="mt-auto flex items-center gap-3 bg-linear-to-l from-gray-100 to-gray-200 px-6 py-4 text-pink transition-colors hover:text-burgundy"
+                    className="mt-auto flex items-center gap-3 bg-gray-600 px-6 py-4 text-white transition-colors hover:bg-gray-700"
                   >
-                    <svg className="w-7 h-7 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-7 h-7 shrink-0 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
                     <span className="flex min-h-[2.2rem] items-center">
