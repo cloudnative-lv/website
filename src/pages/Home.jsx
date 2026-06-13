@@ -51,7 +51,7 @@ export default function Home() {
               {t('home.viewEvents')}
             </Link>
             <a
-              href="https://community.cncf.io/cloud-native-latvia/"
+              href="https://ocgroups.dev/cncf/group/xggmcq8"
               target="_blank"
               rel="noopener noreferrer"
               className="bg-burgundy text-white px-8 py-3 rounded-full font-semibold hover:bg-rose-800 transition-all shadow-lg hover:shadow-xl"

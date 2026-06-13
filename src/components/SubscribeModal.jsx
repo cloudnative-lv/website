@@ -12,7 +12,7 @@ export default function SubscribeModal({ isOpen, onClose }) {
     
     // For now, open the CNCF community page where they can subscribe
     // In the future, this could be connected to a mailing list service
-    window.open('https://community.cncf.io/cloud-native-latvia/', '_blank');
+    window.open('https://ocgroups.dev/cncf/group/xggmcq8', '_blank');
     setStatus('success');
     
     setTimeout(() => {
@@ -120,7 +120,7 @@ export default function SubscribeModal({ isOpen, onClose }) {
               </svg>
             </a>
             <a
-              href="https://community.cncf.io/cloud-native-latvia/"
+              href="https://ocgroups.dev/cncf/group/xggmcq8"
               target="_blank"
               rel="noopener noreferrer"
               className="text-gray-400 hover:text-rose-600 transition-colors"

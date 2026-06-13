@@ -33,7 +33,7 @@ export default function Footer() {
             <h4 className="font-semibold mb-4">{t('footer.connect')}</h4>
             <div className="flex flex-wrap gap-4">
               <a
-                href="https://community.cncf.io/cloud-native-latvia/"
+                href="https://ocgroups.dev/cncf/group/xggmcq8"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-rose-200 hover:text-white transition-colors"
