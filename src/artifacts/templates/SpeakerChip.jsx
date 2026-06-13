@@ -20,12 +20,12 @@ export default function SpeakerChip({ speaker, u }) {
           )}
         </div>
       </div>
-      <div className="min-w-0">
-        <div className="font-bold text-burgundy" style={{ fontSize: `${3.2 * u}px` }}>
+      <div className="min-w-0" style={{ maxWidth: `${34 * u}px` }}>
+        <div className="font-bold leading-tight text-burgundy" style={{ fontSize: `${3.2 * u}px` }}>
           {speaker.name}
         </div>
         {speakerRole(speaker) && (
-          <div className="italic text-rose-500" style={{ fontSize: `${2.3 * u}px` }}>
+          <div className="italic leading-tight text-rose-500" style={{ fontSize: `${2.3 * u}px` }}>
             {speakerRole(speaker)}
           </div>
         )}

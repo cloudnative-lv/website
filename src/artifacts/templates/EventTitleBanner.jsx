@@ -29,7 +29,7 @@ export default function EventTitleBanner({ width, height, event, withSpeakers = 
       {speakers.length > 0 && (
         <div
           className="absolute flex flex-wrap items-start"
-          style={{ left: `${4.5 * u}px`, right: `${4.5 * u}px`, top: `${30 * u}px`, gap: `${4 * u}px ${7 * u}px` }}
+          style={{ left: `${4.5 * u}px`, right: `${4.5 * u}px`, top: `${30 * u}px`, gap: `${4 * u}px ${10 * u}px` }}
         >
           {speakers.map((s) => (
             <SpeakerChip key={s.name} speaker={s} u={u} />
