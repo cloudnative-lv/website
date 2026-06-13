@@ -4,7 +4,7 @@ const siteConfig = {
   siteName: 'Cloud Native Latvia',
   siteUrl: 'https://cloudnative.lv',
   logo: 'https://cloudnative.lv/images/logo.svg',
-  description: 'A community of cloud native enthusiasts in Latvia exploring Kubernetes, DevOps, and platform engineering through bi-monthly meetups in Riga.',
+  description: 'A community of cloud native enthusiasts in Latvia exploring Kubernetes, DevOps, and platform engineering through meetups in Riga.',
   email: 'hello@cloudnative.lv',
   socialLinks: [
     'https://www.linkedin.com/company/cloud-native-latvia',

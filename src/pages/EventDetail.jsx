@@ -226,7 +226,6 @@ export default function EventDetail() {
                     rel="noopener noreferrer"
                     className="block w-full border-2 border-burgundy text-burgundy text-center py-3 px-4 rounded-full font-semibold hover:bg-rose-50 transition-colors mt-3"
                   >
-                    <span className="mr-2" aria-hidden="true">📷</span>
                     {t('eventDetail.viewPhotos')}
                   </a>
                 )}

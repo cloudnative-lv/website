@@ -16,14 +16,14 @@ export default function Home() {
     <div className="min-h-screen">
       <SEO 
         title="Kubernetes, DevOps & Platform Engineering Meetups in Riga"
-        description="Join Cloud Native Latvia for free bi-monthly meetups in Riga exploring Kubernetes, Docker, observability, GitOps, and cloud native technologies. Connect with DevOps engineers and developers in Latvia."
+        description="Join Cloud Native Latvia for free meetups in Riga exploring Kubernetes, Docker, observability, GitOps, and cloud native technologies. Connect with DevOps engineers and developers in Latvia."
         keywords={['Kubernetes meetup Riga', 'DevOps Latvia', 'CNCF Latvia', 'tech meetups Riga', 'platform engineering']}
         path="/"
         image="/images/og/home.png"
       />
       <WebPageJsonLd 
         title="Cloud Native Latvia - Kubernetes & DevOps Meetups in Riga"
-        description="The premier Kubernetes and DevOps community in Latvia. Free bi-monthly meetups exploring cloud native technologies, observability, and platform engineering."
+        description="The premier Kubernetes and DevOps community in Latvia. Free meetups exploring cloud native technologies, observability, and platform engineering."
         path="/"
       />
       
@@ -63,7 +63,7 @@ export default function Home() {
       </section>
 
       {/* Featured Events */}
-      <section className="py-16 bg-pink-light">
+      <section className="py-16 bg-white">
         <div className="max-w-6xl mx-auto px-4">
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-3xl font-black text-burgundy">{t('home.recentEvents')}</h2>
@@ -80,7 +80,7 @@ export default function Home() {
       </section>
 
       {/* About Section */}
-      <section className="py-16 bg-white">
+      <section className="py-16 bg-pink-light">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h2 className="text-3xl font-black text-burgundy mb-6">{t('home.about.title')}</h2>
           <p className="text-lg text-gray-600 mb-6 leading-relaxed" dangerouslySetInnerHTML={{ __html: t('home.about.p1') }} />

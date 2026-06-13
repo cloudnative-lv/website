@@ -143,9 +143,9 @@ export function SubscribeButton({ className = '', variant = 'primary' }) {
 
   const baseClasses = 'inline-flex items-center gap-2 px-4 py-2 rounded-full font-semibold transition-all';
   const variants = {
-    primary: 'bg-white text-burgundy hover:bg-rose-50 shadow-lg hover:shadow-xl',
+    primary: 'bg-pink text-white hover:bg-rose-500 shadow-md hover:shadow-lg',
     secondary: 'bg-pink text-white hover:bg-rose-500 shadow-lg hover:shadow-xl',
-    outline: 'border-2 border-white text-white hover:bg-white/10'
+    outline: 'border-2 border-pink text-pink hover:bg-rose-50'
   };
 
   return (

@@ -11,15 +11,15 @@ export default function Navbar() {
   const linkClass = ({ isActive }) =>
     `px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${
       isActive
-        ? 'bg-white text-rose-700'
-        : 'text-white hover:bg-white/20'
+        ? 'bg-pink text-white'
+        : 'text-gray-700 hover:text-burgundy hover:bg-rose-50'
     }`;
 
   const mobileLinkClass = ({ isActive }) =>
     `block px-4 py-3 rounded-lg font-semibold transition-all ${
       isActive
-        ? 'bg-white text-rose-700'
-        : 'text-white hover:bg-white/10'
+        ? 'bg-pink text-white'
+        : 'text-gray-700 hover:bg-rose-50'
     }`;
 
   const navLinks = [
@@ -32,17 +32,17 @@ export default function Navbar() {
   ];
 
   return (
-    <nav className="bg-linear-to-r from-rose-400 to-rose-700 shadow-lg sticky top-0 z-50">
+    <nav className="bg-white border-b border-rose-100 shadow-sm sticky top-0 z-50">
       <div className="max-w-6xl mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <Link to="/" className="flex items-center space-x-3 group">
-            <img src="/images/logo_light.svg" alt="Cloud Native Latvia" className="h-10 w-auto" />
+            <img src="/images/logo.svg" alt="Cloud Native Latvia" className="h-10 w-auto" />
             <div className="hidden sm:flex flex-col leading-tight uppercase text-center">
-              <span className="text-white font-bold text-sm tracking-tight">Cloud Native</span>
-              <span className="text-burgundy font-black text-lg tracking-wide" style={{ textShadow: '-1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff' }}>LATVIA</span>
+              <span className="text-pink font-bold text-sm tracking-tight">Cloud Native</span>
+              <span className="text-burgundy font-black text-lg tracking-wide">LATVIA</span>
             </div>
           </Link>
-          
+
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-1">
             {navLinks.map(link => (
@@ -61,7 +61,7 @@ export default function Navbar() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden text-white p-2 rounded-lg hover:bg-white/10 transition-colors"
+            className="md:hidden text-burgundy p-2 rounded-lg hover:bg-rose-50 transition-colors"
             aria-label="Toggle menu"
           >
             {isOpen ? (
@@ -78,7 +78,7 @@ export default function Navbar() {
 
         {/* Mobile Navigation */}
         {isOpen && (
-          <div className="md:hidden py-4 border-t border-white/20">
+          <div className="md:hidden py-4 border-t border-rose-100">
             <div className="space-y-2">
               {navLinks.map(link => (
                 <NavLink
@@ -91,7 +91,7 @@ export default function Navbar() {
                   {link.label}
                 </NavLink>
               ))}
-              <div className="pt-4 border-t border-white/20 mt-4 flex items-center gap-4">
+              <div className="pt-4 border-t border-rose-100 mt-4 flex items-center gap-4">
                 <SubscribeButton variant="outline" />
                 <LanguageSwitcher />
               </div>

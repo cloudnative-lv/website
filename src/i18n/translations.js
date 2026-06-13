@@ -13,7 +13,7 @@ export const translations = {
     home: {
       motto1: 'Navigating Through',
       motto2: 'CNCF Landscape',
-      heroDescription: 'The premier <strong>Kubernetes and DevOps community</strong> in Latvia. Join us for free bi-monthly meetups in Riga exploring <strong>cloud native technologies</strong>, observability, platform engineering, and more.',
+      heroDescription: 'The premier <strong>Kubernetes and DevOps community</strong> in Latvia. Join us for free meetups in Riga exploring <strong>cloud native technologies</strong>, observability, platform engineering, and more.',
       viewEvents: 'View Events',
       joinCommunity: 'Join Community',
       recentEvents: 'Recent & Upcoming Events',
@@ -21,7 +21,7 @@ export const translations = {
       about: {
         title: 'About Cloud Native Latvia',
         p1: 'We are a community of <strong>developers, DevOps engineers, SREs, and platform engineers</strong> based in Latvia. Our mission is to share knowledge and experiences around <strong>cloud native technologies</strong> including <strong>Kubernetes, Docker, containers, microservices, observability tools like Prometheus and Grafana</strong>, and modern <strong>platform engineering practices</strong>.',
-        p2: 'We meet bi-monthly (every 2 months) in <strong>Riga</strong> to hear talks from local and international speakers, network with fellow practitioners, and learn together. Our events cover topics like <strong>GitOps, ArgoCD, Helm, Terraform, Infrastructure as Code, service mesh technologies like Istio</strong>, and cloud platforms including <strong>AWS, Azure, and Google Cloud</strong>.',
+        p2: 'We meet in <strong>Riga</strong> to hear talks from local and international speakers, network with fellow practitioners, and learn together. Our events cover topics like <strong>GitOps, ArgoCD, Helm, Terraform, Infrastructure as Code, service mesh technologies like Istio</strong>, and cloud platforms including <strong>AWS, Azure, and Google Cloud</strong>.',
         p3: 'As part of the <strong>CNCF (Cloud Native Computing Foundation) community</strong>, we\'re connected to the global cloud native ecosystem and bring the latest trends and best practices to the Latvian tech community.'
       },
       cta: {
@@ -33,7 +33,7 @@ export const translations = {
     // Events page
     events: {
       title: 'Events',
-      subtitle: 'Join us for bi-monthly meetups exploring cloud native technologies',
+      subtitle: 'Join us for meetups exploring cloud native technologies',
       upcoming: 'Upcoming Events',
       past: 'Past Events',
       noUpcoming: 'The next meetup hasn\'t been announced yet — subscribe or follow us to hear about it first!',
@@ -52,7 +52,7 @@ export const translations = {
       topics: 'Topics',
       registerEventbrite: 'Register on Eventbrite',
       viewEventbrite: 'View on Eventbrite',
-      viewCNCF: 'View on CNCF Community',
+      viewCNCF: 'View on CNCF',
       viewPhotos: 'View Photos',
       photos: 'Photos',
       viewAllPhotos: 'View all photos',
@@ -176,6 +176,12 @@ export const translations = {
       ourSponsors: 'Our Sponsors',
       beFirst: 'Be the first to support Cloud Native Latvia! Your logo could be here.',
       yourLogo: 'Your Logo',
+      partners: {
+        title: 'Our Partners',
+        intro: 'Cloud Native Latvia is made possible by the organizations that host and support our community.',
+        hosts: 'Hosting Providers',
+        supporters: 'Supporters'
+      },
       tierNames: {
         gold: 'Gold',
         silver: 'Silver',
@@ -239,7 +245,7 @@ export const translations = {
     home: {
       motto1: 'Navigējot cauri',
       motto2: 'CNCF ainavai',
-      heroDescription: 'Vadošā <strong>Kubernetes un DevOps kopiena</strong> Latvijā. Pievienojies bezmaksas tikšanās reizēm Rīgā, kas notiek reizi divos mēnešos, lai izpētītu <strong>mākoņdatošanas tehnoloģijas</strong>, novērojamību, platformu inženieriju un daudz ko citu.',
+      heroDescription: 'Vadošā <strong>Kubernetes un DevOps kopiena</strong> Latvijā. Pievienojies bezmaksas tikšanās reizēm Rīgā, lai izpētītu <strong>mākoņdatošanas tehnoloģijas</strong>, novērojamību, platformu inženieriju un daudz ko citu.',
       viewEvents: 'Skatīt pasākumus',
       joinCommunity: 'Pievienoties kopienai',
       recentEvents: 'Nesenie un gaidāmie pasākumi',
@@ -247,7 +253,7 @@ export const translations = {
       about: {
         title: 'Par Cloud Native Latvia',
         p1: 'Mēs esam <strong>izstrādātāju, DevOps inženieru, SRE un platformu inženieru</strong> kopiena Latvijā. Mūsu misija ir dalīties ar zināšanām un pieredzi par <strong>mākoņdatošanas tehnoloģijām</strong>, tostarp <strong>Kubernetes, Docker, konteineriem, mikropakalpojumiem, novērojamības rīkiem kā Prometheus un Grafana</strong>, un modernām <strong>platformu inženierijas praksēm</strong>.',
-        p2: 'Mēs tiekamies reizi divos mēnešos <strong>Rīgā</strong>, lai klausītos vietējo un starptautisko runātāju prezentācijas, veidotu kontaktus ar kolēģiem un mācītos kopā. Mūsu pasākumi aptver tēmas kā <strong>GitOps, ArgoCD, Helm, Terraform, Infrastructure as Code, service mesh tehnoloģijas kā Istio</strong> un mākoņu platformas, ieskaitot <strong>AWS, Azure un Google Cloud</strong>.',
+        p2: 'Mēs tiekamies <strong>Rīgā</strong>, lai klausītos vietējo un starptautisko runātāju prezentācijas, veidotu kontaktus ar kolēģiem un mācītos kopā. Mūsu pasākumi aptver tēmas kā <strong>GitOps, ArgoCD, Helm, Terraform, Infrastructure as Code, service mesh tehnoloģijas kā Istio</strong> un mākoņu platformas, ieskaitot <strong>AWS, Azure un Google Cloud</strong>.',
         p3: 'Kā daļa no <strong>CNCF (Cloud Native Computing Foundation) kopienas</strong>, mēs esam saistīti ar globālo mākoņdatošanas ekosistēmu un ienesam jaunākās tendences un labākās prakses Latvijas tehnoloģiju kopienā.'
       },
       cta: {
@@ -259,7 +265,7 @@ export const translations = {
     // Events page
     events: {
       title: 'Pasākumi',
-      subtitle: 'Pievienojies mūsu tikšanās reizēm, kas notiek reizi divos mēnešos par mākoņdatošanas tehnoloģijām',
+      subtitle: 'Pievienojies mūsu tikšanās reizēm par mākoņdatošanas tehnoloģijām',
       upcoming: 'Gaidāmie pasākumi',
       past: 'Pagājušie pasākumi',
       noUpcoming: 'Nākamā tikšanās vēl nav izsludināta — abonē jaunumus vai seko mums, lai uzzinātu pirmais!',
@@ -278,7 +284,7 @@ export const translations = {
       topics: 'Tēmas',
       registerEventbrite: 'Reģistrēties Eventbrite',
       viewEventbrite: 'Skatīt Eventbrite',
-      viewCNCF: 'Skatīt CNCF Community',
+      viewCNCF: 'Skatīt CNCF',
       viewPhotos: 'Skatīt fotogrāfijas',
       photos: 'Fotogrāfijas',
       viewAllPhotos: 'Skatīt visas fotogrāfijas',
@@ -402,6 +408,12 @@ export const translations = {
       ourSponsors: 'Mūsu sponsori',
       beFirst: 'Esi pirmais, kas atbalsta Cloud Native Latvia! Tavs logo varētu būt šeit.',
       yourLogo: 'Tavs logo',
+      partners: {
+        title: 'Mūsu partneri',
+        intro: 'Cloud Native Latvia pastāv, pateicoties organizācijām, kas uzņem un atbalsta mūsu kopienu.',
+        hosts: 'Norises vietu nodrošinātāji',
+        supporters: 'Atbalstītāji'
+      },
       tierNames: {
         gold: 'Zelts',
         silver: 'Sudrabs',

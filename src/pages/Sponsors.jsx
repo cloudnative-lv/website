@@ -125,21 +125,30 @@ export default function Sponsors() {
         </Section>
 
         <Section className="mb-0">
-          <SectionHeading className="text-center">{t('sponsors.ourSponsors')}</SectionHeading>
-          <div className="bg-white rounded-2xl shadow-lg p-8 text-center">
-            <p className="text-gray-600 mb-6">
-              {t('sponsors.beFirst')}
-            </p>
-            <div className="flex justify-center gap-8 flex-wrap">
-              <div className="w-40 h-20 bg-gray-100 rounded-lg flex items-center justify-center text-gray-400 border-2 border-dashed border-gray-300">
-                {t('sponsors.yourLogo')}
-              </div>
-              <div className="w-40 h-20 bg-gray-100 rounded-lg flex items-center justify-center text-gray-400 border-2 border-dashed border-gray-300">
-                {t('sponsors.yourLogo')}
-              </div>
-              <div className="w-40 h-20 bg-gray-100 rounded-lg flex items-center justify-center text-gray-400 border-2 border-dashed border-gray-300">
-                {t('sponsors.yourLogo')}
-              </div>
+          <SectionHeading className="text-center">{t('sponsors.partners.title')}</SectionHeading>
+          <div className="bg-white rounded-2xl shadow-lg p-8">
+            <p className="text-center text-gray-600 mb-8">{t('sponsors.partners.intro')}</p>
+
+            <h3 className="text-center text-sm font-bold uppercase tracking-wide text-pink mb-4">
+              {t('sponsors.partners.hosts')}
+            </h3>
+            <div className="flex justify-center gap-6 flex-wrap mb-10">
+              {['Accenture', 'GoCardless'].map((name) => (
+                <div key={name} className="w-48 h-24 bg-rose-50 rounded-xl flex items-center justify-center px-4 text-center">
+                  <span className="text-lg font-bold text-burgundy">{name}</span>
+                </div>
+              ))}
+            </div>
+
+            <h3 className="text-center text-sm font-bold uppercase tracking-wide text-pink mb-4">
+              {t('sponsors.partners.supporters')}
+            </h3>
+            <div className="flex justify-center gap-6 flex-wrap">
+              {['Extreme Automation', 'VELUX', 'Nuoxera'].map((name) => (
+                <div key={name} className="w-48 h-24 bg-rose-50 rounded-xl flex items-center justify-center px-4 text-center">
+                  <span className="text-lg font-bold text-burgundy">{name}</span>
+                </div>
+              ))}
             </div>
           </div>
         </Section>

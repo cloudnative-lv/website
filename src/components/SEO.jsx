@@ -6,7 +6,7 @@ const siteConfig = {
   siteUrl: 'https://cloudnative.lv',
   defaultImage: '/images/og/default.png',
   defaultDescription: {
-    en: 'Join Cloud Native Latvia for bi-monthly meetups in Riga exploring Kubernetes, DevOps, observability, platform engineering, and cloud native technologies.',
+    en: 'Join Cloud Native Latvia for meetups in Riga exploring Kubernetes, DevOps, observability, platform engineering, and cloud native technologies.',
     lv: 'Pievienojies Cloud Native Latvia tikšanās reizēm Rīgā par Kubernetes, DevOps, novērojamību, platformu inženieriju un mākoņdatošanas tehnoloģijām.'
   }
 };
