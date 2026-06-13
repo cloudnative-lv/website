@@ -1,0 +1,12 @@
+name = "cloudnative-lv-attendees"
+main = "src/index.js"
+compatibility_date = "2026-06-01"
+
+# SKELETON — implement, then add "attendees" to the workers.yml deploy matrix.
+# Pulls RSVPs from Eventbrite + OCG and dedupes into the R2 CSV source of truth.
+# LinkedIn data is collected locally (off-CI — TOS) and merged here by email.
+# [triggers]
+# crons = ["0 8 * * *"]
+# [[r2_buckets]]
+# binding = "ATTENDEES"
+# bucket_name = "cloudnative-lv"

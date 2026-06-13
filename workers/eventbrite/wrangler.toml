@@ -1,0 +1,7 @@
+name = "cloudnative-lv-eventbrite"
+main = "src/index.js"
+compatibility_date = "2026-06-01"
+
+# SKELETON — implement, then add "eventbrite" to the workers.yml deploy matrix.
+# Creates/updates Eventbrite events + ticket classes from the website's event data.
+# Secrets: EVENTBRITE_TOKEN, EVENTBRITE_ORG_ID  (npx wrangler secret put ...).

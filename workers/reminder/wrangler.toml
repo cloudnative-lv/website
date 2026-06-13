@@ -1,0 +1,9 @@
+name = "cloudnative-lv-reminder"
+main = "src/index.js"
+compatibility_date = "2026-06-01"
+
+# SKELETON — implement, then add "reminder" to the workers.yml deploy matrix.
+# Scheduled check of each upcoming event's expected artifacts (banners, slides,
+# photos, registration links); pings the team when something is missing.
+# [triggers]
+# crons = ["0 9 * * *"]

@@ -54,3 +54,15 @@ pointing at it.
   (comma-separated, e.g. `andrey@extremeautomation.io,linda.arende@gmail.com`).
 - Deploy: the same **Deploy Workers** action (it's in the matrix), or
   `npx wrangler deploy` locally.
+
+## Planned (skeletons)
+
+Stub workers scaffolded for automation we have in mind — implement, then add the
+name to the `workers.yml` deploy matrix:
+
+- **eventbrite** — create/update Eventbrite events from event data.
+- **social** — post announcements to LinkedIn + Bluesky (the `/kit` already makes the copy).
+- **attendees** — aggregate RSVPs (Eventbrite, OCG) into the R2 CSV; LinkedIn data is
+  merged from a local, off-CI collection (TOS).
+- **reminder** — scheduled check of each event's expected artifacts; pings the team on gaps.
+- **youtube** — upload event recordings with metadata + chapters.

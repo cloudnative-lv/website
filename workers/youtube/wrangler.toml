@@ -1,0 +1,7 @@
+name = "cloudnative-lv-youtube"
+main = "src/index.js"
+compatibility_date = "2026-06-01"
+
+# SKELETON — implement, then add "youtube" to the workers.yml deploy matrix.
+# Uploads event recordings with metadata + chapters; thumbnails from kit banners.
+# Secret: YOUTUBE_OAUTH (refresh token).
