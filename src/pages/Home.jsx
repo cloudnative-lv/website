@@ -33,7 +33,7 @@ export default function Home() {
         <AnimatedBackground />
 {/* Background image - add /images/riga-skyline.png for Riga skyline effect */}
         <div className="relative max-w-6xl mx-auto px-4 py-24 text-center">
-          <h1 className="mb-6">
+          <h1 id="hero-wordmark" className="mb-6">
             <img
               src="/images/wordmark.svg"
               alt=""

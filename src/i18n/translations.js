@@ -54,10 +54,12 @@ export const translations = {
       talks: 'Talks',
       details: 'Event Details',
       venue: 'Venue',
+      viewMap: 'View on map',
       topics: 'Topics',
       registerEventbrite: 'Register on Eventbrite',
       viewEventbrite: 'View on Eventbrite',
       viewCNCF: 'View on CNCF',
+      viewLinkedIn: 'View on LinkedIn',
       viewPhotos: 'View Photos',
       photos: 'Photos',
       viewAllPhotos: 'View all photos',
@@ -113,7 +115,7 @@ export const translations = {
           bio: 'Platform engineer passionate about Kubernetes, policy-as-code, and building secure cloud native platforms.'
         },
         andrey: {
-          role: 'Fractional CTO, Trainer',
+          role: 'CTO, Trainer',
           bio: 'Cloud native enthusiast and community builder. Helping bring the cloud native community together in Latvia.'
         }
       }
@@ -303,10 +305,12 @@ export const translations = {
       talks: 'Prezentācijas',
       details: 'Pasākuma detaļas',
       venue: 'Norises vieta',
+      viewMap: 'Skatīt kartē',
       topics: 'Tēmas',
       registerEventbrite: 'Reģistrēties Eventbrite',
       viewEventbrite: 'Skatīt Eventbrite',
       viewCNCF: 'Skatīt CNCF',
+      viewLinkedIn: 'Skatīt LinkedIn',
       viewPhotos: 'Skatīt fotogrāfijas',
       photos: 'Fotogrāfijas',
       viewAllPhotos: 'Skatīt visas fotogrāfijas',
@@ -362,7 +366,7 @@ export const translations = {
           bio: 'Platformu inženiere, kas aizraujas ar Kubernetes, politiku-kā-kodu un drošu mākoņdatošanas platformu veidošanu.'
         },
         andrey: {
-          role: 'Daļlaika CTO, Apmācītājs',
+          role: 'CTO, Apmācītājs',
           bio: 'Mākoņdatošanas entuziasts un kopienas veidotājs. Palīdz apvienot mākoņdatošanas kopienu Latvijā.'
         }
       }

@@ -16,13 +16,13 @@ export default function Navbar() {
   const [scrolledPastHero, setScrolledPastHero] = useState(false);
   useEffect(() => {
     if (!isHome) return;
-    const hero = document.getElementById('hero');
-    if (!hero) return;
+    const wordmark = document.getElementById('hero-wordmark');
+    if (!wordmark) return;
     const observer = new IntersectionObserver(
       ([entry]) => setScrolledPastHero(!entry.isIntersecting),
       { rootMargin: '-72px 0px 0px 0px' }
     );
-    observer.observe(hero);
+    observer.observe(wordmark);
     return () => observer.disconnect();
   }, [isHome]);
   const showWordmark = !isHome || scrolledPastHero;
@@ -53,8 +53,8 @@ export default function Navbar() {
   return (
     <nav className="bg-white border-b border-rose-100 shadow-sm sticky top-0 z-50">
       <div className="max-w-6xl mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
-          <Link to="/" className="flex items-center gap-2.5" aria-label="Cloud Native Latvia">
+        <div className="flex items-center gap-4 h-16">
+          <Link to="/" className="flex items-center gap-2.5 shrink-0" aria-label="Cloud Native Latvia">
             <img src="/images/logo.svg" alt="" className="h-9 md:h-10 w-auto shrink-0" />
             <img
               src="/images/wordmark.svg"
@@ -63,8 +63,8 @@ export default function Navbar() {
             />
           </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-1">
+          {/* Desktop Navigation (centered) */}
+          <div className="hidden md:flex flex-1 items-center justify-center space-x-1">
             {navLinks.map(link => (
               <NavLink key={link.to} to={link.to} end={link.end} className={linkClass}>
                 {link.label}
@@ -73,15 +73,17 @@ export default function Navbar() {
             <div className="ml-2">
               <SubscribeButton variant="primary" />
             </div>
-            <div className="ml-2">
-              <LanguageSwitcher />
-            </div>
+          </div>
+
+          {/* Language switcher */}
+          <div className="hidden md:block shrink-0">
+            <LanguageSwitcher />
           </div>
 
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden text-burgundy p-2 rounded-lg hover:bg-rose-50 transition-colors"
+            className="md:hidden ml-auto text-burgundy p-2 rounded-lg hover:bg-rose-50 transition-colors"
             aria-label="Toggle menu"
           >
             {isOpen ? (

@@ -13,7 +13,7 @@ const teamConfigs = [
   {
     key: 'linda',
     name: 'Linda Austra Ārende',
-    photo: null,
+    photo: '/images/team/linda.jpg',
     social: {
       linkedin: 'https://www.linkedin.com/in/lindaarende/',
       twitter: null

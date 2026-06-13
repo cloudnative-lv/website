@@ -150,6 +150,7 @@ startTime: "18:30"   # talks start, for promo art; omit -> falls back to time
 endTime: "21:00"
 eventbriteUrl: "https://..."   # omit if none
 cncfUrl: "https://..."         # CNCF community event page
+linkedinUrl: "https://www.linkedin.com/events/..."  # LinkedIn event (omit if none)
 photosUrl: "https://photos.app.goo.gl/..."  # Google Photos shared album (omit if none)
 venue:
   name: "Venue Name"

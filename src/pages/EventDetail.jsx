@@ -177,6 +177,20 @@ export default function EventDetail() {
                   <p className="text-sm text-gray-500 uppercase tracking-wide">{t('eventDetail.venue')}</p>
                   <p className="text-burgundy font-medium">{event.venue.name}</p>
                   <p className="text-gray-600 text-sm">{event.venue.address}</p>
+                  {event.venue.mapUrl && (
+                    <a
+                      href={event.venue.mapUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-1 inline-flex items-center gap-1.5 text-sm font-semibold text-pink hover:text-burgundy transition-colors"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                      </svg>
+                      {t('eventDetail.viewMap')}
+                    </a>
+                  )}
                 </div>
 
                 {event.tags && event.tags.length > 0 && (
@@ -225,6 +239,17 @@ export default function EventDetail() {
                     className="block w-full bg-burgundy text-white text-center py-3 px-4 rounded-full font-semibold hover:bg-rose-800 transition-all shadow-md hover:shadow-lg mt-3"
                   >
                     {t('eventDetail.viewCNCF')}
+                  </a>
+                )}
+
+                {event.linkedinUrl && (
+                  <a
+                    href={event.linkedinUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block w-full border-2 border-burgundy text-burgundy text-center py-3 px-4 rounded-full font-semibold hover:bg-rose-50 transition-colors mt-3"
+                  >
+                    {t('eventDetail.viewLinkedIn')}
                   </a>
                 )}
 
