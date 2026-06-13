@@ -17,6 +17,10 @@ test-results/
 playwright-report/
 playwright/.cache/
 
+# Photo intake staging (full-res originals; processed into src/assets/events/)
+photos-inbox/*
+!photos-inbox/README.md
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
