@@ -36,7 +36,7 @@ export const translations = {
       subtitle: 'Join us for meetups exploring cloud native technologies',
       upcoming: 'Upcoming Events',
       past: 'Past Events',
-      noUpcoming: 'The next meetup hasn\'t been announced yet — subscribe or follow us to hear about it first!',
+      noUpcoming: 'The next meetup hasn\'t been announced yet - subscribe or follow us to hear about it first!',
       register: 'Register',
       viewDetails: 'View Details'
     },
@@ -268,7 +268,7 @@ export const translations = {
       subtitle: 'Pievienojies mūsu tikšanās reizēm par mākoņdatošanas tehnoloģijām',
       upcoming: 'Gaidāmie pasākumi',
       past: 'Pagājušie pasākumi',
-      noUpcoming: 'Nākamā tikšanās vēl nav izsludināta — abonē jaunumus vai seko mums, lai uzzinātu pirmais!',
+      noUpcoming: 'Nākamā tikšanās vēl nav izsludināta - abonē jaunumus vai seko mums, lai uzzinātu pirmais!',
       register: 'Reģistrēties',
       viewDetails: 'Skatīt detaļas'
     },
@@ -310,7 +310,7 @@ export const translations = {
       eventsPlural: 'pasākumos',
       cta: {
         title: 'Vēlies uzstāties?',
-        description: 'Mēs vienmēr meklējam runātājus, kas vēlas dalīties ar savu pieredzi mākoņdatošanas tehnoloģijās. Vai tā būtu 20 minūšu prezentācija vai īsa uzstāšanās – mēs labprāt uzklausītu!',
+        description: 'Mēs vienmēr meklējam runātājus, kas vēlas dalīties ar savu pieredzi mākoņdatošanas tehnoloģijās. Vai tā būtu 20 minūšu prezentācija vai īsa uzstāšanās - mēs labprāt uzklausītu!',
         submit: 'Iesniegt prezentācijas pieteikumu',
         viewEvents: 'Skatīt gaidāmos pasākumus'
       }
@@ -402,7 +402,7 @@ export const translations = {
       perEvent: 'par pasākumu',
       custom: {
         title: 'Pielāgota sponsorēšana',
-        description: 'Meklē ko citu? Mēs labprāt apspriedīsim pielāgotus sponsorēšanas piedāvājumus, kas pielāgoti tavas organizācijas mērķiem. Vai tā būtu vietas sponsorēšana, ēdināšana, suvenīri vai kaut kas unikāls – parunāsim!',
+        description: 'Meklē ko citu? Mēs labprāt apspriedīsim pielāgotus sponsorēšanas piedāvājumus, kas pielāgoti tavas organizācijas mērķiem. Vai tā būtu vietas sponsorēšana, ēdināšana, suvenīri vai kaut kas unikāls - parunāsim!',
         contact: 'Sazinies par sponsorēšanu'
       },
       ourSponsors: 'Mūsu sponsori',

@@ -1,4 +1,4 @@
-// Inline row of speaker social/profile links — renders only the ones present
+// Inline row of speaker social/profile links - renders only the ones present
 // in the speaker's profile (linkedin / github / cncf).
 const LABELS = {
   linkedin: 'LinkedIn',
@@ -54,7 +54,7 @@ export default function SpeakerSocials({ info, iconClass = 'text-pink hover:text
           href={url}
           target="_blank"
           rel="noopener noreferrer"
-          aria-label={`${info.name} — ${LABELS[kind]}`}
+          aria-label={`${info.name} - ${LABELS[kind]}`}
           className={`transition-colors ${iconClass}`}
         >
           <Icon kind={kind} />

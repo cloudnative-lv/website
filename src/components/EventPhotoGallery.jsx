@@ -2,7 +2,7 @@ import { useLanguage } from '../i18n/useLanguage';
 
 // Gallery photos are auto-discovered: drop image files into
 // src/assets/events/<event-id>/ (the id from the event's YAML) and they show
-// up on that event's page — no YAML changes needed. Keep them web-sized
+// up on that event's page - no YAML changes needed. Keep them web-sized
 // (~800px wide); the full album lives behind the event's photosUrl link.
 const photoFiles = import.meta.glob('../assets/events/*/*.{jpg,jpeg,png,webp}', {
   eager: true,
@@ -49,7 +49,7 @@ export default function EventPhotoGallery({ event }) {
           >
             <img
               src={src}
-              alt={`${event.title} — photo ${idx + 1}`}
+              alt={`${event.title} - photo ${idx + 1}`}
               loading="lazy"
               className="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-300"
             />

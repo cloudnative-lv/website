@@ -37,7 +37,7 @@ export const announcementPost = (event) => {
     'Talks:',
     ...(event.talks || []).map((t) => {
       const who = talkSpeakerNames(t).join(' & ');
-      return `• ${t.title}${who ? ` — ${who}` : ''}`;
+      return `• ${t.title}${who ? ` - ${who}` : ''}`;
     }),
     '',
   ];
@@ -52,7 +52,7 @@ export const speakerIntroPost = (event, talk) => {
   const names = speakers.map((s) => s.name).join(' & ');
   const roles = speakers.map(speakerRole).filter(Boolean).join(' · ');
   const lines = [
-    `🎤 Speaker spotlight — Meetup #${meetupNumber(event)}: ${names}${roles ? ` (${roles})` : ''}`,
+    `🎤 Speaker spotlight - Meetup #${meetupNumber(event)}: ${names}${roles ? ` (${roles})` : ''}`,
     '',
     `“${talk.title}”`,
     '',

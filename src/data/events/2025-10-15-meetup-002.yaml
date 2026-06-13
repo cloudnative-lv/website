@@ -25,10 +25,10 @@ talks:
   - title: "OpenTelemetry: From Core Concepts to Scaling Insights"
     speaker: "Gundega Dekena"
     slidesUrl: "/slides/2025-10-15-meetup-002/opentelemetry-core-concepts.pptx"
-    description: "Are you curious about OpenTelemetry and how it can boost your cloud systems? We'll explain the difference between monitoring and observability—think of it as the difference between checking the weather and understanding the climate. We'll explore how OpenTelemetry helps you see what's really going on inside your systems. Discover how it works, why it's beneficial, and how we've successfully integrated it into our platform."
+    description: "Are you curious about OpenTelemetry and how it can boost your cloud systems? We'll explain the difference between monitoring and observability - think of it as the difference between checking the weather and understanding the climate. We'll explore how OpenTelemetry helps you see what's really going on inside your systems. Discover how it works, why it's beneficial, and how we've successfully integrated it into our platform."
   - title: "Guardrails in Action: Policy as Code with Kyverno"
     speaker: "Linda Ārende"
-    description: "Designing scalable and secure Kubernetes environments requires balancing the flexibility for application teams with centralized control. In this session, we will examine a real-world use case demonstrating how Kyverno—a Kubernetes-native policy engine—can be used to automate, enforce, and monitor policy-driven guardrails across clusters, helping platform teams maintain consistency, compliance, and operational safety at scale."
+    description: "Designing scalable and secure Kubernetes environments requires balancing the flexibility for application teams with centralized control. In this session, we will examine a real-world use case demonstrating how Kyverno - a Kubernetes-native policy engine - can be used to automate, enforce, and monitor policy-driven guardrails across clusters, helping platform teams maintain consistency, compliance, and operational safety at scale."
 tags:
   - opentelemetry
   - observability

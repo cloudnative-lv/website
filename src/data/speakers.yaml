@@ -1,7 +1,7 @@
 # Speaker profiles, keyed by the exact name used in event YAML talks.
 # All fields optional: title, company, bio, linkedin, github, cncf.
 # - cncf: a CNCF certification-directory (Kubestronaut) profile.
-# Photos are NOT listed here — drop an image into src/assets/speakers/
+# Photos are NOT listed here - drop an image into src/assets/speakers/
 # named after the speaker's slug (lowercase, diacritics stripped, spaces
 # to dashes: "Jānis Orlovs" -> janis-orlovs.jpg) and it is picked up
 # automatically on the Speakers page and event pages.
@@ -25,7 +25,7 @@
 
 "Gundega Dekena":
   title: "Staff Software Engineer"
-  bio: "Observability practitioner and trainer who has rolled out OpenTelemetry end to end — from core concepts to scaled insights."
+  bio: "Observability practitioner and trainer who has rolled out OpenTelemetry end to end - from core concepts to scaled insights."
   linkedin: "https://www.linkedin.com/in/gundega-dekena/"
   github: "https://github.com/GundegaDekena"
 
@@ -46,7 +46,7 @@
 "Kārlis Akots Gribulis":
   title: "Senior Container Platform Engineer"
   company: "Saxo Bank"
-  bio: "Engineer on Saxo Bank's cloud-exit journey, running self-hosted Kubernetes at scale — networking, security baselines and day-2 operations. Golden Kubestronaut."
+  bio: "Engineer on Saxo Bank's cloud-exit journey, running self-hosted Kubernetes at scale - networking, security baselines and day-2 operations. Golden Kubestronaut."
   linkedin: "https://www.linkedin.com/in/k%C4%81rlis-akots-gribulis-2aa0b61b2/"
   github: "https://github.com/KarlisAG"
   cncf: "https://certdirectory.io/profile/456c6a45-5a4c-41c8-9f0e-361bf5da63d1"
@@ -68,18 +68,18 @@
 "Aleksejs Gordons":
   title: "Head of IP Network & Platform Team"
   company: "LMT"
-  bio: "Eleven years at LMT — from network engineer to leading the team behind mission-critical IP infrastructure. Believes automation, standardization and platforms beat heroics."
+  bio: "Eleven years at LMT - from network engineer to leading the team behind mission-critical IP infrastructure. Believes automation, standardization and platforms beat heroics."
   linkedin: "https://www.linkedin.com/in/aleksejs-gordons-16a64014/"
 
 "Didzis Dzvinko":
   title: "DevOps Engineer"
   company: "LMT"
-  bio: "Joined LMT as a network engineer and now bridges networking reality with modern platform practices — hands-on with automation, CI/CD and infrastructure tooling."
+  bio: "Joined LMT as a network engineer and now bridges networking reality with modern platform practices - hands-on with automation, CI/CD and infrastructure tooling."
 
 "Gerret Apelt":
   title: "Senior Operations Engineer & Golden Kubestronaut"
   company: "IS Nordic A/S"
-  bio: "Completed the CNCF certification track all the way to Golden Kubestronaut status — with honest takes on what the certifications really demonstrate."
+  bio: "Completed the CNCF certification track all the way to Golden Kubestronaut status - with honest takes on what the certifications really demonstrate."
   linkedin: "https://www.linkedin.com/in/gerretapelt/"
   cncf: "https://certdirectory.io/profile/97243a8f-5003-496b-a3ec-2c62f20086ed"
 
@@ -98,12 +98,12 @@
 "Nicklas Frahm":
   title: "Director of Platform Engineering"
   company: "Corti"
-  bio: "Mechatronics engineer turned platform lead and Talos Linux contributor, building Kommodity — an open-source Kubernetes engine for sovereign AI infrastructure."
+  bio: "Mechatronics engineer turned platform lead and Talos Linux contributor, building Kommodity - an open-source Kubernetes engine for sovereign AI infrastructure."
   linkedin: "https://www.linkedin.com/in/nicklasfrahm/"
   github: "https://github.com/nicklasfrahm"
 
 "Andrey Adamovich":
   title: "Fractional CTO, Trainer"
-  bio: "Developer, DevOps practitioner and trainer — and co-organizer of Cloud Native Latvia. Hands-on with CI pipelines, Kubernetes and CNCF projects like Argo CD, Crossplane, Kyverno and OpenTelemetry. Off the clock, a chess player — often across the board from his son."
+  bio: "Developer, DevOps practitioner and trainer - and co-organizer of Cloud Native Latvia. Hands-on with CI pipelines, Kubernetes and CNCF projects like Argo CD, Crossplane, Kyverno and OpenTelemetry. Off the clock, a chess player - often across the board from his son."
   linkedin: "https://www.linkedin.com/in/andreyadamovich/"
   github: "https://github.com/aadamovich"
