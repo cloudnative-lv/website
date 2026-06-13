@@ -139,8 +139,11 @@ export default function EventDetail() {
                                       {name}
                                       <SpeakerSocials info={info} iconClass="text-pink hover:text-burgundy" />
                                     </p>
-                                    {(info.title || info.company) && (
-                                      <p className="text-pink text-sm">{[info.title, info.company].filter(Boolean).join(' · ')}</p>
+                                    {info.title && (
+                                      <p className="text-pink text-sm font-bold leading-tight">{info.title}</p>
+                                    )}
+                                    {info.company && (
+                                      <p className="text-pink/80 text-sm italic leading-tight">{info.company}</p>
                                     )}
                                     {info.bio && <p className="text-gray-500 text-sm mt-1">{info.bio}</p>}
                                   </div>

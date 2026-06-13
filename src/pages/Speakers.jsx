@@ -101,8 +101,11 @@ export default function Speakers() {
                         {talk.speaker}
                         <SpeakerSocials info={info} iconClass="text-white/70 hover:text-white" />
                       </h3>
-                      {(info.title || info.company) && (
-                        <p className="text-white/85 text-xs mt-0.5">{[info.title, info.company].filter(Boolean).join(' · ')}</p>
+                      {info.title && (
+                        <p className="text-white text-xs font-bold mt-0.5 leading-tight">{info.title}</p>
+                      )}
+                      {info.company && (
+                        <p className="text-white/80 text-xs italic leading-tight">{info.company}</p>
                       )}
                     </div>
                   </div>
