@@ -191,7 +191,7 @@ event's `photosUrl` (Google Photos shared album). No YAML changes needed.
 
 **Slides.** Talk decks live in `public/slides/<event-id>/` (prefer PDF — it
 previews in the browser; PPTX downloads). Reference them from the talk's
-`slidesUrl`. Compress big PDFs first: `gs -sDEVICE=pdfwrite -dPDFSETTINGS=/ebook
+`slidesUrl`, which may also be an external link (e.g. Canva, GitLab Pages). Compress big PDFs first: `gs -sDEVICE=pdfwrite -dPDFSETTINGS=/ebook
 -o out.pdf in.pdf`.
 
 **Speaker profiles.** `src/data/speakers.yaml` maps the exact speaker name used

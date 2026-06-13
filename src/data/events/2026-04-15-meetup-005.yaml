@@ -5,6 +5,7 @@ date: "2026-04-15"
 time: "18:15"
 startTime: "18:30"
 endTime: "21:00"
+eventbriteUrl: "https://www.eventbrite.com/e/1986971057922"
 cncfUrl: "https://ocgroups.dev/cncf/group/xggmcq8/event/h75mf5u"
 photosUrl: "https://photos.app.goo.gl/RUqyfAryGUUeGNDL7"
 venue:
@@ -24,6 +25,7 @@ description: |
 talks:
   - title: "What's a Kubestronaut (good for)?"
     speaker: "Gerret Apelt"
+    slidesUrl: "https://golden-kubestronaut-presentation-3134b1.gitlab.io/"
     description: "What does the CNCF Kubestronaut certification program actually involve - and is it worth it? This talk walks through the program's structure, costs, and rewards, sharing a personal journey all the way to Golden Kubestronaut status. Expect honest takes on preparation strategies, exam difficulty, and the baseline technical competency the certifications really demonstrate."
   - title: "The Beginning of a Journey to the Edge with Talos Kubernetes"
     speakers:

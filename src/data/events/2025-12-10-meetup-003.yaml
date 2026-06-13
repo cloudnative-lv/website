@@ -29,6 +29,7 @@ talks:
     description: "Cloud exits sound simple in theory - build your own Kubernetes, save money, gain control. In practice, the road is long, messy, and full of lessons. Saxo Bank is in the middle of this exit. We'll explore how we tackled networking complexity, security baselines, and the operational learning curve of self-hosting Kubernetes at scale. We'll share what went well, what failed fast, and how we're iterating toward stability and efficiency."
   - title: "Greenscaling: Karpenter + Kube Green for GKE"
     speaker: "Igor Golm"
+    slidesUrl: "https://www.canva.com/design/DAG5vOUcz5s/HKn_EjdlZYfGwXuM9bZc1g/view?utm_content=DAG5vOUcz5s&utm_campaign=designshare&utm_medium=link&utm_source=viewer"
     description: "Learn how to make your GKE clusters faster, more cost-efficient, and environmentally friendlier. This talk explores how Karpenter brings next-generation autoscaling to GCP and how Kube Green reduces unused workload footprint by pausing non-essential environments. A practical guide to building a smarter, greener, and more efficient Kubernetes platform on GKE."
 tags:
   - kubernetes
