@@ -89,7 +89,7 @@ export default function Speakers() {
               {allTalks.map((talk, idx) => {
                 const info = getSpeakerInfo(talk.speaker);
                 return (
-                <div key={idx} className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+                <div key={idx} className="flex flex-col bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
                   <div className="h-20 bg-linear-to-r from-rose-400 to-rose-600 flex items-center px-6">
                     <SpeakerAvatar
                       name={talk.speaker}
@@ -115,18 +115,20 @@ export default function Speakers() {
                       <p className="text-pink text-sm mb-2">{t('speakers.with')} {talk.coSpeakers.join(', ')}</p>
                     )}
                     {talk.description && (
-                      <p className="text-gray-600 text-sm mb-4 line-clamp-3">{talk.description}</p>
+                      <p className="text-gray-600 text-sm line-clamp-3">{talk.description}</p>
                     )}
-                    <Link 
-                      to={`/events/${talk.eventSlug}`}
-                      className="inline-flex items-center text-sm text-pink hover:text-burgundy font-semibold transition-colors"
-                    >
-                      <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                      </svg>
-                      {talk.eventTitle}
-                    </Link>
                   </div>
+                  <Link
+                    to={`/events/${talk.eventSlug}`}
+                    className="mt-auto flex items-center gap-3 bg-linear-to-l from-gray-100 to-gray-200 px-6 py-4 text-pink transition-colors hover:text-burgundy"
+                  >
+                    <svg className="w-7 h-7 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    <span className="flex min-h-[2.2rem] items-center">
+                      <span className="line-clamp-2 text-sm font-semibold leading-tight">{talk.eventTitle}</span>
+                    </span>
+                  </Link>
                 </div>
                 );
               })}
