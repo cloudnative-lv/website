@@ -1,15 +1,14 @@
 import { Link } from 'react-router-dom';
-import { useLanguage } from '../i18n/LanguageContext';
+import { useLanguage } from '../i18n/useLanguage';
 
 export default function EventCard({ event }) {
-  const { t } = useLanguage();
-  const dateObj = new Date(event.date);
-  const formattedDate = dateObj.toLocaleDateString('en-US', {
-    weekday: 'short',
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric'
-  });
+  const { t, language } = useLanguage();
+  // Date-only strings parse as UTC midnight; format in UTC so every visitor
+  // sees the event's actual calendar date.
+  const formattedDate = new Date(event.date).toLocaleDateString(
+    language === 'lv' ? 'lv-LV' : 'en-US',
+    { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' }
+  );
 
   const isUpcoming = event.status === 'upcoming';
 

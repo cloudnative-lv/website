@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import { useLanguage } from '../i18n/LanguageContext';
+import { useLanguage } from '../i18n/useLanguage';
 import LanguageSwitcher from './LanguageSwitcher';
 import { SubscribeButton } from './SubscribeModal';
 

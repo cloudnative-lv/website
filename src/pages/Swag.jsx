@@ -5,7 +5,7 @@ import FeatureCard from '../components/FeatureCard';
 import CTASection from '../components/CTASection';
 import Button from '../components/Button';
 import { Container, Section, SectionHeading } from '../components/layout';
-import { useLanguage } from '../i18n/LanguageContext';
+import { useLanguage } from '../i18n/useLanguage';
 
 const stickerConfigs = [
   { id: 1, key: 'linda', image: '/images/stickers/sticker_linda.svg' },

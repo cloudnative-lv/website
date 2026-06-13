@@ -1,15 +1,16 @@
 import { Link } from 'react-router-dom';
-import { events, upcomingEvents, pastEvents } from '../data/events';
+import { getUpcomingEvents, getPastEvents } from '../data/events';
 import EventCard from '../components/EventCard';
 import AnimatedBackground from '../components/AnimatedBackground';
 import SEO from '../components/SEO';
 import { WebPageJsonLd } from '../components/JsonLd';
-import { useLanguage } from '../i18n/LanguageContext';
+import { useLanguage } from '../i18n/useLanguage';
 
 export default function Home() {
   const { t } = useLanguage();
+  const upcomingEvents = getUpcomingEvents();
+  const pastEvents = getPastEvents();
   const featuredEvents = [...upcomingEvents, ...pastEvents].slice(0, 3);
-  const eventsIn2026 = events.filter(e => e.date.startsWith('2026')).length;
 
   return (
     <div className="min-h-screen">
@@ -57,30 +58,6 @@ export default function Home() {
             >
               {t('home.joinCommunity')}
             </a>
-          </div>
-        </div>
-      </section>
-
-      {/* Stats Section */}
-      <section className="py-16 bg-white">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            <div className="p-6 rounded-2xl bg-rose-50 hover:shadow-lg transition-shadow">
-              <p className="text-5xl font-black text-burgundy">{pastEvents.length}</p>
-              <p className="text-gray-600 font-medium mt-2">{t('home.stats.eventsHeld')}</p>
-            </div>
-            <div className="p-6 rounded-2xl bg-rose-50 hover:shadow-lg transition-shadow">
-              <p className="text-5xl font-black text-burgundy">{upcomingEvents.length}</p>
-              <p className="text-gray-600 font-medium mt-2">{t('home.stats.upcoming')}</p>
-            </div>
-            <div className="p-6 rounded-2xl bg-rose-50 hover:shadow-lg transition-shadow">
-              <p className="text-5xl font-black text-burgundy">{eventsIn2026}</p>
-              <p className="text-gray-600 font-medium mt-2">{t('home.stats.plannedFor2026')}</p>
-            </div>
-            <div className="p-6 rounded-2xl bg-rose-50 hover:shadow-lg transition-shadow">
-              <p className="text-3xl font-black text-burgundy">{t('home.stats.bimonthly')}</p>
-              <p className="text-gray-600 font-medium mt-2">{t('home.stats.meetupFrequency')}</p>
-            </div>
           </div>
         </div>
       </section>

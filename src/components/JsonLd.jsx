@@ -1,3 +1,5 @@
+import { rigaIsoString } from '../data/events';
+
 const siteConfig = {
   siteName: 'Cloud Native Latvia',
   siteUrl: 'https://cloudnative.lv',
@@ -47,23 +49,26 @@ export function WebPageJsonLd({ title, description, path }) {
 }
 
 export function EventJsonLd({ event }) {
-  const eventDate = new Date(event.date);
-  const isUpcoming = eventDate > new Date();
-  
+  // A talk has either `speaker: "Name"` or `speakers: [..]` — flatten both shapes.
+  const speakerNames = (event.talks || []).flatMap(talk =>
+    Array.isArray(talk.speakers) ? talk.speakers : (talk.speaker ? [talk.speaker] : [])
+  );
+
   const data = {
     '@context': 'https://schema.org',
     '@type': 'Event',
     name: event.title,
     description: event.description,
-    startDate: event.date,
-    endDate: event.date,
-    eventStatus: isUpcoming ? 'https://schema.org/EventScheduled' : 'https://schema.org/EventMovedOnline',
+    startDate: rigaIsoString(event.date, event.time || '18:00'),
+    endDate: rigaIsoString(event.date, event.endTime || event.time || '23:59'),
+    eventStatus: 'https://schema.org/EventScheduled',
     eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
     location: {
       '@type': 'Place',
-      name: event.venue || 'Riga, Latvia',
+      name: event.venue?.name || 'Riga, Latvia',
       address: {
         '@type': 'PostalAddress',
+        streetAddress: event.venue?.address,
         addressLocality: 'Riga',
         addressCountry: 'LV'
       }
@@ -73,19 +78,21 @@ export function EventJsonLd({ event }) {
       name: siteConfig.siteName,
       url: siteConfig.siteUrl
     },
-    performer: event.talks?.map(talk => ({
-      '@type': 'Person',
-      name: talk.speaker
-    })) || [],
-    offers: {
+    performer: speakerNames.map(name => ({ '@type': 'Person', name })),
+    image: `${siteConfig.siteUrl}/images/og/events.png`
+  };
+
+  // Offers only make sense while registration is open.
+  if (event.status === 'upcoming' && event.eventbriteUrl) {
+    data.offers = {
       '@type': 'Offer',
       price: '0',
       priceCurrency: 'EUR',
-      availability: isUpcoming ? 'https://schema.org/InStock' : 'https://schema.org/SoldOut',
-      url: event.eventbrite || event.cncf || `${siteConfig.siteUrl}/events/${event.slug}`
-    },
-    image: `${siteConfig.siteUrl}/images/og/events.png`
-  };
+      availability: 'https://schema.org/InStock',
+      url: event.eventbriteUrl
+    };
+  }
+
   return <JsonLd data={data} />;
 }
 
@@ -108,7 +115,7 @@ export function EventsListJsonLd({ events }) {
           url: `${siteConfig.siteUrl}/events/${event.slug}`,
           location: {
             '@type': 'Place',
-            name: event.venue || 'Riga, Latvia'
+            name: event.venue?.name || 'Riga, Latvia'
           }
         }
       }))

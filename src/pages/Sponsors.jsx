@@ -5,7 +5,7 @@ import FeatureCard from '../components/FeatureCard';
 import CTASection from '../components/CTASection';
 import Button from '../components/Button';
 import { Container, Section, SectionHeading } from '../components/layout';
-import { useLanguage } from '../i18n/LanguageContext';
+import { useLanguage } from '../i18n/useLanguage';
 
 const benefitIcons = [
   <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" key="talent">

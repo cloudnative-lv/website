@@ -69,7 +69,9 @@ test.describe('Site Navigation', () => {
   test('slow scroll through each page', async ({ page }) => {
     for (const p of pages) {
       await page.goto(p.path);
-      await page.waitForTimeout(500);
+      // Routes are lazy-loaded: assert the page chunk actually mounted before
+      // measuring scroll height, or we'd silently scroll the Suspense fallback.
+      await expect(page.locator('h1')).toContainText(p.enTitle);
       await slowScroll(page, 5);
       await page.waitForTimeout(300);
     }

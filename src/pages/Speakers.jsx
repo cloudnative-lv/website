@@ -1,11 +1,14 @@
 import { Link } from 'react-router-dom';
-import { events } from '../data/events';
+import { getEvents } from '../data/events';
 import PageHeader from '../components/PageHeader';
 import CTASection from '../components/CTASection';
 import Button from '../components/Button';
 import SEO from '../components/SEO';
+import SpeakerAvatar from '../components/SpeakerAvatar';
+import SpeakerSocials from '../components/SpeakerSocials';
 import { SpeakersPageJsonLd } from '../components/JsonLd';
-import { useLanguage } from '../i18n/LanguageContext';
+import { getSpeakerInfo } from '../data/speakers';
+import { useLanguage } from '../i18n/useLanguage';
 
 function getSpeakersFromTalk(talk) {
   if (talk.speakers && Array.isArray(talk.speakers)) {
@@ -19,8 +22,8 @@ function getSpeakersFromTalk(talk) {
 
 function getTalksWithSpeakers() {
   const talks = [];
-  
-  events.forEach(event => {
+
+  getEvents().forEach(event => {
     if (event.talks) {
       event.talks.forEach(talk => {
         const speakers = getSpeakersFromTalk(talk);
@@ -83,22 +86,30 @@ export default function Speakers() {
         ) : (
           <>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-              {allTalks.map((talk, idx) => (
+              {allTalks.map((talk, idx) => {
+                const info = getSpeakerInfo(talk.speaker);
+                return (
                 <div key={idx} className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
                   <div className="h-20 bg-linear-to-r from-rose-400 to-rose-600 flex items-center px-6">
-                    <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center shrink-0">
-                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                      </svg>
-                    </div>
+                    <SpeakerAvatar
+                      name={talk.speaker}
+                      photo={info.photo}
+                      className="w-12 h-12 text-base shrink-0 ring-2 ring-white/40"
+                    />
                     <div className="ml-4 text-white">
-                      <h3 className="font-bold text-lg">{talk.speaker}</h3>
+                      <h3 className="font-bold text-lg leading-tight">
+                        {talk.speaker}
+                        <SpeakerSocials info={info} iconClass="text-white/70 hover:text-white" />
+                      </h3>
+                      {(info.title || info.company) && (
+                        <p className="text-white/85 text-xs mt-0.5">{[info.title, info.company].filter(Boolean).join(' · ')}</p>
+                      )}
                     </div>
                   </div>
                   <div className="p-6">
                     <h4 className="text-lg font-bold text-burgundy mb-3 line-clamp-2">{talk.title}</h4>
                     {talk.coSpeakers.length > 0 && (
-                      <p className="text-pink text-sm mb-2">with {talk.coSpeakers.join(', ')}</p>
+                      <p className="text-pink text-sm mb-2">{t('speakers.with')} {talk.coSpeakers.join(', ')}</p>
                     )}
                     {talk.description && (
                       <p className="text-gray-600 text-sm mb-4 line-clamp-3">{talk.description}</p>
@@ -114,7 +125,8 @@ export default function Speakers() {
                     </Link>
                   </div>
                 </div>
-              ))}
+                );
+              })}
             </div>
 
             <CTASection

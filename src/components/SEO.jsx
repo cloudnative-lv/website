@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useLanguage } from '../i18n/LanguageContext';
+import { useLanguage } from '../i18n/useLanguage';
 
 const siteConfig = {
   siteName: 'Cloud Native Latvia',
@@ -10,6 +10,12 @@ const siteConfig = {
     lv: 'Pievienojies Cloud Native Latvia tikšanās reizēm Rīgā par Kubernetes, DevOps, novērojamību, platformu inženieriju un mākoņdatošanas tehnoloģijām.'
   }
 };
+
+const DEFAULT_KEYWORDS = [
+  'Cloud Native', 'Kubernetes', 'K8s', 'DevOps', 'Platform Engineering',
+  'Riga', 'Latvia', 'Meetup', 'CNCF', 'Docker', 'Containers',
+  'Observability', 'Prometheus', 'Grafana', 'GitOps', 'ArgoCD'
+];
 
 export default function SEO({ 
   title, 
@@ -25,19 +31,15 @@ export default function SEO({
     : `${siteConfig.siteName} - Kubernetes & DevOps Meetups in Riga`;
   const fullDescription = description || siteConfig.defaultDescription[language] || siteConfig.defaultDescription.en;
   const canonicalUrl = `${siteConfig.siteUrl}${path}`;
-  const ogImage = image 
-    ? `${siteConfig.siteUrl}${image}` 
+  const ogImage = image
+    ? `${siteConfig.siteUrl}${image}`
     : `${siteConfig.siteUrl}${siteConfig.defaultImage}`;
+  // Joined to a string so the effect dependency compares by value — callers
+  // pass inline array literals whose identity changes every render.
+  const allKeywords = [...new Set([...keywords, ...DEFAULT_KEYWORDS])].join(', ');
 
   useEffect(() => {
     document.title = fullTitle;
-
-    const defaultKeywords = [
-      'Cloud Native', 'Kubernetes', 'K8s', 'DevOps', 'Platform Engineering',
-      'Riga', 'Latvia', 'Meetup', 'CNCF', 'Docker', 'Containers',
-      'Observability', 'Prometheus', 'Grafana', 'GitOps', 'ArgoCD'
-    ];
-    const allKeywords = [...new Set([...keywords, ...defaultKeywords])];
 
     const updateMeta = (name, content, isProperty = false) => {
       const attr = isProperty ? 'property' : 'name';
@@ -53,7 +55,7 @@ export default function SEO({
     };
 
     updateMeta('description', fullDescription);
-    updateMeta('keywords', allKeywords.join(', '));
+    updateMeta('keywords', allKeywords);
     updateMeta('og:title', fullTitle, true);
     updateMeta('og:description', fullDescription, true);
     updateMeta('og:url', canonicalUrl, true);
@@ -70,7 +72,7 @@ export default function SEO({
     }
     
     document.documentElement.lang = language;
-  }, [fullTitle, fullDescription, keywords, canonicalUrl, ogImage, language]);
+  }, [fullTitle, fullDescription, allKeywords, canonicalUrl, ogImage, language]);
 
   return null;
 }

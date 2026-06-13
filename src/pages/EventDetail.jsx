@@ -1,12 +1,23 @@
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, Navigate } from 'react-router-dom';
 import { getEventBySlug } from '../data/events';
 import EventQRCode from '../components/EventQRCode';
-import { useLanguage } from '../i18n/LanguageContext';
+import EventPhotoGallery from '../components/EventPhotoGallery';
+import SpeakerAvatar from '../components/SpeakerAvatar';
+import SpeakerSocials from '../components/SpeakerSocials';
+import { getSpeakerInfo } from '../data/speakers';
+import SEO from '../components/SEO';
+import { EventJsonLd } from '../components/JsonLd';
+import { useLanguage } from '../i18n/useLanguage';
 
 export default function EventDetail() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const { slug } = useParams();
   const event = getEventBySlug(slug);
+
+  // Reached via a former slug (previousSlugs) — send to the canonical URL.
+  if (event && event.slug !== slug) {
+    return <Navigate to={`/events/${event.slug}`} replace />;
+  }
 
   if (!event) {
     return (
@@ -21,18 +32,24 @@ export default function EventDetail() {
     );
   }
 
-  const dateObj = new Date(event.date);
-  const formattedDate = dateObj.toLocaleDateString('en-US', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  });
+  // Date-only strings parse as UTC midnight; format in UTC so every visitor
+  // sees the event's actual calendar date.
+  const formattedDate = new Date(event.date).toLocaleDateString(
+    language === 'lv' ? 'lv-LV' : 'en-US',
+    { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' }
+  );
 
   const isUpcoming = event.status === 'upcoming';
 
   return (
     <div className="min-h-screen bg-pink-light">
+      <SEO
+        title={event.title}
+        description={event.description.split('\n')[0]}
+        keywords={event.tags || []}
+        path={`/events/${event.slug}`}
+      />
+      <EventJsonLd event={event} />
       <div className={`${isUpcoming ? 'bg-linear-to-r from-rose-400 to-rose-700' : 'bg-gray-600'} text-white py-16`}>
         <div className="max-w-4xl mx-auto px-4">
           <Link to="/events" className="inline-flex items-center text-white/80 hover:text-white mb-6">
@@ -79,24 +96,54 @@ export default function EventDetail() {
                 <h2 className="text-2xl font-black text-burgundy mb-6">{t('eventDetail.talks')}</h2>
                 <div className="space-y-6">
                   {event.talks.map((talk, idx) => {
-                    const speakers = talk.speakers && Array.isArray(talk.speakers) 
-                      ? talk.speakers 
+                    const speakers = talk.speakers && Array.isArray(talk.speakers)
+                      ? talk.speakers
                       : (talk.speaker ? [talk.speaker] : []);
                     return (
                       <div key={idx} className="border-l-4 border-pink pl-4">
                         <h3 className="text-lg font-bold text-burgundy">{talk.title}</h3>
-                        {speakers.length > 0 && (
-                          <p className="text-pink text-sm font-semibold mt-1">
-                            {speakers.length === 1 ? t('eventDetail.speaker') : t('eventDetail.speakers')}: {speakers.join(', ')}
-                          </p>
-                        )}
                         <p className="text-gray-600 mt-2">{talk.description}</p>
+                        {talk.slidesUrl && (
+                          <a
+                            href={talk.slidesUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1.5 text-sm text-pink hover:text-burgundy font-semibold mt-2 transition-colors"
+                          >
+                            <span aria-hidden="true">📄</span>
+                            {t('eventDetail.slides')}
+                          </a>
+                        )}
+                        {speakers.length > 0 && (
+                          <div className="mt-4 space-y-3">
+                            {speakers.map(name => {
+                              const info = getSpeakerInfo(name);
+                              return (
+                                <div key={name} className="flex items-start gap-3">
+                                  <SpeakerAvatar name={name} photo={info.photo} className="w-10 h-10 text-sm shrink-0" />
+                                  <div>
+                                    <p className="font-semibold text-burgundy leading-tight">
+                                      {name}
+                                      <SpeakerSocials info={info} iconClass="text-pink hover:text-burgundy" />
+                                    </p>
+                                    {(info.title || info.company) && (
+                                      <p className="text-pink text-sm">{[info.title, info.company].filter(Boolean).join(' · ')}</p>
+                                    )}
+                                    {info.bio && <p className="text-gray-500 text-sm mt-1">{info.bio}</p>}
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        )}
                       </div>
                     );
                   })}
                 </div>
               </section>
             )}
+
+            <EventPhotoGallery event={event} />
           </div>
 
           <div className="md:col-span-1">
@@ -156,6 +203,18 @@ export default function EventDetail() {
                     className="block w-full bg-burgundy text-white text-center py-3 px-4 rounded-full font-semibold hover:bg-rose-800 transition-all shadow-md hover:shadow-lg mt-3"
                   >
                     {t('eventDetail.viewCNCF')}
+                  </a>
+                )}
+
+                {event.photosUrl && (
+                  <a
+                    href={event.photosUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block w-full border-2 border-burgundy text-burgundy text-center py-3 px-4 rounded-full font-semibold hover:bg-rose-50 transition-colors mt-3"
+                  >
+                    <span className="mr-2" aria-hidden="true">📷</span>
+                    {t('eventDetail.viewPhotos')}
                   </a>
                 )}
 

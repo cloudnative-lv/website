@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useLanguage } from '../i18n/LanguageContext';
+import { useLanguage } from '../i18n/useLanguage';
 
 export default function SubscribeModal({ isOpen, onClose }) {
   const { t } = useLanguage();

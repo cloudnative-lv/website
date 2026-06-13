@@ -1,13 +1,15 @@
-import { upcomingEvents, pastEvents } from '../data/events';
+import { getUpcomingEvents, getPastEvents } from '../data/events';
 import EventCard from '../components/EventCard';
 import PageHeader from '../components/PageHeader';
 import SEO from '../components/SEO';
 import { EventsListJsonLd } from '../components/JsonLd';
-import { useLanguage } from '../i18n/LanguageContext';
+import { useLanguage } from '../i18n/useLanguage';
 
 export default function Events() {
   const { t } = useLanguage();
-  
+  const upcomingEvents = getUpcomingEvents();
+  const pastEvents = getPastEvents();
+
   return (
     <div className="min-h-screen bg-pink-light">
       <SEO 
@@ -24,6 +26,13 @@ export default function Events() {
       />
 
       <div className="max-w-6xl mx-auto px-4 py-12">
+        {upcomingEvents.length === 0 && (
+          <section className="mb-16">
+            <div className="bg-white rounded-2xl shadow-md border border-rose-100 p-8 text-center">
+              <p className="text-gray-600 text-lg">{t('events.noUpcoming')}</p>
+            </div>
+          </section>
+        )}
         {upcomingEvents.length > 0 && (
           <section className="mb-16">
             <h2 className="text-2xl font-black text-burgundy mb-6 flex items-center">

@@ -4,7 +4,7 @@ import Button from '../components/Button';
 import SEO from '../components/SEO';
 import { TeamPageJsonLd } from '../components/JsonLd';
 import { LinkedInIcon, TwitterIcon, SocialLink } from '../components/SocialIcons';
-import { useLanguage } from '../i18n/LanguageContext';
+import { useLanguage } from '../i18n/useLanguage';
 
 const teamConfigs = [
   {

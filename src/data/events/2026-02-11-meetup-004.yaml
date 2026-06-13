@@ -1,11 +1,10 @@
 id: "2026-02-11-meetup-004"
 title: "Meetup #004: GitOps with ArgoCD"
 slug: "meetup-004-gitops-argocd"
+previousSlugs: ["meetup-004-coming-soon"]
 date: "2026-02-11"
 time: "18:15"
 endTime: "21:00"
-status: "past"
-eventbriteUrl: ""
 cncfUrl: "https://ocgroups.dev/cncf/group/xggmcq8/event/55exfmn"
 venue:
   name: "Accenture"
@@ -24,11 +23,13 @@ description: |
 talks:
   - title: "Getting the Most out of ArgoCD"
     speaker: "Jānis Orlovs"
+    slidesUrl: "/slides/2026-02-11-meetup-004/getting-the-most-out-of-argocd.pdf"
     description: "Drawing on CWISE's last six years of experience running ArgoCD, this session shares practical strategies, patterns, and hard-won insights for getting the most out of GitOps. Learn what works, what to avoid, and how to keep ArgoCD maintainable as your platform grows."
   - title: "LMT's Argo Project Journey"
     speakers:
       - "Aleksejs Gordons"
       - "Didzis Dzvinko"
+    slidesUrl: "/slides/2026-02-11-meetup-004/lmt-argo-project-journey.pptx"
     description: "A case study tracing LMT's path from the first decision to adopt ArgoCD, through its promotion across the organization, and into event-driven automation with the wider Argo project. We'll cover the wins, the friction points, and how GitOps reshaped the way teams ship."
 tags:
   - gitops

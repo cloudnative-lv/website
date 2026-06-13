@@ -142,12 +142,14 @@ Events are defined in YAML files in `src/data/events/`. Filenames are date-prefi
 ```yaml
 id: "2026-02-11-meetup-004"
 slug: "meetup-004-gitops-argocd"
+previousSlugs: ["meetup-004-coming-soon"]  # former slugs; old URLs redirect (omit if none)
 title: "Meetup #004: Topic"
-date: "2026-02-11"
-time: "18:15"        # doors open
+date: "2026-02-11"   # quoted "YYYY-MM-DD"
+time: "18:15"        # doors open, quoted "HH:MM"
 endTime: "21:00"
-eventbriteUrl: "https://..."   # leave "" if none
+eventbriteUrl: "https://..."   # omit if none
 cncfUrl: "https://..."         # CNCF community event page
+photosUrl: "https://photos.app.goo.gl/..."  # Google Photos shared album (omit if none)
 venue:
   name: "Venue Name"
   address: "Address, Riga"
@@ -157,6 +159,7 @@ description: |
 talks:
   - title: "Solo Talk"
     speaker: "Speaker Name"          # single speaker
+    slidesUrl: "/slides/<event-id>/talk-name.pdf"  # deck in public/slides/ (omit if none)
     description: "Talk description"
   - title: "Co-presented Talk"
     speakers:                        # OR multiple speakers
@@ -166,10 +169,36 @@ talks:
 tags: ["kubernetes", "devops"]
 ```
 
+YAML is converted to JS at build time by `@rollup/plugin-yaml` (configured in
+`vite.config.js`), so no YAML parser ships to the browser.
+
 **Status is derived, not stored.** `src/data/events.js` computes `status`
-(`upcoming` / `past`) in the browser from `date` + `endTime`: an event is `past` by
-default and only `upcoming` while its end time is still in the future. Don't add a
-`status:` field to the YAML — it is ignored.
+(`upcoming` / `past`) per render from `date` + `endTime`, anchored to the
+**Europe/Riga** timezone (so visitors worldwide see the same status). Don't add a
+`status:` field to the YAML — it is ignored. Malformed `date`/`endTime` values
+throw at module load in dev and are treated as `past` in production.
+
+**Renaming a slug?** Keep the old one in `previousSlugs` — `getEventBySlug`
+resolves former slugs and `EventDetail` redirects to the canonical URL, so shared
+links and QR codes keep working.
+
+**Photo galleries.** Drop web-sized images (~800px wide) into
+`src/assets/events/<event-id>/` and `EventPhotoGallery` shows them on that
+event's page automatically (sorted by filename) with a "view all" link to the
+event's `photosUrl` (Google Photos shared album). No YAML changes needed.
+
+**Slides.** Talk decks live in `public/slides/<event-id>/` (prefer PDF — it
+previews in the browser; PPTX downloads). Reference them from the talk's
+`slidesUrl`. Compress big PDFs first: `gs -sDEVICE=pdfwrite -dPDFSETTINGS=/ebook
+-o out.pdf in.pdf`.
+
+**Speaker profiles.** `src/data/speakers.yaml` maps the exact speaker name used
+in event talks to optional `title` / `company` / `bio` / `linkedin` / `github` /
+`cncf` (a certdirectory.io Kubestronaut profile), shown on event pages and the
+Speakers page (`SpeakerSocials` renders whichever links exist). Photos: drop
+`<speaker-slug>.jpg` (lowercase, diacritics stripped, e.g. `janis-orlovs.jpg`)
+into `src/assets/speakers/` — auto-discovered by `src/data/speakers.js`; initials
+avatars are the fallback.
 
 > **Note (June 2026):** CNCF migrated its event-publishing platform. New events live
 > on `ocgroups.dev/cncf/group/...` (reached via the old `community.cncf.io` links,

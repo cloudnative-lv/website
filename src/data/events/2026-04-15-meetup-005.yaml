@@ -4,9 +4,8 @@ slug: "meetup-005-kubestronaut-talos-edge"
 date: "2026-04-15"
 time: "18:15"
 endTime: "21:00"
-status: "past"
-eventbriteUrl: ""
 cncfUrl: "https://ocgroups.dev/cncf/group/xggmcq8/event/h75mf5u"
+photosUrl: "https://photos.app.goo.gl/RUqyfAryGUUeGNDL7"
 venue:
   name: "Accenture"
   address: "Brīvības gatve 214, Rīga, LV-1039"
@@ -29,6 +28,7 @@ talks:
     speakers:
       - "Khaled Hammoun"
       - "Daniel Hansen"
+    slidesUrl: "/slides/2026-04-15-meetup-005/journey-to-the-edge-with-talos.pdf"
     description: "JYSK shares its strategy for deploying Kubernetes across 3,500+ distributed retail locations worldwide. The talk digs into real-world challenges - bandwidth constraints, hardware diversity, and operations at scale - and explains how Talos Linux enabled a unified platform deployment across resource-limited edge environments."
 tags:
   - kubernetes

@@ -4,7 +4,6 @@ slug: "meetup-002-opentelemetry-guardrails"
 date: "2025-10-15"
 time: "17:45"
 endTime: "20:30"
-status: "past"
 eventbriteUrl: "https://www.eventbrite.com/e/1779173368439"
 cncfUrl: "https://community.cncf.io/e/m5bfkt/"
 venue:
@@ -24,6 +23,7 @@ description: |
 talks:
   - title: "OpenTelemetry: From Core Concepts to Scaling Insights"
     speaker: "Gundega Dekena"
+    slidesUrl: "/slides/2025-10-15-meetup-002/opentelemetry-core-concepts.pptx"
     description: "Are you curious about OpenTelemetry and how it can boost your cloud systems? We'll explain the difference between monitoring and observability—think of it as the difference between checking the weather and understanding the climate. We'll explore how OpenTelemetry helps you see what's really going on inside your systems. Discover how it works, why it's beneficial, and how we've successfully integrated it into our platform."
   - title: "Guardrails in Action: Policy as Code with Kyverno"
     speaker: "Linda Ārende"

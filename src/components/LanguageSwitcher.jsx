@@ -1,4 +1,4 @@
-import { useLanguage } from '../i18n/LanguageContext';
+import { useLanguage } from '../i18n/useLanguage';
 
 const languages = [
   { code: 'en', label: 'EN', flag: '🇬🇧' },

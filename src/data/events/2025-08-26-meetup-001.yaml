@@ -4,9 +4,9 @@ slug: "meetup-001-no-more-secrets-hybrid-cloud"
 date: "2025-08-26"
 time: "17:30"
 endTime: "20:30"
-status: "past"
 eventbriteUrl: "https://www.eventbrite.com/e/1558423920899"
 cncfUrl: "https://community.cncf.io/e/mnw5ue/"
+photosUrl: "https://photos.app.goo.gl/RtjQUtMRbJrPG3Mk9"
 venue:
   name: "Accenture"
   address: "Brīvības gatve 214, Rīga, LV-1039"
@@ -26,6 +26,7 @@ talks:
     speakers:
       - "Māris Titovs"
       - "Ieva Lapiņa"
+    slidesUrl: "/slides/2025-08-26-meetup-001/no-more-secrets-in-code.pptx"
     description: "When the manual management of secrets becomes unsustainable, a new way to conveniently handle them is needed. In this talk we will share our journey to create a secret management solution that allows our teams to work autonomously in an ever growing hybrid environment. We will touch on challenges faced, the decisions made, and the solutions implemented in this journey we continue to refine."
   - title: "Practical Hybrid Cloud"
     speaker: "Alex Rimlin"

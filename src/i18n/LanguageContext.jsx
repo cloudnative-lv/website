@@ -1,7 +1,6 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import { LanguageContext } from './context';
 import { translations } from './translations';
-
-const LanguageContext = createContext();
 
 const STORAGE_KEY = 'cnlv-language';
 
@@ -41,13 +40,4 @@ export function LanguageProvider({ children }) {
       {children}
     </LanguageContext.Provider>
   );
-}
-
-// eslint-disable-next-line react-refresh/only-export-components
-export function useLanguage() {
-  const context = useContext(LanguageContext);
-  if (!context) {
-    throw new Error('useLanguage must be used within a LanguageProvider');
-  }
-  return context;
 }
