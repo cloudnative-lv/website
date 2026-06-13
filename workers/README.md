@@ -41,3 +41,16 @@ the subscribe form falls back to opening the CNCF/OCG group page.
 ### Later: attendees
 The same bucket can hold `attendees/<event-id>.csv` as the source of truth for
 event attendees — add a route + handler when that's needed.
+
+## cloudnative-lv-info (email forward)
+
+Email Worker that forwards inbound mail for `hello@cloudnative.lv` /
+`info@cloudnative.lv` to the organizers. Deploying from the repo **takes over** the
+existing dashboard-managed worker (same name); the Email Routing rules keep
+pointing at it.
+
+- Set the destinations once (keeps personal addresses out of git):
+  `cd workers/cloudnative-lv-info && npx wrangler secret put FORWARD_TO`
+  (comma-separated, e.g. `andrey@extremeautomation.io,linda.arende@gmail.com`).
+- Deploy: the same **Deploy Workers** action (it's in the matrix), or
+  `npx wrangler deploy` locally.

@@ -1,0 +1,12 @@
+name = "cloudnative-lv-info"
+main = "src/index.js"
+compatibility_date = "2026-06-01"
+
+# account_id = "..." (or pass CLOUDFLARE_ACCOUNT_ID in the environment)
+
+# Email Worker. The addresses that trigger it (hello@cloudnative.lv,
+# info@cloudnative.lv) are Email Routing rules in the dashboard pointing here.
+# Forward destinations come from the FORWARD_TO secret (comma-separated), so
+# personal addresses aren't committed:
+#   cd workers/cloudnative-lv-info && npx wrangler secret put FORWARD_TO
+#   (value e.g. "andrey@extremeautomation.io,linda.arende@gmail.com")
