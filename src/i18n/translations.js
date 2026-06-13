@@ -179,7 +179,7 @@ export const translations = {
       partners: {
         title: 'Our Partners',
         intro: 'Cloud Native Latvia is made possible by the organizations that host and support our community.',
-        hosts: 'Hosting Providers',
+        hosts: 'Venue Providers',
         supporters: 'Supporters'
       },
       tierNames: {
