@@ -12,7 +12,8 @@
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:headed": "playwright test --headed",
     "test:unit": "node --test src/artifacts/*.test.js",
-    "generate:artifacts": "node scripts/generate-artifacts.mjs"
+    "generate:artifacts": "node scripts/generate-artifacts.mjs",
+    "prerender": "node scripts/prerender.mjs"
   },
   "dependencies": {
     "jszip": "^3.10.1",

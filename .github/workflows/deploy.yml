@@ -37,11 +37,12 @@ jobs:
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium
 
-      - name: Generate event artifacts
+      - name: Generate event artifacts & prerender SEO
         run: |
           npm run preview &
           for i in $(seq 1 60); do curl -sf http://localhost:4173 >/dev/null && break; sleep 1; done
           npm run generate:artifacts
+          npm run prerender
           kill %1 || true
 
       - name: Upload event artifacts (pipeline)
