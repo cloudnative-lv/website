@@ -231,8 +231,7 @@ organizer kit page, and the event-page hero/OG image.
 - **Platforms:** banners cover LinkedIn (event 1600×900, post 1280×720, speaker
   1280×720), Eventbrite (2160×1080), Bevy (2560×650, **legacy**), OG (1200×630),
   and OCG — the decorative breadcrumb strip that replaced Bevy (desktop 2428×192 +
-  mobile 1220×192 WebP, ≤1 MiB). See
-  `docs/superpowers/specs/2026-06-13-event-artifact-generation-design.md`.
+  mobile 1220×192 WebP, ≤1 MiB). See the event-publishing runbook in `README.md`.
 
 ## Social Links
 
