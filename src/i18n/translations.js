@@ -28,6 +28,11 @@ export const translations = {
         title: 'Want to speak at our meetup?',
         description: 'We\'re always looking for speakers to share their experiences with cloud native technologies.',
         contact: 'Get in Touch'
+      },
+      partners: {
+        title: 'Our Partners',
+        subtitle: 'The organizations that host and support Cloud Native Latvia.',
+        cta: 'Become a partner →'
       }
     },
     // Events page
@@ -260,6 +265,11 @@ export const translations = {
         title: 'Vēlies uzstāties mūsu tikšanās reizē?',
         description: 'Mēs vienmēr meklējam runātājus, kas vēlas dalīties ar savu pieredzi mākoņdatošanas tehnoloģijās.',
         contact: 'Sazināties'
+      },
+      partners: {
+        title: 'Mūsu partneri',
+        subtitle: 'Organizācijas, kas uzņem un atbalsta Cloud Native Latvia.',
+        cta: 'Kļūsti par partneri →'
       }
     },
     // Events page

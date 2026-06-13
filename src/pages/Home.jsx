@@ -5,6 +5,7 @@ import AnimatedBackground from '../components/AnimatedBackground';
 import SEO from '../components/SEO';
 import { WebPageJsonLd } from '../components/JsonLd';
 import { useLanguage } from '../i18n/useLanguage';
+import { allPartners } from '../data/partners';
 
 export default function Home() {
   const { t } = useLanguage();
@@ -86,6 +87,25 @@ export default function Home() {
           <p className="text-lg text-gray-600 mb-6 leading-relaxed" dangerouslySetInnerHTML={{ __html: t('home.about.p1') }} />
           <p className="text-lg text-gray-600 mb-6 leading-relaxed" dangerouslySetInnerHTML={{ __html: t('home.about.p2') }} />
           <p className="text-lg text-gray-600 leading-relaxed" dangerouslySetInnerHTML={{ __html: t('home.about.p3') }} />
+        </div>
+      </section>
+
+      {/* Partners */}
+      <section className="py-16 bg-white">
+        <div className="max-w-5xl mx-auto px-4 text-center">
+          <h2 className="text-3xl font-black text-burgundy mb-2">{t('home.partners.title')}</h2>
+          <p className="text-gray-600 mb-10">{t('home.partners.subtitle')}</p>
+          <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-8">
+            {allPartners.map((p) => {
+              const img = <img src={p.logo} alt={p.name} className="max-h-9 max-w-[130px] object-contain" />;
+              return p.url ? (
+                <a key={p.name} href={p.url} target="_blank" rel="noopener noreferrer" title={p.name} className="opacity-90 transition hover:opacity-100 hover:-translate-y-0.5">{img}</a>
+              ) : (
+                <span key={p.name} title={p.name}>{img}</span>
+              );
+            })}
+          </div>
+          <Link to="/sponsors" className="mt-8 inline-block font-semibold text-pink transition-colors hover:text-burgundy">{t('home.partners.cta')}</Link>
         </div>
       </section>
 

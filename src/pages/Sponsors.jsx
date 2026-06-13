@@ -6,6 +6,7 @@ import CTASection from '../components/CTASection';
 import Button from '../components/Button';
 import { Container, Section, SectionHeading } from '../components/layout';
 import { useLanguage } from '../i18n/useLanguage';
+import { venueProviders, supporters } from '../data/partners';
 
 const benefitIcons = [
   <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" key="talent">
@@ -53,22 +54,15 @@ const tierConfigs = [
   }
 ];
 
-const venueProviders = [
-  { name: 'Accenture', logo: '/images/sponsors/accenture.png' },
-  { name: 'GoCardless', logo: '/images/sponsors/gocardless.png' },
-];
-const supporters = [
-  { name: 'Extreme Automation', logo: '/images/sponsors/extreme-automation.png', dark: true },
-  { name: 'VELUX', logo: '/images/sponsors/velux.svg' },
-  { name: 'Nuoxera', logo: '/images/sponsors/nuoxera.svg' },
-];
-
-function PartnerCard({ name, logo, dark }) {
-  return (
-    <div className={`flex h-24 w-48 items-center justify-center rounded-xl px-6 ${dark ? 'bg-gray-900' : 'bg-white ring-1 ring-gray-200'}`}>
+function PartnerCard({ name, logo, url }) {
+  const card = (
+    <div className="flex h-24 w-48 items-center justify-center rounded-xl bg-white px-6 ring-1 ring-gray-200">
       <img src={logo} alt={name} className="max-h-12 max-w-[150px] object-contain" />
     </div>
   );
+  return url ? (
+    <a href={url} target="_blank" rel="noopener noreferrer" title={name} className="transition hover:-translate-y-0.5">{card}</a>
+  ) : card;
 }
 
 export default function Sponsors() {
