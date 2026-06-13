@@ -19,6 +19,12 @@
   --color-pink-light: #fdf2f4;
   
   --animate-float: float 20s ease-in-out infinite;
+  --animate-fade-in: fadeIn 0.25s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes float {

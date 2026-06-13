@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react';
-import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Outlet, useLocation } from 'react-router-dom';
 import { LanguageProvider } from './i18n/LanguageContext';
 import ErrorBoundary from './components/ErrorBoundary';
 import Navbar from './components/Navbar';
@@ -24,12 +24,16 @@ const KitManifest = lazy(() => import('./artifacts/KitManifest'));
 // Site chrome wrapping the public pages. The Suspense sits *inside* the layout so
 // the navbar/footer stay mounted (no flicker) while a lazy page loads.
 function SiteLayout() {
+  const location = useLocation();
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
       <main className="grow">
         <Suspense fallback={<div className="min-h-screen bg-pink-light" />}>
-          <Outlet />
+          {/* Keyed by route so each navigation re-runs the fade-in animation. */}
+          <div key={location.pathname} className="animate-fade-in">
+            <Outlet />
+          </div>
         </Suspense>
       </main>
       <Footer />
