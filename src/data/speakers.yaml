@@ -18,6 +18,7 @@
   bio: "Builds automation at airBaltic that lets teams manage secrets and configuration autonomously across a hybrid environment."
 
 "Alex Rimlin":
+  title: "DevOps Engineer | Kubestronaut"
   company: "GOStack"
   bio: "Hybrid-cloud practitioner connecting Kubernetes clusters across providers with eBPF and mesh networking, with an eye on cost and latency."
   linkedin: "https://www.linkedin.com/in/alexrimlin/"
@@ -103,7 +104,7 @@
   github: "https://github.com/nicklasfrahm"
 
 "Andrey Adamovich":
-  title: "Fractional CTO, Trainer"
+  title: "CTO, Trainer"
   bio: "Developer, DevOps practitioner and trainer - and co-organizer of Cloud Native Latvia. Hands-on with CI pipelines, Kubernetes and CNCF projects like Argo CD, Crossplane, Kyverno and OpenTelemetry. Off the clock, a chess player - often across the board from his son."
   linkedin: "https://www.linkedin.com/in/andreyadamovich/"
   github: "https://github.com/aadamovich"
