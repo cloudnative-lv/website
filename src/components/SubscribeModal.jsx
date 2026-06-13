@@ -3,6 +3,10 @@ import { useLanguage } from '../i18n/useLanguage';
 import { SocialLink } from './SocialIcons';
 import { SOCIAL_LINKS } from '../data/socialLinks';
 
+// Set VITE_SUBSCRIBE_ENDPOINT (e.g. a Formspree form URL) to POST emails to a
+// mailing list. Until it's set, we fall back to opening the CNCF/OCG group page.
+const ENDPOINT = import.meta.env.VITE_SUBSCRIBE_ENDPOINT;
+
 export default function SubscribeModal({ isOpen, onClose }) {
   const { t } = useLanguage();
   const [email, setEmail] = useState('');
@@ -11,17 +15,27 @@ export default function SubscribeModal({ isOpen, onClose }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus('loading');
-    
-    // For now, open the CNCF community page where they can subscribe
-    // In the future, this could be connected to a mailing list service
-    window.open('https://ocgroups.dev/cncf/group/xggmcq8', '_blank');
-    setStatus('success');
-    
-    setTimeout(() => {
-      setEmail('');
-      setStatus('idle');
-      onClose();
-    }, 2000);
+
+    // No mailing-list endpoint configured yet: open the CNCF/OCG group page.
+    if (!ENDPOINT) {
+      window.open('https://ocgroups.dev/cncf/group/xggmcq8', '_blank', 'noopener');
+      setStatus('success');
+      setTimeout(() => { setEmail(''); setStatus('idle'); onClose(); }, 2000);
+      return;
+    }
+
+    try {
+      const res = await fetch(ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      setStatus('success');
+      setTimeout(() => { setEmail(''); setStatus('idle'); onClose(); }, 2500);
+    } catch {
+      setStatus('error');
+    }
   };
 
   if (!isOpen) return null;

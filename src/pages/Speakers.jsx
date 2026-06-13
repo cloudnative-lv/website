@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { getEvents } from '../data/events';
+import { getEvents, getEventTalks } from '../data/events';
 import PageHeader from '../components/PageHeader';
 import CTASection from '../components/CTASection';
 import Button from '../components/Button';
@@ -25,14 +25,16 @@ function getTalksWithSpeakers() {
 
   getEvents().forEach(event => {
     if (event.talks) {
-      event.talks.forEach(talk => {
+      getEventTalks(event).forEach(talk => {
         const speakers = getSpeakersFromTalk(talk);
         speakers.forEach(speaker => {
           talks.push({
             speaker: speaker,
             title: talk.title,
             description: talk.description,
+            slidesUrl: talk.slidesUrl,
             eventSlug: event.slug,
+            talkSlug: talk.talkSlug,
             eventTitle: event.title,
             eventDate: event.date,
             coSpeakers: speakers.length > 1 ? speakers.filter(s => s !== speaker) : []
@@ -113,7 +115,9 @@ export default function Speakers() {
                         <SpeakerSocials info={info} className="mt-2" />
                       </div>
                     )}
-                    <h4 className="text-lg font-bold text-burgundy mb-3 line-clamp-2">{talk.title}</h4>
+                    <h4 className="text-lg font-bold text-burgundy mb-3 line-clamp-2">
+                      <Link to={`/events/${talk.eventSlug}/talks/${talk.talkSlug}`} className="hover:text-pink transition-colors">{talk.title}</Link>
+                    </h4>
                     {talk.coSpeakers.length > 0 && (
                       <p className="text-pink text-sm mb-2">{t('speakers.with')} {talk.coSpeakers.join(', ')}</p>
                     )}

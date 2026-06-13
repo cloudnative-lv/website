@@ -165,4 +165,18 @@ test.describe('Site Navigation', () => {
     await page.waitForTimeout(1000);
     await expect(page.locator('h1')).toContainText(/Team|Komanda/);
   });
+
+  test('talk pages are deep-linkable', async ({ page }) => {
+    // Land on an event, grab a talk link, then load that URL directly (deep
+    // link / hard refresh) to prove the per-talk route resolves on its own.
+    await page.goto('/events/meetup-006-gpus-ai-agents');
+    const talkLink = page.locator('a[href*="/talks/"]').first();
+    await expect(talkLink).toBeVisible();
+    const href = await talkLink.getAttribute('href');
+    const title = (await talkLink.textContent()).trim();
+    await page.goto(href);
+    await expect(page.locator('h1')).toContainText(title);
+    await expect(page.getByText(/Presented by|Prezentē/)).toBeVisible();
+    await expect(page.locator('a[href="/events/meetup-006-gpus-ai-agents"]')).toBeVisible();
+  });
 });

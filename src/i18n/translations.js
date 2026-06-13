@@ -65,10 +65,20 @@ export const translations = {
       notFound: 'Event not found',
       shareEvent: 'Share Event'
     },
+    // Talk detail
+    talkDetail: {
+      notFound: 'Talk not found',
+      backToEvent: 'Back to event',
+      about: 'About this talk',
+      presentedBy: 'Presented by',
+      slides: 'View slides',
+      partOf: 'Part of'
+    },
     // Event card
     eventCard: {
       upcoming: 'Upcoming',
-      pastEvent: 'Past Event'
+      pastEvent: 'Past Event',
+      slides: 'Slides available'
     },
     // Speakers page
     speakers: {
@@ -233,6 +243,8 @@ export const translations = {
       buttonShort: 'Subscribe',
       loading: 'Subscribing...',
       success: 'Redirecting to CNCF Community...',
+      subscribed: 'Thanks for subscribing!',
+      error: 'Something went wrong - please try again.',
       followUs: 'Or follow us on social media'
     }
   },
@@ -302,10 +314,20 @@ export const translations = {
       notFound: 'Pasākums nav atrasts',
       shareEvent: 'Dalīties ar pasākumu'
     },
+    // Talk detail
+    talkDetail: {
+      notFound: 'Prezentācija nav atrasta',
+      backToEvent: 'Atpakaļ uz pasākumu',
+      about: 'Par šo prezentāciju',
+      presentedBy: 'Prezentē',
+      slides: 'Skatīt slaidus',
+      partOf: 'Daļa no'
+    },
     // Event card
     eventCard: {
       upcoming: 'Gaidāmais',
-      pastEvent: 'Pagājušais pasākums'
+      pastEvent: 'Pagājušais pasākums',
+      slides: 'Pieejami slaidi'
     },
     // Speakers page
     speakers: {
@@ -470,6 +492,8 @@ export const translations = {
       buttonShort: 'Abonēt',
       loading: 'Abonē...',
       success: 'Pāradresē uz CNCF Community...',
+      subscribed: 'Paldies, ka pieteicies!',
+      error: 'Kaut kas nogāja greizi - lūdzu, mēģini vēlreiz.',
       followUs: 'Vai seko mums sociālajos tīklos'
     }
   }

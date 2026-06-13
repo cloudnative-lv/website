@@ -11,6 +11,7 @@ import Home from './pages/Home';
 // Secondary pages are code-split so each is only downloaded when first visited.
 const Events = lazy(() => import('./pages/Events'));
 const EventDetail = lazy(() => import('./pages/EventDetail'));
+const TalkDetail = lazy(() => import('./pages/TalkDetail'));
 const Team = lazy(() => import('./pages/Team'));
 const Swag = lazy(() => import('./pages/Swag'));
 const Sponsors = lazy(() => import('./pages/Sponsors'));
@@ -51,6 +52,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/events" element={<Events />} />
             <Route path="/events/:slug" element={<EventDetail />} />
+            <Route path="/events/:slug/talks/:talkSlug" element={<TalkDetail />} />
             <Route path="/team" element={<Team />} />
             <Route path="/swag" element={<Swag />} />
             <Route path="/sponsors" element={<Sponsors />} />

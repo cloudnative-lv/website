@@ -70,3 +70,34 @@ export const getPastEvents = () => getEvents().filter((e) => e.status === 'past'
 // already-shared URLs survive a rename; EventDetail redirects to the canonical slug.
 export const getEventBySlug = (slug) =>
   getEvents().find((e) => e.slug === slug || (e.previousSlugs || []).includes(slug));
+
+// URL-safe segment from a talk title (diacritics stripped, lowercased).
+const slugify = (s) =>
+  String(s)
+    .toLowerCase()
+    .normalize('NFKD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 60) || 'talk';
+
+// An event's talks, each given a stable `talkSlug` (deduped within the event)
+// and its 0-based `index`. Single source of truth for talk URLs (pages + prerender).
+export const getEventTalks = (event) => {
+  const seen = {};
+  return (event.talks || []).map((talk, index) => {
+    let talkSlug = slugify(talk.title);
+    if (seen[talkSlug]) talkSlug = `${talkSlug}-${(seen[talkSlug] += 1)}`;
+    else seen[talkSlug] = 1;
+    return { ...talk, index, talkSlug };
+  });
+};
+
+// Resolve one talk by event slug + talk slug. Former event slugs resolve via
+// getEventBySlug; TalkDetail redirects to the canonical event slug.
+export const getTalk = (eventSlug, talkSlug) => {
+  const event = getEventBySlug(eventSlug);
+  if (!event) return null;
+  const talk = getEventTalks(event).find((tk) => tk.talkSlug === talkSlug);
+  return talk ? { event, talk } : null;
+};

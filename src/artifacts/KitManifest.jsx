@@ -1,6 +1,6 @@
 import { allArtifacts } from './artifactSpec';
 import { eventSocial } from './socialCopy';
-import { getEvents } from '../data/events';
+import { getEvents, getEventTalks } from '../data/events';
 
 const SITE = 'https://cloudnative.lv';
 
@@ -14,6 +14,7 @@ export default function KitManifest() {
     id: e.id,
     slug: e.slug,
     url: `${SITE}/events/${e.slug}`,
+    talks: getEventTalks(e).map((tk) => tk.talkSlug),
     social: eventSocial(e),
   }));
   const manifest = { images: allArtifacts(), events };
