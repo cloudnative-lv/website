@@ -53,6 +53,24 @@ const tierConfigs = [
   }
 ];
 
+const venueProviders = [
+  { name: 'Accenture', logo: '/images/sponsors/accenture.png' },
+  { name: 'GoCardless', logo: '/images/sponsors/gocardless.png' },
+];
+const supporters = [
+  { name: 'Extreme Automation', logo: '/images/sponsors/extreme-automation.png', dark: true },
+  { name: 'VELUX', logo: '/images/sponsors/velux.svg' },
+  { name: 'Nuoxera', logo: '/images/sponsors/nuoxera.svg' },
+];
+
+function PartnerCard({ name, logo, dark }) {
+  return (
+    <div className={`flex h-24 w-48 items-center justify-center rounded-xl px-6 ${dark ? 'bg-gray-900' : 'bg-white ring-1 ring-gray-200'}`}>
+      <img src={logo} alt={name} className="max-h-12 max-w-[150px] object-contain" />
+    </div>
+  );
+}
+
 export default function Sponsors() {
   const { t } = useLanguage();
 
@@ -132,23 +150,15 @@ export default function Sponsors() {
             <h3 className="text-center text-sm font-bold uppercase tracking-wide text-pink mb-4">
               {t('sponsors.partners.hosts')}
             </h3>
-            <div className="flex justify-center gap-6 flex-wrap mb-10">
-              {['Accenture', 'GoCardless'].map((name) => (
-                <div key={name} className="w-48 h-24 bg-rose-50 rounded-xl flex items-center justify-center px-4 text-center">
-                  <span className="text-lg font-bold text-burgundy">{name}</span>
-                </div>
-              ))}
+            <div className="flex justify-center items-center gap-6 flex-wrap mb-10">
+              {venueProviders.map((p) => <PartnerCard key={p.name} {...p} />)}
             </div>
 
             <h3 className="text-center text-sm font-bold uppercase tracking-wide text-pink mb-4">
               {t('sponsors.partners.supporters')}
             </h3>
-            <div className="flex justify-center gap-6 flex-wrap">
-              {['Extreme Automation', 'VELUX', 'Nuoxera'].map((name) => (
-                <div key={name} className="w-48 h-24 bg-rose-50 rounded-xl flex items-center justify-center px-4 text-center">
-                  <span className="text-lg font-bold text-burgundy">{name}</span>
-                </div>
-              ))}
+            <div className="flex justify-center items-center gap-6 flex-wrap">
+              {supporters.map((p) => <PartnerCard key={p.name} {...p} />)}
             </div>
           </div>
         </Section>

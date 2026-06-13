@@ -35,12 +35,8 @@ export default function Navbar() {
     <nav className="bg-white border-b border-rose-100 shadow-sm sticky top-0 z-50">
       <div className="max-w-6xl mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          <Link to="/" className="flex items-center space-x-3 group">
-            <img src="/images/logo.svg" alt="Cloud Native Latvia" className="h-10 w-auto" />
-            <div className="hidden sm:flex flex-col leading-tight uppercase text-center">
-              <span className="text-pink font-bold text-sm tracking-tight">Cloud Native</span>
-              <span className="text-burgundy font-black text-lg tracking-wide">LATVIA</span>
-            </div>
+          <Link to="/" className="flex items-center group">
+            <img src="/images/logo-horizontal.svg" alt="Cloud Native Latvia" className="h-9 md:h-10 w-auto" />
           </Link>
 
           {/* Desktop Navigation */}
