@@ -42,6 +42,19 @@ export default {
       console.log("reminder: nothing to flag");
       return;
     }
+
+    // Record to R2 (reliable log, independent of email delivery).
+    if (env.DATA) {
+      try {
+        const existing = await env.DATA.get("reminders.csv");
+        const csv = existing ? await existing.text() : "timestamp,issues\n";
+        const row = `${new Date().toISOString()},"${issues.join(" | ").replace(/"/g, '""')}"\n`;
+        await env.DATA.put("reminders.csv", csv + row, { httpMetadata: { contentType: "text/csv" } });
+      } catch (err) {
+        console.error("reminder: R2 log failed", err);
+      }
+    }
+
     await notify(env, issues).catch((err) => console.error("reminder: notify failed", err));
   },
 };

@@ -1,0 +1,62 @@
+# Project bootstrap — Cloudflare + GitHub resources
+
+How the cloudnative.lv backend resources were set up. Everything runs on the
+Cloudflare account that owns the **cloudnative.lv** zone (account id
+`2206fc831247e31fb22b657089145789`) and deploys from this repo.
+
+## Cloudflare
+
+### R2 (storage)
+- Enabled R2 on the account (Dashboard → R2 → enable; required once).
+- Created the bucket: `npx wrangler r2 bucket create cloudnative-lv`.
+- Objects (the source of truth):
+  - `subscribers.csv` — newsletter subscribers (subscribe worker).
+  - `feedback/<event-slug>.csv` — per-event feedback (feedback worker).
+  - `reminders.csv` — reminder digests (reminder worker).
+
+### Workers (`workers/`, deployed with wrangler)
+Each sets `account_id` + `workers_dev = false` and is served under cloudnative.lv:
+
+| Worker | URL / trigger | Bindings |
+|---|---|---|
+| **subscribe** | `subscribe.cloudnative.lv` (custom domain) | R2 `SUBSCRIBERS`, `send_email` NOTIFY |
+| **feedback** | `feedback.cloudnative.lv` (custom domain) | R2 `FEEDBACK` |
+| **reminder** | cron `0 9 * * *` (no public URL) | R2 `DATA`, `send_email` NOTIFY |
+| **cloudnative-lv-info** | Email Routing (hello@/info@) | — (forwards) |
+
+Deploy one: `cd workers/<name> && npx wrangler deploy`.
+Or run the **Deploy Workers** GitHub Action (manual `workflow_dispatch`; matrix of all
+workers) — it auto-creates the R2 bucket first.
+
+### Email Routing
+- `hello@cloudnative.lv` / `info@cloudnative.lv` are custom addresses forwarded to the
+  organizers by the **cloudnative-lv-info** Email Worker (`FORWARD_TO` secret).
+- subscribe + reminder send notifications via the `send_email` binding to `NOTIFY_TO`
+  (`hello@cloudnative.lv`). **`NOTIFY_TO` must be a verified Email Routing *destination***
+  for delivery (Dashboard → Email Routing → Destination addresses → add + verify). R2
+  logging records everything regardless of email delivery.
+
+### Worker secrets (`wrangler secret put <NAME>` from the worker's folder)
+- **cloudnative-lv-info** → `FORWARD_TO` = comma-separated forward addresses (keeps
+  personal addresses out of git).
+
+## GitHub (`cloudnative-lv/website` → Settings → Secrets and variables → Actions)
+- **Secrets:** `CLOUDFLARE_API_KEY` (scoped API token: *Workers Scripts: Edit* +
+  *Workers R2 Storage: Edit* + *Account Settings: Read*), `CLOUDFLARE_ACCOUNT_ID`.
+- **Variables:** `SUBSCRIBE_ENDPOINT` = `https://subscribe.cloudnative.lv`,
+  `FEEDBACK_ENDPOINT` = `https://feedback.cloudnative.lv`. The site build passes them as
+  `VITE_SUBSCRIBE_ENDPOINT` / `VITE_FEEDBACK_ENDPOINT`; unset → the forms degrade
+  gracefully (subscribe opens the CNCF page; feedback shows "not set up yet").
+
+## Local wrangler
+`npx wrangler login` (OAuth) once; then `wrangler deploy` / `wrangler secret put` /
+`wrangler r2 ...` work against the account.
+
+## Site (GitHub Pages)
+- `cloudnative.lv` apex → GitHub Pages (the React/Vite site). DNS + email on Cloudflare.
+- Built/deployed by `.github/workflows/deploy.yml` on push to `main`
+  (validate → build → generate artifacts → prerender → deploy + upload artifacts).
+
+## Deprecated
+- `cloudnative-lv/event-ops` — archived; superseded by this repo (event data, artifact
+  generation, and workers all live here now).

@@ -16,6 +16,11 @@ NOTIFY_FROM = "noreply@cloudnative.lv"
 [[send_email]]
 name = "NOTIFY"
 
+# Reliable R2 log of each digest (independent of email delivery).
+[[r2_buckets]]
+binding = "DATA"
+bucket_name = "cloudnative-lv"
+
 # Daily at 09:00 UTC.
 [triggers]
 crons = ["0 9 * * *"]
