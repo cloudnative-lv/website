@@ -12,7 +12,11 @@ custom_domain = true
 
 [vars]
 ALLOWED_ORIGINS = "https://cloudnative.lv,http://localhost:5173,http://localhost:4173"
-NOTIFY_TO = "hello@cloudnative.lv"
+# send_email can only deliver to a *verified* Email Routing destination address.
+# andrey@extremeautomation.io is already verified (the catch-all / andrey@ target), so
+# notifications deliver with no dashboard step. hello@cloudnative.lv is a Worker *route*,
+# not a destination, so it can't receive worker-sent mail.
+NOTIFY_TO = "andrey@extremeautomation.io"
 NOTIFY_FROM = "noreply@cloudnative.lv"
 SUBSCRIBERS_KEY = "subscribers.csv"
 

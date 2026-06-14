@@ -17,9 +17,10 @@ is restricted to `ALLOWED_ORIGINS` in `wrangler.toml`.
 ### One-time setup (Cloudflare)
 1. **R2 bucket:** `npx wrangler r2 bucket create cloudnative-lv` (match
    `bucket_name` in `wrangler.toml`).
-2. **Verify the email destination:** in Email Routing, confirm
-   `hello@cloudnative.lv` is a **verified destination** — `send_email` can only
-   send to verified addresses.
+2. **Notification recipient:** `send_email` can only deliver to a **verified Email
+   Routing destination**, so `NOTIFY_TO` is `andrey@extremeautomation.io` (already
+   verified). `hello@cloudnative.lv` is a Worker route, not a destination, so it
+   can't receive worker-sent mail.
 3. **Account id:** set `account_id` in `wrangler.toml`, or pass
    `CLOUDFLARE_ACCOUNT_ID` (the CI workflow does this).
 

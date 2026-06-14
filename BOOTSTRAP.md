@@ -31,10 +31,11 @@ workers) — it auto-creates the R2 bucket first.
 ### Email Routing
 - `hello@cloudnative.lv` / `info@cloudnative.lv` are custom addresses forwarded to the
   organizers by the **cloudnative-lv-info** Email Worker (`FORWARD_TO` secret).
-- the subscribe worker sends a notification via the `send_email` binding to `NOTIFY_TO`
-  (`hello@cloudnative.lv`). **`NOTIFY_TO` must be a verified Email Routing *destination***
-  for delivery (Dashboard → Email Routing → Destination addresses → add + verify). R2
-  logging records every subscriber regardless of email delivery.
+- the subscribe worker sends a notification via the `send_email` binding to `NOTIFY_TO`.
+  `send_email` can only deliver to a **verified Email Routing _destination_ address**, so
+  `NOTIFY_TO = andrey@extremeautomation.io` (already verified as the catch-all / andrey@
+  target). `hello@cloudnative.lv` is a Worker *route*, not a destination, so it can't
+  receive worker-sent mail. R2 logging records every subscriber regardless of email.
 
 ### Worker secrets (`wrangler secret put <NAME>` from the worker's folder)
 - **cloudnative-lv-info** → `FORWARD_TO` = comma-separated forward addresses (keeps
