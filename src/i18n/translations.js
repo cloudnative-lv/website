@@ -277,6 +277,16 @@ export const translations = {
         title: 'Your rights',
         body: 'You can ask us to access, correct, or delete your data at any time — just email <a href="mailto:hello@cloudnative.lv" class="text-pink hover:text-burgundy underline">hello@cloudnative.lv</a> and we\'ll handle it promptly.'
       }
+    },
+    feedback: {
+      title: 'Event feedback',
+      rating: 'How would you rate the event? (1–5)',
+      comment: 'Anything you\'d like to share?',
+      submit: 'Send feedback',
+      sending: 'Sending...',
+      thanks: 'Thank you for your feedback!',
+      error: 'Something went wrong - please try again.',
+      notEnabled: 'Feedback collection isn\'t set up yet — check back soon.'
     }
   },
   lv: {
@@ -557,6 +567,16 @@ export const translations = {
         title: 'Tavas tiesības',
         body: 'Tu vari jebkurā laikā lūgt piekļūt saviem datiem, tos labot vai dzēst — vienkārši raksti uz <a href="mailto:hello@cloudnative.lv" class="text-pink hover:text-burgundy underline">hello@cloudnative.lv</a>, un mēs to ātri nokārtosim.'
       }
+    },
+    feedback: {
+      title: 'Pasākuma atsauksmes',
+      rating: 'Kā tu novērtētu pasākumu? (1–5)',
+      comment: 'Ko vēlies pastāstīt?',
+      submit: 'Nosūtīt atsauksmi',
+      sending: 'Nosūta...',
+      thanks: 'Paldies par atsauksmi!',
+      error: 'Kaut kas nogāja greizi - lūdzu, mēģini vēlreiz.',
+      notEnabled: 'Atsauksmju vākšana vēl nav iestatīta — ielūkojies vēlāk.'
     }
   }
 };

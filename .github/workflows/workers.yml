@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        worker: [subscribe, cloudnative-lv-info]
+        worker: [subscribe, cloudnative-lv-info, feedback, reminder]
     steps:
       - name: Checkout
         uses: actions/checkout@v6

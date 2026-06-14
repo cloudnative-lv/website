@@ -7,6 +7,7 @@ import { eventSocial } from './socialCopy';
 import { meetupNumber, cleanTitle, dateDots } from './fields';
 import ScaledPreview from './ScaledPreview';
 import Button from '../components/Button';
+import { QRCodeSVG } from 'qrcode.react';
 
 // Organizer "kit" for one event (unlisted; reach by direct link). Shows every
 // banner as a live preview with per-file download, plus QR and copy-to-clipboard
@@ -193,6 +194,17 @@ export default function KitPage() {
               <Button href={`${dir}/qr.svg`} download variant="secondary" size="sm">SVG</Button>
               <p className="mt-2 text-xs text-gray-500">Encodes cloudnative.lv/events/{event.slug}</p>
             </div>
+          </div>
+        </section>
+
+        {/* Feedback QR — links to the unlisted feedback form. */}
+        <section className="mt-12">
+          <h2 className="mb-4 text-xl font-bold text-burgundy">Feedback QR</h2>
+          <div className="flex items-center gap-6 rounded-xl bg-white p-5 shadow-sm">
+            <div className="rounded bg-white p-1 ring-1 ring-rose-200">
+              <QRCodeSVG value={`https://cloudnative.lv/events/${event.slug}/feedback`} size={120} fgColor="#881337" />
+            </div>
+            <p className="text-sm text-gray-600">Show this at the event so attendees can leave feedback — links to the (unlisted) feedback form.</p>
           </div>
         </section>
 

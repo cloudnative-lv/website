@@ -41,6 +41,11 @@ const page = await browser.newPage();
 // eval. The text is parsed with JSON.parse, never executed.)
 await page.goto(`${BASE}/kit/manifest`, { waitUntil: 'networkidle' });
 const { events } = JSON.parse(await page.$eval('[data-manifest]', (el) => el.textContent));
+
+// Static JSON snapshot of event data for Workers (e.g. the reminder bot) to fetch
+// — the SPA's /kit/manifest is client-rendered and not readable server-side.
+await writeFile(path.join(DIST, 'events.json'), JSON.stringify(events.map(({ social, ...e }) => e)));
+
 const routes = ['/', '/events', '/speakers', '/team', '/swag', '/sponsors', '/privacy',
   ...events.flatMap((e) => [
     `/events/${e.slug}`,

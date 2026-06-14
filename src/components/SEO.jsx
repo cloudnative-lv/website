@@ -22,7 +22,8 @@ export default function SEO({
   description, 
   keywords = [],
   path = '',
-  image = null
+  image = null,
+  noindex = false
 }) {
   const { language } = useLanguage();
 
@@ -65,14 +66,15 @@ export default function SEO({
     updateMeta('twitter:title', fullTitle);
     updateMeta('twitter:description', fullDescription);
     updateMeta('twitter:image', ogImage);
-    
+    updateMeta('robots', noindex ? 'noindex, nofollow' : 'index, follow');
+
     let canonical = document.querySelector('link[rel="canonical"]');
     if (canonical) {
       canonical.setAttribute('href', canonicalUrl);
     }
     
     document.documentElement.lang = language;
-  }, [fullTitle, fullDescription, allKeywords, canonicalUrl, ogImage, language]);
+  }, [fullTitle, fullDescription, allKeywords, canonicalUrl, ogImage, language, noindex]);
 
   return null;
 }

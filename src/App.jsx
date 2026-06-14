@@ -12,6 +12,7 @@ import Home from './pages/Home';
 const Events = lazy(() => import('./pages/Events'));
 const EventDetail = lazy(() => import('./pages/EventDetail'));
 const TalkDetail = lazy(() => import('./pages/TalkDetail'));
+const FeedbackPage = lazy(() => import('./pages/FeedbackPage'));
 const Team = lazy(() => import('./pages/Team'));
 const Swag = lazy(() => import('./pages/Swag'));
 const Sponsors = lazy(() => import('./pages/Sponsors'));
@@ -54,6 +55,7 @@ function App() {
             <Route path="/events" element={<Events />} />
             <Route path="/events/:slug" element={<EventDetail />} />
             <Route path="/events/:slug/talks/:talkSlug" element={<TalkDetail />} />
+            <Route path="/events/:slug/feedback" element={<FeedbackPage />} />
             <Route path="/team" element={<Team />} />
             <Route path="/swag" element={<Swag />} />
             <Route path="/sponsors" element={<Sponsors />} />

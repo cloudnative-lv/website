@@ -1,0 +1,14 @@
+name = "cloudnative-lv-feedback"
+main = "src/index.js"
+compatibility_date = "2026-06-01"
+
+# account_id = "..." (or pass CLOUDFLARE_ACCOUNT_ID)
+
+[vars]
+ALLOWED_ORIGINS = "https://cloudnative.lv,http://localhost:5173,http://localhost:4173"
+FEEDBACK_PREFIX = "feedback/"
+
+# R2 bucket holding feedback/<event-slug>.csv (one row per submission).
+[[r2_buckets]]
+binding = "FEEDBACK"
+bucket_name = "cloudnative-lv"

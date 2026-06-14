@@ -4,6 +4,7 @@ import { getSpeakerInfo } from '../data/speakers';
 import { meetupNumber, cleanTitle, dateDots } from './fields';
 import { allPartners } from '../data/partners';
 import { SOCIAL_LINKS } from '../data/socialLinks';
+import QRCode from 'qrcode';
 
 const BURGUNDY = '8B1538';
 const PINK = 'D4567C';
@@ -89,6 +90,16 @@ export async function downloadDeck(event) {
       pa.addText(p.name, { x, y: 4.1, w: cellW, h: 0.4, fontSize: 12, align: 'center', color: '666666' });
     });
   }
+
+  // Feedback QR (optional — skipped if generation fails).
+  try {
+    const qr = await QRCode.toDataURL(`https://cloudnative.lv/events/${event.slug}/feedback`, { margin: 1, width: 600, color: { dark: '#881337', light: '#ffffff' } });
+    const fb = pptx.addSlide();
+    fb.background = { color: ROSE };
+    fb.addText('Your feedback', { x: 0.8, y: 1.0, w: W - 1.6, h: 0.9, fontSize: 34, bold: true, color: BURGUNDY, align: 'center' });
+    fb.addImage({ data: qr, x: (W - 3) / 2, y: 2.2, w: 3, h: 3 });
+    fb.addText('Scan to share your thoughts', { x: 0.8, y: 5.4, w: W - 1.6, h: 0.5, fontSize: 18, color: '666666', align: 'center' });
+  } catch { /* QR optional */ }
 
   // Closing + connect.
   const cl = pptx.addSlide();

@@ -2,8 +2,18 @@ name = "cloudnative-lv-reminder"
 main = "src/index.js"
 compatibility_date = "2026-06-01"
 
-# SKELETON — implement, then add "reminder" to the workers.yml deploy matrix.
-# Scheduled check of each upcoming event's expected artifacts (banners, slides,
-# photos, registration links); pings the team when something is missing.
-# [triggers]
-# crons = ["0 9 * * *"]
+# account_id = "..." (or pass CLOUDFLARE_ACCOUNT_ID)
+
+[vars]
+SITE_URL = "https://cloudnative.lv"
+NOTIFY_TO = "hello@cloudnative.lv"
+NOTIFY_FROM = "noreply@cloudnative.lv"
+
+# Cloudflare Email Routing send binding (destination must be a verified address).
+[[send_email]]
+name = "NOTIFY"
+destination_address = "hello@cloudnative.lv"
+
+# Daily at 09:00 UTC.
+[triggers]
+crons = ["0 9 * * *"]

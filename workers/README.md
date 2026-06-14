@@ -55,6 +55,21 @@ pointing at it.
 - Deploy: the same **Deploy Workers** action (it's in the matrix), or
   `npx wrangler deploy` locally.
 
+## feedback
+
+Backend for the unlisted per-event feedback form (`/events/<slug>/feedback`).
+`POST { event, rating, comment }` appends a row to `feedback/<slug>.csv` in R2.
+Honeypot + validation + CORS. Wire it up by setting the repo variable
+`FEEDBACK_ENDPOINT` to the deployed worker URL (the site passes it as
+`VITE_FEEDBACK_ENDPOINT`); reuses the `cloudnative-lv` R2 bucket.
+
+## reminder
+
+Scheduled (daily) Worker that fetches the site's `events.json` and emails the
+organizers about gaps — upcoming events with no registration link, recently
+finished events missing photos or slides — via the Email Routing `send_email`
+binding. No third-party services.
+
 ## Planned (skeletons)
 
 Stub workers scaffolded for automation we have in mind — implement, then add the
@@ -64,5 +79,4 @@ name to the `workers.yml` deploy matrix:
 - **social** — post announcements to LinkedIn + Bluesky (the `/kit` already makes the copy).
 - **attendees** — aggregate RSVPs (Eventbrite, OCG) into the R2 CSV; LinkedIn data is
   merged from a local, off-CI collection (TOS).
-- **reminder** — scheduled check of each event's expected artifacts; pings the team on gaps.
 - **youtube** — upload event recordings with metadata + chapters.
