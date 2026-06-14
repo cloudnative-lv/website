@@ -493,7 +493,7 @@ export const translations = {
         gold: 'Zelts',
         silver: 'Sudrabs',
         bronze: 'Bronza',
-        event: 'Pasākuma sponsors'
+        event: 'Pasākums'
       },
       tierBenefits: {
         logoHomepage: 'Logo mājaslapas sākumlapā',
