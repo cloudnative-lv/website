@@ -84,9 +84,36 @@ export const speakerThankYou = (event, name, talkTitle) => {
   return { subject, body };
 };
 
+// Long-form Eventbrite listing description (the organizer pastes it into the
+// Eventbrite event body). Fuller than the social post: the whole agenda with a
+// one-line abstract per talk.
+export const eventbriteDescription = (event) => {
+  const lines = [
+    `Cloud Native Latvia Meetup #${meetupNumber(event)} - ${cleanTitle(event.title)}`,
+    '',
+    `${dateLong(event.date)}${startTime(event) ? ` · ${startTime(event)}` : ''}`,
+    venueLine(event.venue),
+    '',
+    'Join the Cloud Native Latvia community for an evening of talks on Kubernetes, cloud native tooling and the CNCF ecosystem. Free to attend - everyone welcome.',
+    '',
+    'Agenda:',
+  ];
+  (event.talks || []).forEach((t) => {
+    const who = talkSpeakerNames(t).join(' & ');
+    lines.push(`• ${t.title}${who ? ` - ${who}` : ''}`);
+    if (t.description) lines.push(`  ${firstSentence(t.description)}`);
+  });
+  lines.push('');
+  const reg = registerLine(event);
+  if (reg) lines.push(reg, '');
+  lines.push('Organized by Cloud Native Latvia · https://cloudnative.lv');
+  return lines.join('\n');
+};
+
 // All copy for an event: the announcement + one intro per talk that has speakers.
 export const eventSocial = (event) => ({
   announcement: announcementPost(event),
+  eventbrite: eventbriteDescription(event),
   speakerIntros: (event.talks || [])
     .map((talk, i) => ({ talk, i }))
     .filter(({ talk }) => talkSpeakerNames(talk).length > 0)

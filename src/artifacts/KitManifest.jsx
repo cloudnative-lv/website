@@ -14,12 +14,6 @@ export default function KitManifest() {
     id: e.id,
     slug: e.slug,
     url: `${SITE}/events/${e.slug}`,
-    date: e.date,
-    endTime: e.endTime,
-    hasPhotos: !!e.photosUrl,
-    hasRegistration: !!(e.cncfUrl || e.eventbriteUrl),
-    talkCount: (e.talks || []).length,
-    talksMissingSlides: (e.talks || []).filter((t) => !t.slidesUrl).length,
     talks: getEventTalks(e).map((tk) => tk.talkSlug),
     social: eventSocial(e),
   }));

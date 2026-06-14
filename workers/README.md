@@ -38,9 +38,10 @@ Set the repo **variable** `SUBSCRIBE_ENDPOINT` to the deployed worker URL (e.g.
 it as `VITE_SUBSCRIBE_ENDPOINT` (see `.github/workflows/deploy.yml`); when unset,
 the subscribe form falls back to opening the CNCF/OCG group page.
 
-### Later: attendees
-The same bucket can hold `attendees/<event-id>.csv` as the source of truth for
-event attendees — add a route + handler when that's needed.
+### Attendees
+Event attendees live in the same bucket as `attendees/<event-slug>.csv`. They're
+imported locally (no worker) from Eventbrite / OCG / LinkedIn CSV exports with
+`node scripts/import-attendees.mjs` — see `BOOTSTRAP.md`.
 
 ## cloudnative-lv-info (email forward)
 
@@ -63,20 +64,13 @@ Honeypot + validation + CORS. Wire it up by setting the repo variable
 `FEEDBACK_ENDPOINT` to the deployed worker URL (the site passes it as
 `VITE_FEEDBACK_ENDPOINT`); reuses the `cloudnative-lv` R2 bucket.
 
-## reminder
+## Not workers (by design)
 
-Scheduled (daily) Worker that fetches the site's `events.json` and emails the
-organizers about gaps — upcoming events with no registration link, recently
-finished events missing photos or slides — via the Email Routing `send_email`
-binding. No third-party services.
+Kept deliberately simple — these are handled outside Workers:
 
-## Planned (skeletons)
-
-Stub workers scaffolded for automation we have in mind — implement, then add the
-name to the `workers.yml` deploy matrix:
-
-- **eventbrite** — create/update Eventbrite events from event data.
-- **social** — post announcements to LinkedIn + Bluesky (the `/kit` already makes the copy).
-- **attendees** — aggregate RSVPs (Eventbrite, OCG) into the R2 CSV; LinkedIn data is
-  merged from a local, off-CI collection (TOS).
-- **youtube** — upload event recordings with metadata + chapters.
+- **Eventbrite + social** — posted manually. The `/kit` generates all the copy
+  (announcement, Eventbrite description, speaker intros) and visuals (Eventbrite,
+  LinkedIn, OG, speaker banners).
+- **Attendees** — imported locally from CSV exports into `attendees/<slug>.csv`
+  with `node scripts/import-attendees.mjs` (see `BOOTSTRAP.md`).
+- **Reminders / YouTube** — dropped (not needed).

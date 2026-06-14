@@ -75,6 +75,7 @@ export default function KitPage() {
     try {
       const zip = new JSZip();
       zip.file('announcement.md', social.announcement);
+      zip.file('eventbrite-description.md', social.eventbrite);
       social.speakerIntros.forEach((s) => zip.file(s.filename, s.text));
       social.speakerThankYous.forEach((s) => zip.file(s.filename, s.text));
       const files = [...images.map((i) => i.filename), 'qr.png', 'qr.svg'];
@@ -212,7 +213,7 @@ export default function KitPage() {
         <section className="mt-12">
           <h2 className="mb-4 text-xl font-bold text-burgundy">Social copy</h2>
           <div className="space-y-5">
-            {[{ title: 'Announcement', text: social.announcement }, ...social.speakerIntros.map((s, i) => ({ title: `Speaker intro ${i + 1}`, text: s.text }))].map((block) => (
+            {[{ title: 'Announcement', text: social.announcement }, { title: 'Eventbrite description', text: social.eventbrite }, ...social.speakerIntros.map((s, i) => ({ title: `Speaker intro ${i + 1}`, text: s.text }))].map((block) => (
               <div key={block.title} className="rounded-xl bg-white p-5 shadow-sm">
                 <div className="mb-2 flex items-center justify-between">
                   <h3 className="font-semibold text-gray-800">{block.title}</h3>

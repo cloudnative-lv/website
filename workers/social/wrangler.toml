@@ -1,8 +1,0 @@
-name = "cloudnative-lv-social"
-main = "src/index.js"
-compatibility_date = "2026-06-01"
-
-# SKELETON — implement, then add "social" to the workers.yml deploy matrix.
-# Posts event announcements to Bluesky (atproto) + LinkedIn. The /kit page
-# already produces the post copy + images.
-# Secrets: BLUESKY_HANDLE, BLUESKY_APP_PASSWORD, LINKEDIN_TOKEN.

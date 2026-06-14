@@ -71,7 +71,8 @@ for (const ev of events) {
   await QRCode.toFile(path.join(dir, 'qr.png'), ev.url, { ...QR_OPTS, width: 600 });
   await writeFile(path.join(dir, 'qr.svg'), await QRCode.toString(ev.url, { ...QR_OPTS, type: 'svg' }));
   await writeFile(path.join(dir, 'announcement.md'), ev.social.announcement);
-  record(ev.id, 'qr.png'); record(ev.id, 'qr.svg'); record(ev.id, 'announcement.md');
+  await writeFile(path.join(dir, 'eventbrite-description.md'), ev.social.eventbrite);
+  record(ev.id, 'qr.png'); record(ev.id, 'qr.svg'); record(ev.id, 'announcement.md'); record(ev.id, 'eventbrite-description.md');
   for (const intro of ev.social.speakerIntros) {
     await writeFile(path.join(dir, intro.filename), intro.text);
     record(ev.id, intro.filename);
