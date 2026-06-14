@@ -18,6 +18,9 @@ export const translations = {
       joinCommunity: 'Join Community',
       recentEvents: 'Recent & Upcoming Events',
       viewAll: 'View all →',
+      video: {
+        title: 'See us in action'
+      },
       about: {
         title: 'About Cloud Native Latvia',
         p1: 'We are a community of <strong>developers, DevOps engineers, SREs, and platform engineers</strong> based in Latvia. Our mission is to share knowledge and experiences around <strong>cloud native technologies</strong> including <strong>Kubernetes, Docker, containers, microservices, observability tools like Prometheus and Grafana</strong>, and modern <strong>platform engineering practices</strong>.',
@@ -308,6 +311,9 @@ export const translations = {
       joinCommunity: 'Pievienoties kopienai',
       recentEvents: 'Nesenie un gaidāmie pasākumi',
       viewAll: 'Skatīt visus →',
+      video: {
+        title: 'Redzi mūs darbībā'
+      },
       about: {
         title: 'Par Cloud Native Latvia',
         p1: 'Mēs esam <strong>izstrādātāju, DevOps inženieru, SRE un platformu inženieru</strong> kopiena Latvijā. Mūsu misija ir dalīties ar zināšanām un pieredzi par <strong>mākoņdatošanas tehnoloģijām</strong>, tostarp <strong>Kubernetes, Docker, konteineriem, mikropakalpojumiem, novērojamības rīkiem, piemēram, Prometheus un Grafana</strong>, un modernām <strong>platformu inženierijas praksēm</strong>.',

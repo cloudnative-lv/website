@@ -66,6 +66,24 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Promo video */}
+      <section className="py-16 bg-white">
+        <div className="mx-auto max-w-4xl px-4 text-center">
+          <h2 className="mb-6 text-3xl font-black text-burgundy">{t('home.video.title')}</h2>
+          <div className="relative mx-auto w-full max-w-3xl overflow-hidden rounded-2xl shadow-xl" style={{ aspectRatio: '16 / 9' }}>
+            <iframe
+              className="absolute inset-0 h-full w-full"
+              src="https://www.youtube-nocookie.com/embed/yT3mZbEYxgM"
+              title={t('home.video.title')}
+              loading="lazy"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerPolicy="strict-origin-when-cross-origin"
+              allowFullScreen
+            />
+          </div>
+        </div>
+      </section>
+
       {/* Featured Events */}
       <section className="py-16 bg-white">
         <div className="max-w-6xl mx-auto px-4">
