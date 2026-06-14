@@ -3,6 +3,12 @@ main = "src/index.js"
 compatibility_date = "2026-06-01"
 
 account_id = "2206fc831247e31fb22b657089145789"
+workers_dev = false
+
+# Served under cloudnative.lv (not the account's workers.dev subdomain).
+[[routes]]
+pattern = "feedback.cloudnative.lv"
+custom_domain = true
 
 [vars]
 ALLOWED_ORIGINS = "https://cloudnative.lv,http://localhost:5173,http://localhost:4173"

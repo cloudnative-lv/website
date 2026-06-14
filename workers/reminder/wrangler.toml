@@ -3,6 +3,8 @@ main = "src/index.js"
 compatibility_date = "2026-06-01"
 
 account_id = "2206fc831247e31fb22b657089145789"
+# Cron-only worker — no public HTTP URL.
+workers_dev = false
 
 [vars]
 SITE_URL = "https://cloudnative.lv"
