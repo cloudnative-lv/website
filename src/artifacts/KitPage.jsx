@@ -45,6 +45,7 @@ export default function KitPage() {
   const event = getEventBySlug(slug);
   const [zipping, setZipping] = useState(false);
   const [deckBusy, setDeckBusy] = useState(false);
+  const [htmlBusy, setHtmlBusy] = useState(false);
 
   if (!event) {
     return (
@@ -119,6 +120,21 @@ export default function KitPage() {
             className="mt-4 ml-3 rounded-full bg-white px-5 py-2 font-semibold text-rose-700 hover:bg-rose-50 disabled:opacity-60"
           >
             {deckBusy ? 'Building…' : 'Opening deck (.pptx)'}
+          </button>
+          <button
+            onClick={async () => {
+              setHtmlBusy(true);
+              try {
+                const { downloadHtmlDeck } = await import('./htmlDeck');
+                downloadHtmlDeck(event);
+              } finally {
+                setHtmlBusy(false);
+              }
+            }}
+            disabled={htmlBusy}
+            className="mt-4 ml-3 rounded-full bg-white px-5 py-2 font-semibold text-rose-700 hover:bg-rose-50 disabled:opacity-60"
+          >
+            {htmlBusy ? 'Building…' : 'Deck (.html)'}
           </button>
         </div>
       </header>
