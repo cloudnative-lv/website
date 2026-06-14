@@ -46,8 +46,7 @@ export default function Navbar() {
     { to: '/events', label: t('nav.events') },
     { to: '/speakers', label: t('nav.speakers') },
     { to: '/team', label: t('nav.team') },
-    { to: '/swag', label: t('nav.swag') },
-    { to: '/sponsors', label: t('nav.sponsors') }
+    { to: '/swag', label: t('nav.swag') }
   ];
 
   return (
