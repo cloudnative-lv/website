@@ -148,7 +148,7 @@ export default function KitPage() {
               const resolved = resolveVariant(event, a.variant);
               return (
                 <div key={a.variant} className="rounded-xl bg-white p-4 shadow-sm">
-                  <ScaledPreview width={a.width} height={a.height} cardWidth={340}>
+                  <ScaledPreview width={a.width} height={a.height}>
                     {resolved && <resolved.Component {...resolved.props} />}
                   </ScaledPreview>
                   <div className="mt-3 flex items-center justify-between gap-2">

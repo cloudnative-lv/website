@@ -48,7 +48,7 @@ export default function KitIndex() {
               const resolved = resolveBrand(a.variant);
               return (
                 <div key={a.variant} className="rounded-xl bg-white p-4 shadow-sm">
-                  <ScaledPreview width={a.width} height={a.height} cardWidth={a.width > 1600 ? 680 : 520}>
+                  <ScaledPreview width={a.width} height={a.height}>
                     {resolved && <resolved.Component {...resolved.props} />}
                   </ScaledPreview>
                   <div className="mt-3 flex items-center justify-between">

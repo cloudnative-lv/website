@@ -2,10 +2,30 @@ import pptxgen from 'pptxgenjs';
 import { getEventTalks } from '../data/events';
 import { getSpeakerInfo } from '../data/speakers';
 import { meetupNumber, cleanTitle, dateDots } from './fields';
+import { allPartners } from '../data/partners';
+import { SOCIAL_LINKS } from '../data/socialLinks';
 
 const BURGUNDY = '8B1538';
 const PINK = 'D4567C';
 const ROSE = 'FDF2F4';
+
+// Fetch an image as a data URL for embedding; returns null on failure so a
+// missing/unsupported logo never breaks the whole deck.
+async function loadImage(url) {
+  try {
+    const res = await fetch(url);
+    if (!res.ok) return null;
+    const blob = await res.blob();
+    return await new Promise((resolve) => {
+      const r = new FileReader();
+      r.onloadend = () => resolve(r.result);
+      r.onerror = () => resolve(null);
+      r.readAsDataURL(blob);
+    });
+  } catch {
+    return null;
+  }
+}
 
 // Build and download an opening deck (.pptx) for an event, from its metadata:
 // title slide, agenda, one slide per talk (speaker + role + abstract), closing.
@@ -56,11 +76,34 @@ export async function downloadDeck(event) {
     if (t.description) s.addText(t.description, { x: 1.0, y: 3.9, w: W - 2, h: 3, fontSize: 14, color: '555555' });
   });
 
+  // Partners (logos best-effort; names always shown).
+  if (allPartners.length) {
+    const logos = await Promise.all(allPartners.map((p) => loadImage(p.logo)));
+    const pa = pptx.addSlide();
+    pa.background = { color: 'FFFFFF' };
+    pa.addText('Thanks to our partners', { x: 0.8, y: 0.6, w: W - 1.6, h: 0.9, fontSize: 32, bold: true, color: BURGUNDY });
+    const cellW = (W - 1.6) / allPartners.length;
+    allPartners.forEach((p, i) => {
+      const x = 0.8 + i * cellW;
+      if (logos[i]) pa.addImage({ data: logos[i], x: x + 0.2, y: 2.6, w: cellW - 0.4, h: 1.3, sizing: { type: 'contain', w: cellW - 0.4, h: 1.3 } });
+      pa.addText(p.name, { x, y: 4.1, w: cellW, h: 0.4, fontSize: 12, align: 'center', color: '666666' });
+    });
+  }
+
+  // Closing + connect.
   const cl = pptx.addSlide();
   cl.background = { color: BURGUNDY };
-  cl.addText('Thank you!', { x: 0.8, y: 2.6, w: W - 1.6, h: 1.1, fontSize: 44, bold: true, color: 'FFFFFF' });
-  cl.addText('cloudnative.lv', { x: 0.8, y: 3.9, w: W - 1.6, h: 0.7, fontSize: 26, color: 'FFFFFF' });
-  cl.addText(`Slides & photos: cloudnative.lv/events/${event.slug}`, { x: 0.8, y: 4.7, w: W - 1.6, h: 0.6, fontSize: 16, color: 'F2D3DC' });
+  cl.addText('Thank you!', { x: 0.8, y: 2.1, w: W - 1.6, h: 1.0, fontSize: 44, bold: true, color: 'FFFFFF' });
+  cl.addText('cloudnative.lv', { x: 0.8, y: 3.2, w: W - 1.6, h: 0.6, fontSize: 26, color: 'FFFFFF' });
+  const socials = SOCIAL_LINKS.filter((s) => ['linkedin', 'bluesky', 'cncf', 'eventbrite'].includes(s.key));
+  cl.addText(
+    socials.flatMap((s, i) => [
+      ...(i ? [{ text: '    ·    ', options: { color: 'F2D3DC' } }] : []),
+      { text: s.title, options: { color: 'FFFFFF', hyperlink: { url: s.href } } },
+    ]),
+    { x: 0.8, y: 4.0, w: W - 1.6, h: 0.5, fontSize: 16, align: 'left' },
+  );
+  cl.addText(`Slides & photos: cloudnative.lv/events/${event.slug}`, { x: 0.8, y: 4.8, w: W - 1.6, h: 0.5, fontSize: 14, color: 'F2D3DC' });
 
   await pptx.writeFile({ fileName: `${event.slug}-deck.pptx` });
 }
