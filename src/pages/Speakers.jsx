@@ -115,8 +115,16 @@ export default function Speakers() {
                         <SpeakerSocials info={info} className="mt-2" />
                       </div>
                     )}
-                    <h4 className="text-lg font-bold text-burgundy mb-3 line-clamp-2">
-                      <Link to={`/events/${talk.eventSlug}/talks/${talk.talkSlug}`} className="hover:text-pink transition-colors">{talk.title}</Link>
+                    <h4 className="text-lg font-bold mb-3">
+                      <Link
+                        to={`/events/${talk.eventSlug}/talks/${talk.talkSlug}`}
+                        className="group inline-flex items-start gap-1.5 text-burgundy hover:text-pink hover:underline transition-colors"
+                      >
+                        <span className="line-clamp-2">{talk.title}</span>
+                        <svg className="mt-1 h-4 w-4 shrink-0 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </Link>
                     </h4>
                     {talk.coSpeakers.length > 0 && (
                       <p className="text-pink text-sm mb-2">{t('speakers.with')} {talk.coSpeakers.join(', ')}</p>

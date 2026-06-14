@@ -114,9 +114,15 @@ export default function EventDetail() {
                       : (talk.speaker ? [talk.speaker] : []);
                     return (
                       <div key={talk.talkSlug} className="border-l-4 border-pink pl-4">
-                        <h3 className="text-lg font-bold text-burgundy">
-                          <Link to={`/events/${event.slug}/talks/${talk.talkSlug}`} className="hover:text-pink transition-colors">
-                            {talk.title}
+                        <h3 className="text-lg font-bold">
+                          <Link
+                            to={`/events/${event.slug}/talks/${talk.talkSlug}`}
+                            className="group inline-flex items-start gap-1.5 text-burgundy hover:text-pink hover:underline transition-colors"
+                          >
+                            <span>{talk.title}</span>
+                            <svg className="mt-1 h-4 w-4 shrink-0 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                            </svg>
                           </Link>
                         </h3>
                         <p className="text-gray-600 mt-2">{talk.description}</p>
