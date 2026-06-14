@@ -39,9 +39,11 @@ export function GlobeIcon({ className = "w-5 h-5" }) {
 }
 
 export function CncfIcon({ className = "w-5 h-5" }) {
+  // Official CNCF cloud mark (cncf/artwork icon), recolored via currentColor.
   return (
-    <svg className={className} fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M4.5 9.75a6 6 0 0 1 11.573-2.226 3.75 3.75 0 0 1 4.133 4.303A4.5 4.5 0 0 1 18 20.25H6.75a5.25 5.25 0 0 1-2.23-10.004A6.072 6.072 0 0 1 4.5 9.75Z" />
+    <svg className={className} fill="currentColor" viewBox="5.52 5.02 388.71 388.96" aria-hidden="true">
+      <path opacity=".75" d="M66.5 333.2v-71.3H13v124.7h124.7v-53.4H66.5zm267.1-70.9v70.9h-70.9l-.3-.4v53.8H387V261.9h-53.8l.4.4zM66.5 136.9V66h70.8l.4.4V12.6H13v124.7h53.9l-.4-.4zM262.4 12.6V66h71.2v71.3H387V12.6H262.4z" />
+      <path d="M208.5 137.3h47.3L184.5 66h77.9V12.6H137.7v53.8l70.8 70.9zm18.4 160l-35.4-35.4h-47.2l59 59.1 12.2 12.2h-77.8v53.4h124.7v-53.8l-35.5-35.5zm106.7-106.6v24.4l-12.2-12.2-59-59v47.2l35.4 35.4 35.4 35.4H387V137.3h-53.4v53.4zm-267.1-6.6l71.2 71.2v-47.2l-70.8-70.8H13v124.6h53.5v-77.8z" />
     </svg>
   );
 }
