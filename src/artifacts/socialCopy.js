@@ -65,6 +65,25 @@ export const speakerIntroPost = (event, talk) => {
   return lines.join('\n');
 };
 
+// A thank-you email draft for one speaker (the organizer sends it manually).
+// Links to the site so they can find the recap/photos and share it.
+export const speakerThankYou = (event, name, talkTitle) => {
+  const subject = `Thank you for speaking at Cloud Native Latvia Meetup #${meetupNumber(event)}`;
+  const body = [
+    `Hi ${name.split(/\s+/)[0]},`,
+    '',
+    `Thank you for your talk${talkTitle ? ` “${talkTitle}”` : ''} at Cloud Native Latvia Meetup #${meetupNumber(event)} on ${dateLong(event.date)} — the community really appreciated it.`,
+    '',
+    'Recap, slides and photos from our meetups are on the site: https://cloudnative.lv',
+    '',
+    'Hope to have you back — and feel free to share it with your network.',
+    '',
+    'Thanks again,',
+    'Cloud Native Latvia',
+  ].join('\n');
+  return { subject, body };
+};
+
 // All copy for an event: the announcement + one intro per talk that has speakers.
 export const eventSocial = (event) => ({
   announcement: announcementPost(event),
@@ -75,4 +94,9 @@ export const eventSocial = (event) => ({
       filename: `speaker-intro-${i + 1}-${speakerSlug(talkSpeakerNames(talk)[0])}.md`,
       text: speakerIntroPost(event, talk),
     })),
+  speakerThankYous: [...new Set((event.talks || []).flatMap(talkSpeakerNames))].map((name) => {
+    const talk = (event.talks || []).find((t) => talkSpeakerNames(t).includes(name));
+    const { subject, body } = speakerThankYou(event, name, talk ? talk.title : '');
+    return { name, filename: `thank-you-${speakerSlug(name)}.md`, subject, text: `Subject: ${subject}\n\n${body}` };
+  }),
 });

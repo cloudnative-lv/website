@@ -74,6 +74,7 @@ export default function KitPage() {
       const zip = new JSZip();
       zip.file('announcement.md', social.announcement);
       social.speakerIntros.forEach((s) => zip.file(s.filename, s.text));
+      social.speakerThankYous.forEach((s) => zip.file(s.filename, s.text));
       const files = [...images.map((i) => i.filename), 'qr.png', 'qr.svg'];
       await Promise.all(
         files.map(async (f) => {
@@ -194,6 +195,23 @@ export default function KitPage() {
             ))}
           </div>
         </section>
+
+        {social.speakerThankYous.length > 0 && (
+          <section className="mt-12">
+            <h2 className="mb-4 text-xl font-bold text-burgundy">Speaker thank-you emails</h2>
+            <div className="space-y-5">
+              {social.speakerThankYous.map((ty) => (
+                <div key={ty.filename} className="rounded-xl bg-white p-5 shadow-sm">
+                  <div className="mb-2 flex items-center justify-between">
+                    <h3 className="font-semibold text-gray-800">{ty.name}</h3>
+                    <CopyButton text={ty.text} />
+                  </div>
+                  <pre className="whitespace-pre-wrap font-sans text-sm text-gray-700">{ty.text}</pre>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
       </main>
     </div>
   );

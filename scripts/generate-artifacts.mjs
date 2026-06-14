@@ -76,6 +76,10 @@ for (const ev of events) {
     await writeFile(path.join(dir, intro.filename), intro.text);
     record(ev.id, intro.filename);
   }
+  for (const ty of ev.social.speakerThankYous || []) {
+    await writeFile(path.join(dir, ty.filename), ty.text);
+    record(ev.id, ty.filename);
+  }
   console.log(`✓ ${ev.id}/qr + social (${ev.social.speakerIntros.length} intros)`);
 }
 
