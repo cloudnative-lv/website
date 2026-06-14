@@ -6,6 +6,7 @@ import { artifactsFor, resolveVariant } from './artifactSpec';
 import { eventSocial } from './socialCopy';
 import { meetupNumber, cleanTitle, dateDots } from './fields';
 import ScaledPreview from './ScaledPreview';
+import Button from '../components/Button';
 
 // Organizer "kit" for one event (unlisted; reach by direct link). Shows every
 // banner as a live preview with per-file download, plus QR and copy-to-clipboard
@@ -155,13 +156,9 @@ export default function KitPage() {
                       <p className="truncate text-sm font-semibold text-gray-800">{a.label}</p>
                       <p className="text-xs text-gray-500">{a.width}×{a.height} · {a.format || 'png'}</p>
                     </div>
-                    <a
-                      href={`${dir}/${a.filename}`}
-                      download
-                      className="shrink-0 rounded-full bg-burgundy px-4 py-1.5 text-sm font-semibold text-white hover:bg-rose-700"
-                    >
+                    <Button href={`${dir}/${a.filename}`} download variant="secondary" size="sm" className="shrink-0">
                       Download
-                    </a>
+                    </Button>
                   </div>
                 </div>
               );
@@ -175,8 +172,8 @@ export default function KitPage() {
           <div className="flex items-center gap-6 rounded-xl bg-white p-5 shadow-sm">
             <img src={`${dir}/qr.png`} alt="Event QR code" className="h-32 w-32" />
             <div className="space-x-3">
-              <a href={`${dir}/qr.png`} download className="rounded-full bg-burgundy px-4 py-1.5 text-sm font-semibold text-white hover:bg-rose-700">PNG</a>
-              <a href={`${dir}/qr.svg`} download className="rounded-full bg-burgundy px-4 py-1.5 text-sm font-semibold text-white hover:bg-rose-700">SVG</a>
+              <Button href={`${dir}/qr.png`} download variant="secondary" size="sm">PNG</Button>
+              <Button href={`${dir}/qr.svg`} download variant="secondary" size="sm">SVG</Button>
               <p className="mt-2 text-xs text-gray-500">Encodes cloudnative.lv/events/{event.slug}</p>
             </div>
           </div>

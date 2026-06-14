@@ -6,6 +6,8 @@ import Button from '../components/Button';
 import SEO from '../components/SEO';
 import SpeakerAvatar from '../components/SpeakerAvatar';
 import SpeakerSocials from '../components/SpeakerSocials';
+import TalkTitleLink from '../components/TalkTitleLink';
+import { CalendarIcon } from '../components/Icons';
 import { SpeakersPageJsonLd } from '../components/JsonLd';
 import { getSpeakerInfo } from '../data/speakers';
 import { useLanguage } from '../i18n/useLanguage';
@@ -116,15 +118,7 @@ export default function Speakers() {
                       </div>
                     )}
                     <h4 className="text-lg font-bold mb-3">
-                      <Link
-                        to={`/events/${talk.eventSlug}/talks/${talk.talkSlug}`}
-                        className="group inline-flex items-start gap-1.5 text-burgundy hover:text-pink hover:underline transition-colors"
-                      >
-                        <span className="line-clamp-2">{talk.title}</span>
-                        <svg className="mt-1 h-4 w-4 shrink-0 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                      </Link>
+                      <TalkTitleLink to={`/events/${talk.eventSlug}/talks/${talk.talkSlug}`} title={talk.title} clamp />
                     </h4>
                     {talk.coSpeakers.length > 0 && (
                       <p className="text-pink text-sm mb-2">{t('speakers.with')} {talk.coSpeakers.join(', ')}</p>
@@ -138,9 +132,7 @@ export default function Speakers() {
                     to={`/events/${talk.eventSlug}`}
                     className="mt-auto flex items-center gap-3 bg-gray-600 px-6 py-4 text-white transition-colors hover:bg-gray-700"
                   >
-                    <svg className="w-7 h-7 shrink-0 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
+                    <CalendarIcon className="w-7 h-7 shrink-0 text-white/80" />
                     <span className="flex min-h-[2.2rem] items-center">
                       <span className="line-clamp-2 text-sm font-semibold leading-tight">{talk.eventTitle}</span>
                     </span>

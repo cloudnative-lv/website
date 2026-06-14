@@ -2,9 +2,13 @@ import { useParams, Link, Navigate } from 'react-router-dom';
 import { getEventBySlug, getEventTalks } from '../data/events';
 import EventQRCode from '../components/EventQRCode';
 import EventPhotoGallery from '../components/EventPhotoGallery';
-import SpeakerAvatar from '../components/SpeakerAvatar';
-import SpeakerSocials from '../components/SpeakerSocials';
-import { getSpeakerInfo } from '../data/speakers';
+import SpeakerBio from '../components/SpeakerBio';
+import SlidesLink from '../components/SlidesLink';
+import TalkTitleLink from '../components/TalkTitleLink';
+import ArtifactImage from '../components/ArtifactImage';
+import Button from '../components/Button';
+import { CalendarIcon, ClockIcon, MapPinIcon, ChevronLeftIcon } from '../components/Icons';
+import { formatEventDate } from '../utils/dates';
 import SEO from '../components/SEO';
 import { EventJsonLd } from '../components/JsonLd';
 import { useLanguage } from '../i18n/useLanguage';
@@ -32,13 +36,7 @@ export default function EventDetail() {
     );
   }
 
-  // Date-only strings parse as UTC midnight; format in UTC so every visitor
-  // sees the event's actual calendar date.
-  const formattedDate = new Date(event.date).toLocaleDateString(
-    language === 'lv' ? 'lv-LV' : 'en-US',
-    { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' }
-  );
-
+  const formattedDate = formatEventDate(event.date, language, { weekday: 'long' });
   const isUpcoming = event.status === 'upcoming';
 
   return (
@@ -54,9 +52,7 @@ export default function EventDetail() {
       <div className={`${isUpcoming ? 'bg-linear-to-r from-rose-400 to-rose-700' : 'bg-gray-600'} text-white py-16`}>
         <div className="max-w-4xl mx-auto px-4">
           <Link to="/events" className="flex w-fit items-center text-white/80 hover:text-white mb-6">
-            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
+            <ChevronLeftIcon className="w-5 h-5 mr-2" />
             {t('eventDetail.backToEvents')}
           </Link>
           <span className={`block w-fit px-4 py-1 rounded-full text-sm font-semibold mb-4 ${isUpcoming ? 'bg-white/20' : 'bg-white/10'}`}>
@@ -65,31 +61,20 @@ export default function EventDetail() {
           <h1 className="text-4xl font-black mb-4">{event.title}</h1>
           <div className="flex flex-wrap gap-6 text-white/90">
             <div className="flex items-center gap-2">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
+              <CalendarIcon className="w-5 h-5" />
               <span>{formattedDate}</span>
             </div>
             <div className="flex items-center gap-2">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
+              <ClockIcon className="w-5 h-5" />
               <span>{event.time} - {event.endTime}</span>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Share banner — generated at build time into /artifacts/<id>/; hidden
-          gracefully when absent (e.g. local dev before generation runs). */}
+      {/* Share banner — generated at build time into /artifacts/<id>/. */}
       <div className="max-w-4xl mx-auto px-4 -mt-8">
-        <img
-          src={`/artifacts/${event.id}/linkedin-event-speakers.png`}
-          alt={`${event.title} banner`}
-          className="w-full rounded-2xl shadow-lg ring-1 ring-rose-200"
-          loading="lazy"
-          onError={(e) => { e.currentTarget.style.display = 'none'; }}
-        />
+        <ArtifactImage src={`/artifacts/${event.id}/linkedin-event-speakers.png`} alt={`${event.title} banner`} />
       </div>
 
       <div className="max-w-4xl mx-auto px-4 py-12">
@@ -115,53 +100,13 @@ export default function EventDetail() {
                     return (
                       <div key={talk.talkSlug} className="border-l-4 border-pink pl-4">
                         <h3 className="text-lg font-bold">
-                          <Link
-                            to={`/events/${event.slug}/talks/${talk.talkSlug}`}
-                            className="group inline-flex items-start gap-1.5 text-burgundy hover:text-pink hover:underline transition-colors"
-                          >
-                            <span>{talk.title}</span>
-                            <svg className="mt-1 h-4 w-4 shrink-0 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                            </svg>
-                          </Link>
+                          <TalkTitleLink to={`/events/${event.slug}/talks/${talk.talkSlug}`} title={talk.title} />
                         </h3>
                         <p className="text-gray-600 mt-2">{talk.description}</p>
-                        {talk.slidesUrl && (
-                          <a
-                            href={talk.slidesUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="mt-3 inline-flex items-center gap-2 rounded-full bg-pink px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-rose-500"
-                          >
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                            </svg>
-                            {t('eventDetail.slides')}
-                          </a>
-                        )}
+                        {talk.slidesUrl && <SlidesLink href={talk.slidesUrl} label={t('eventDetail.slides')} className="mt-3" />}
                         {speakers.length > 0 && (
                           <div className="mt-4 space-y-3">
-                            {speakers.map(name => {
-                              const info = getSpeakerInfo(name);
-                              return (
-                                <div key={name} className="flex items-start gap-3">
-                                  <SpeakerAvatar name={name} photo={info.photo} className="w-10 h-10 text-sm shrink-0" />
-                                  <div>
-                                    <p className="font-semibold text-burgundy leading-tight">
-                                      {name}
-                                      <SpeakerSocials info={info} iconClass="text-pink hover:text-burgundy" />
-                                    </p>
-                                    {info.title && (
-                                      <p className="text-pink text-sm font-bold leading-tight">{info.title}</p>
-                                    )}
-                                    {info.company && (
-                                      <p className="text-pink/80 text-sm italic leading-tight">{info.company}</p>
-                                    )}
-                                    {info.bio && <p className="text-gray-500 text-sm mt-1">{info.bio}</p>}
-                                  </div>
-                                </div>
-                              );
-                            })}
+                            {speakers.map(name => <SpeakerBio key={name} name={name} size="sm" />)}
                           </div>
                         )}
                       </div>
@@ -177,7 +122,7 @@ export default function EventDetail() {
           <div className="md:col-span-1">
             <div className="bg-white rounded-2xl shadow-lg p-6 sticky top-20">
               <h3 className="text-lg font-bold text-burgundy mb-4">{t('eventDetail.details')}</h3>
-              
+
               <div className="space-y-4">
                 <div>
                   <p className="text-sm text-gray-500 uppercase tracking-wide">{t('eventDetail.venue')}</p>
@@ -190,10 +135,7 @@ export default function EventDetail() {
                       rel="noopener noreferrer"
                       className="mt-1 inline-flex items-center gap-1.5 text-sm font-semibold text-pink hover:text-burgundy transition-colors"
                     >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                      </svg>
+                      <MapPinIcon className="w-4 h-4" />
                       {t('eventDetail.viewMap')}
                     </a>
                   )}
@@ -216,64 +158,39 @@ export default function EventDetail() {
                 )}
 
                 {isUpcoming && event.eventbriteUrl && (
-                  <a
-                    href={event.eventbriteUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block w-full bg-pink text-white text-center py-3 px-4 rounded-full font-semibold hover:bg-rose-500 transition-all shadow-md hover:shadow-lg mt-6"
-                  >
+                  <Button href={event.eventbriteUrl} variant="primary" size="md" fullWidth className="mt-6">
                     {t('eventDetail.registerEventbrite')}
-                  </a>
+                  </Button>
                 )}
 
                 {!isUpcoming && event.eventbriteUrl && (
-                  <a
-                    href={event.eventbriteUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block w-full bg-gray-200 text-gray-700 text-center py-3 px-4 rounded-full font-semibold hover:bg-gray-300 transition-colors mt-6"
-                  >
+                  <Button href={event.eventbriteUrl} variant="muted" size="md" fullWidth className="mt-6">
                     {t('eventDetail.viewEventbrite')}
-                  </a>
+                  </Button>
                 )}
 
                 {event.cncfUrl && (
-                  <a
-                    href={event.cncfUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block w-full bg-burgundy text-white text-center py-3 px-4 rounded-full font-semibold hover:bg-rose-800 transition-all shadow-md hover:shadow-lg mt-3"
-                  >
+                  <Button href={event.cncfUrl} variant="secondary" size="md" fullWidth className="mt-3">
                     {t('eventDetail.viewCNCF')}
-                  </a>
+                  </Button>
                 )}
 
                 {event.linkedinUrl && (
-                  <a
-                    href={event.linkedinUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block w-full border-2 border-burgundy text-burgundy text-center py-3 px-4 rounded-full font-semibold hover:bg-rose-50 transition-colors mt-3"
-                  >
+                  <Button href={event.linkedinUrl} variant="outline" size="md" fullWidth className="mt-3">
                     {t('eventDetail.viewLinkedIn')}
-                  </a>
+                  </Button>
                 )}
 
                 {event.photosUrl && (
-                  <a
-                    href={event.photosUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block w-full border-2 border-burgundy text-burgundy text-center py-3 px-4 rounded-full font-semibold hover:bg-rose-50 transition-colors mt-3"
-                  >
+                  <Button href={event.photosUrl} variant="outline" size="md" fullWidth className="mt-3">
                     {t('eventDetail.viewPhotos')}
-                  </a>
+                  </Button>
                 )}
 
                 {/* QR Code */}
                 <div className="mt-6 pt-6 border-t border-gray-100">
                   <p className="text-sm text-gray-500 uppercase tracking-wide mb-3 text-center">{t('eventDetail.shareEvent')}</p>
-                  <EventQRCode 
+                  <EventQRCode
                     url={`https://cloudnative.lv/events/${event.slug}`}
                     title={event.title}
                   />
