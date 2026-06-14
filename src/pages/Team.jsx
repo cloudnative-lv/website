@@ -14,6 +14,7 @@ const teamConfigs = [
     key: 'linda',
     name: 'Linda Austra Ārende',
     photo: '/images/team/linda.jpg',
+    ring: 'ring-rose-100',
     social: {
       linkedin: 'https://www.linkedin.com/in/lindaarende/',
       twitter: null
@@ -23,6 +24,7 @@ const teamConfigs = [
     key: 'andrey',
     name: 'Andrey Adamovich',
     photo: '/images/team/andrey.jpg',
+    ring: 'ring-burgundy',
     social: {
       linkedin: 'https://www.linkedin.com/in/andreysadamovich/',
       twitter: 'https://x.com/codingandrey'
@@ -64,7 +66,7 @@ export default function Team() {
               <SpeakerAvatar
                 name={member.name}
                 photo={member.photo}
-                className="w-32 h-32 text-3xl shrink-0 ring-4 ring-rose-100"
+                className={`w-32 h-32 text-3xl shrink-0 ring-4 ${member.ring}`}
               />
               <h3 className="mt-5 text-xl font-bold text-burgundy">{member.name}</h3>
               <p className="text-pink font-semibold">{member.role}</p>
