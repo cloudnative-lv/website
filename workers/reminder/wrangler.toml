@@ -2,17 +2,17 @@ name = "cloudnative-lv-reminder"
 main = "src/index.js"
 compatibility_date = "2026-06-01"
 
-# account_id = "..." (or pass CLOUDFLARE_ACCOUNT_ID)
+account_id = "2206fc831247e31fb22b657089145789"
 
 [vars]
 SITE_URL = "https://cloudnative.lv"
 NOTIFY_TO = "hello@cloudnative.lv"
 NOTIFY_FROM = "noreply@cloudnative.lv"
 
-# Cloudflare Email Routing send binding (destination must be a verified address).
+# Cloudflare Email Routing send binding. No destination_address = may send to any
+# *verified* Email Routing destination; the recipient comes from NOTIFY_TO.
 [[send_email]]
 name = "NOTIFY"
-destination_address = "hello@cloudnative.lv"
 
 # Daily at 09:00 UTC.
 [triggers]

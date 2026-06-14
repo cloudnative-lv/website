@@ -2,9 +2,7 @@ name = "cloudnative-lv-subscribe"
 main = "src/index.js"
 compatibility_date = "2026-06-01"
 
-# Set your account id here, or pass CLOUDFLARE_ACCOUNT_ID in the environment
-# (the Deploy Workers GitHub Action does the latter).
-# account_id = "..."
+account_id = "2206fc831247e31fb22b657089145789"
 
 [vars]
 ALLOWED_ORIGINS = "https://cloudnative.lv,http://localhost:5173,http://localhost:4173"
@@ -18,8 +16,7 @@ SUBSCRIBERS_KEY = "subscribers.csv"
 binding = "SUBSCRIBERS"
 bucket_name = "cloudnative-lv"
 
-# Cloudflare Email Routing send binding. destination_address must be a *verified*
-# Email Routing address on the cloudnative.lv zone.
+# Cloudflare Email Routing send binding. No destination_address = may send to any
+# *verified* Email Routing destination; the recipient comes from NOTIFY_TO.
 [[send_email]]
 name = "NOTIFY"
-destination_address = "hello@cloudnative.lv"

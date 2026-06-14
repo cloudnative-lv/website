@@ -2,7 +2,7 @@ name = "cloudnative-lv-feedback"
 main = "src/index.js"
 compatibility_date = "2026-06-01"
 
-# account_id = "..." (or pass CLOUDFLARE_ACCOUNT_ID)
+account_id = "2206fc831247e31fb22b657089145789"
 
 [vars]
 ALLOWED_ORIGINS = "https://cloudnative.lv,http://localhost:5173,http://localhost:4173"
