@@ -29,6 +29,7 @@ export default function Footer() {
               <li><a href="/team" className="hover:text-white transition-colors">{t('nav.team')}</a></li>
               <li><a href="/swag" className="hover:text-white transition-colors">{t('nav.swag')}</a></li>
               <li><a href="/sponsors" className="hover:text-white transition-colors">{t('nav.sponsors')}</a></li>
+              <li><a href="/privacy" className="hover:text-white transition-colors">{t('privacy.title')}</a></li>
             </ul>
           </div>
           <div>
@@ -48,9 +49,6 @@ export default function Footer() {
         </div>
         <div className="border-t border-rose-800 mt-8 pt-8 text-center text-rose-200">
           <p>&copy; {new Date().getFullYear()} Cloud Native Latvia. All rights reserved.</p>
-          <p className="mt-2">
-            <a href="/privacy" className="hover:text-white transition-colors underline">{t('privacy.title')}</a>
-          </p>
         </div>
       </div>
     </footer>
