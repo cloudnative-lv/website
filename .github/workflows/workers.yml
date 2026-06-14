@@ -10,7 +10,21 @@ on:
   #   paths: ['workers/**', '.github/workflows/workers.yml']
 
 jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+      - name: Ensure R2 bucket exists
+        run: npx --yes wrangler@4 r2 bucket create cloudnative-lv || true
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_KEY }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
   deploy:
+    needs: setup
     runs-on: ubuntu-latest
     strategy:
       matrix:
