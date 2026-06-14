@@ -5,5 +5,4 @@
 [ ] Write future doc for Linda
 [ ] Update publishing flow/details in kit + diagram
 [ ] Make sure e2e produces video/pictures (email report?)
-[ ] Adjust kit artifacts to real Figma-based output
 [ ] Move design elements to website and archive design repo

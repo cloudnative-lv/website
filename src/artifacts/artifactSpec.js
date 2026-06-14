@@ -3,6 +3,7 @@ import EventTitleBanner from './templates/EventTitleBanner';
 import LinkedInPostImage from './templates/LinkedInPostImage';
 import BevyBanner from './templates/BevyBanner';
 import OcgBanner from './templates/OcgBanner';
+import DeckBackground from './templates/DeckBackground';
 import { talkSpeakerNames } from './fields';
 import { getEvents } from '../data/events';
 
@@ -62,6 +63,7 @@ export function resolveVariant(event, variant) {
 const BRAND = [
   { variant: 'ocg-banner-desktop', width: 2428, height: 192, filename: 'ocg-banner-desktop.webp', format: 'webp', label: 'OCG banner — desktop' },
   { variant: 'ocg-banner-mobile', width: 1220, height: 192, filename: 'ocg-banner-mobile.webp', format: 'webp', label: 'OCG banner — mobile' },
+  { variant: 'deck-bg', width: 1920, height: 1080, filename: 'deck-bg.png', label: 'Deck slide background' },
 ];
 
 export function brandArtifacts() {
@@ -69,6 +71,7 @@ export function brandArtifacts() {
 }
 
 export function resolveBrand(variant) {
+  if (variant === 'deck-bg') return { Component: DeckBackground, props: { width: 1920, height: 1080 } };
   const b = BRAND.find((a) => a.variant === variant);
   if (!b) return null;
   return { Component: OcgBanner, props: { width: b.width, height: b.height } };
