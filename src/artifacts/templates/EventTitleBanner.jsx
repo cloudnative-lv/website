@@ -12,9 +12,9 @@ export default function EventTitleBanner({ width, height, event, withSpeakers = 
   const speakers = withSpeakers ? eventSpeakerNames(event).map(getSpeakerInfo) : [];
 
   return (
-    <BannerFrame width={width} height={height} skylineClass="opacity-40">
+    <BannerFrame width={width} height={height} skylineClass="opacity-25">
       {/* Header */}
-      <div className="absolute flex items-baseline" style={{ left: `${4.5 * u}px`, top: `${7 * u}px`, gap: `${3 * u}px` }}>
+      <div className="absolute flex items-baseline" style={{ left: `${4.5 * u}px`, top: `${7 * u}px`, gap: `${5 * u}px` }}>
         <span className="font-black text-burgundy" style={{ fontSize: `${8 * u}px` }}>
           Meetup #{meetupNumber(event)}
         </span>
@@ -37,12 +37,15 @@ export default function EventTitleBanner({ width, height, event, withSpeakers = 
         </div>
       )}
 
-      {/* Title box */}
+      {/* Title band — full-bleed, semi-transparent, floating in the lower third */}
       <div
-        className="absolute rounded-xl bg-burgundy"
-        style={{ left: `${4.5 * u}px`, right: `${4.5 * u}px`, bottom: `${8 * u}px`, padding: `${4 * u}px ${5 * u}px` }}
+        className="absolute inset-x-0 flex items-center justify-center bg-burgundy/90"
+        style={{ top: `${59 * u}px`, height: `${15 * u}px` }}
       >
-        <div className="text-center font-bold text-white" style={{ fontSize: `${7 * u}px`, lineHeight: 1.15 }}>
+        <div
+          className="text-center font-bold text-white"
+          style={{ fontSize: `${7 * u}px`, lineHeight: 1.15, paddingLeft: `${5 * u}px`, paddingRight: `${5 * u}px` }}
+        >
           {cleanTitle(event.title)}
         </div>
       </div>

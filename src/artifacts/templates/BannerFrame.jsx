@@ -40,17 +40,17 @@ export function BannerLogo({ u, iconClass = 'h-16', className = '', style }) {
         src="/images/logo.svg"
         alt="Cloud Native Latvia"
         className={sized ? 'w-auto' : `${iconClass} w-auto`}
-        style={sized ? { height: `${15 * u}px` } : undefined}
+        style={sized ? { height: `${18 * u}px` } : undefined}
       />
       <span
         className="font-bold uppercase tracking-tight text-pink"
-        style={sized ? { fontSize: `${3 * u}px`, marginTop: `${1.2 * u}px` } : { marginTop: '0.5rem', fontSize: '0.875rem' }}
+        style={sized ? { fontSize: `${3.4 * u}px`, marginTop: `${1.2 * u}px` } : { marginTop: '0.5rem', fontSize: '0.875rem' }}
       >
         Cloud Native
       </span>
       <span
         className="font-black uppercase text-burgundy"
-        style={sized ? { fontSize: `${4.8 * u}px`, letterSpacing: `${0.5 * u}px` } : { fontSize: '1.5rem', letterSpacing: '0.2em' }}
+        style={sized ? { fontSize: `${5.6 * u}px`, letterSpacing: `${0.5 * u}px` } : { fontSize: '1.5rem', letterSpacing: '0.2em' }}
       >
         Latvia
       </span>

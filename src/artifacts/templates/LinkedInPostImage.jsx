@@ -24,10 +24,10 @@ const Icon = ({ name, size }) => (
 // 1280×720 logistics card: logo + a burgundy band with date / start-time / venue.
 export default function LinkedInPostImage({ event }) {
   return (
-    <BannerFrame width={1280} height={720} skylineClass="opacity-40">
-      <BannerLogo className="absolute right-12 top-9" iconClass="h-16" />
+    <BannerFrame width={1280} height={720} skylineClass="opacity-25">
+      <BannerLogo className="absolute right-10 top-8" u={7.2} />
 
-      <div className="absolute inset-x-0 bottom-0 flex flex-col justify-center gap-6 bg-burgundy px-16" style={{ height: '40%' }}>
+      <div className="absolute inset-x-0 bottom-0 flex flex-col justify-center gap-6 bg-burgundy/90 px-16" style={{ height: '40%' }}>
         <div className="flex flex-wrap items-center gap-x-16 gap-y-4 text-white">
           <div className="flex items-center gap-4">
             <Icon name="calendar" size={48} />
