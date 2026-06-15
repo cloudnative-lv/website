@@ -1,10 +1,7 @@
-// Community milestone infographics, rendered as part of the subscriber report
-// (report:subscribers / rebuild). Hand-built SVG rasterised with sharp, reusing the brand
-// palette + the Riga skyline + the stacked Cloud Native Latvia lockup. Three layouts so the
-// orgs can pick what fits the channel:
-//   community-square.png  1080×1080  Instagram / LinkedIn post
-//   community-wide.png    1200×630   LinkedIn / X link card, OG
-//   community-story.png   1080×1350  portrait post / story
+// Brand share-card generators — hand-built SVG rasterised with sharp, reusing the brand
+// palette + the Riga skyline + the stacked Cloud Native Latvia lockup. No kit/CI pipeline.
+//   renderInfographics  — community "Year One" stat cards (part of report:subscribers)
+//   renderSponsorsCard  — partners/supporters card (its own op: generate:sponsors-card)
 import sharp from 'sharp';
 import path from 'node:path';
 import { venueProviders, supporters } from '../../src/data/partners.js';
@@ -22,17 +19,17 @@ const statCentered = (cx, numBaseline, { value, label }, numSize, labelSize) =>
   text(cx, numBaseline, value, { size: numSize, fill: PINK, weight: 800 }) +
   text(cx, numBaseline + labelSize + numSize * 0.06, label, { size: labelSize, fill: BURGUNDY, weight: 700, spacing: labelSize * 0.08 });
 
-// Rasterise an SVG asset to a base64 PNG data URI so it can be <image>-embedded (librsvg
-// renders nested SVG unreliably; a flattened PNG always composites cleanly).
+// Rasterise an SVG/PNG asset to a base64 PNG data URI so it can be <image>-embedded
+// (librsvg renders nested SVG unreliably; a flattened PNG always composites cleanly).
 async function pngUri(file, width) {
-  const buf = await sharp(file, { density: 320 }).resize({ width: Math.round(width) }).png().toBuffer();
+  const buf = await sharp(file, { density: 320 }).resize({ width: Math.round(width), withoutEnlargement: false }).png().toBuffer();
   return `data:image/png;base64,${buf.toString('base64')}`;
 }
 
-export async function renderInfographics({ stats, subtitle = SUBTITLE, OUT, assets = 'public/images' }) {
+// Load the brand assets once and return the rose-field frame + lockup helpers.
+async function brandFrame(assets) {
   const SKY = await pngUri(path.join(assets, 'brand/skyline.svg'), 1600);
   const LOGO = await pngUri(path.join(assets, 'logo-stacked.svg'), 520);
-
   const skyImage = (W, H, opacity = 0.16) => {
     const h = W * (1024 / 1536); // skyline viewBox is 1536×1024
     return `<image href="${SKY}" x="0" y="${H - h}" width="${W}" height="${h}" opacity="${opacity}" preserveAspectRatio="xMidYMax slice"/>`;
@@ -41,6 +38,12 @@ export async function renderInfographics({ stats, subtitle = SUBTITLE, OUT, asse
   const frame = (W, H, body) =>
     `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">`
     + `<rect width="${W}" height="${H}" fill="${ROSE}"/>${skyImage(W, H)}${body}</svg>`;
+  return { frame, logoImage };
+}
+
+// Community "Year One" stat cards in three channel sizes.
+export async function renderInfographics({ stats, subtitle = SUBTITLE, OUT, assets = 'public/images' }) {
+  const { frame, logoImage } = await brandFrame(assets);
 
   const square = () => {
     const W = 1080, cx = W / 2;
@@ -69,41 +72,39 @@ export async function renderInfographics({ stats, subtitle = SUBTITLE, OUT, asse
       + text(cx, 1316, 'cloudnative.lv', { size: 28, fill: PINK, weight: 700, spacing: 2 }));
   };
 
-  // A partner logo on a white rounded tile (logos vary in colour/aspect — a white tile
-  // keeps them legible on the rose field; preserveAspectRatio centres + fits each).
-  const logoUri = async (partner) => {
-    const buf = await sharp(path.join(assets, partner.logo.replace(/^\/images\//, '')), { density: 320 })
-      .resize({ width: 640, withoutEnlargement: false }).png().toBuffer();
-    return `data:image/png;base64,${buf.toString('base64')}`;
-  };
-  const tile = (uri, x, y, w, h) =>
-    `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${h * 0.14}" fill="#ffffff"/>`
-    + `<image href="${uri}" x="${x + w * 0.13}" y="${y + h * 0.18}" width="${w * 0.74}" height="${h * 0.64}" preserveAspectRatio="xMidYMid meet"/>`;
-
-  // square 1080×1080 — sponsors / supporters card for socials
-  const sponsors = async () => {
-    const W = 1080, cx = W / 2;
-    const venueUris = await Promise.all(venueProviders.map(logoUri));
-    const supUris = await Promise.all(supporters.map(logoUri));
-    let body = logoImage(cx, 54, 176)
-      + text(cx, 320, 'OUR PARTNERS', { size: 54, fill: BURGUNDY, weight: 800, spacing: 6 })
-      + text(cx, 362, 'The organizations that host and support us', { size: 25, fill: PINK, weight: 600 })
-      + text(cx, 446, 'VENUE PARTNERS', { size: 24, fill: PINK, weight: 700, spacing: 4 });
-    const vW = 380, vGap = 44, vX = (W - (2 * vW + vGap)) / 2, vY = 470, vH = 156;
-    venueUris.forEach((u, i) => { body += tile(u, vX + i * (vW + vGap), vY, vW, vH); });
-    body += text(cx, 706, 'SUPPORTERS', { size: 24, fill: PINK, weight: 700, spacing: 4 });
-    const sW = 292, sGap = 28, sX = (W - (3 * sW + 2 * sGap)) / 2, sY = 730, sH = 146;
-    supUris.forEach((u, i) => { body += tile(u, sX + i * (sW + sGap), sY, sW, sH); });
-    body += text(cx, 1030, 'cloudnative.lv', { size: 30, fill: PINK, weight: 700, spacing: 2 });
-    return frame(W, 1080, body);
-  };
-
   const files = [];
   for (const [name, build] of [['community-square', square], ['community-wide', wide], ['community-story', story]]) {
     await sharp(Buffer.from(build())).png().toFile(path.join(OUT, `${name}.png`));
     files.push(`${name}.png`);
   }
-  await sharp(Buffer.from(await sponsors())).png().toFile(path.join(OUT, 'community-sponsors.png'));
-  files.push('community-sponsors.png');
   return files;
+}
+
+// Square partners/supporters card for socials. Logos come from src/data/partners.js.
+export async function renderSponsorsCard({ OUT, assets = 'public/images' }) {
+  const { frame, logoImage } = await brandFrame(assets);
+
+  // A partner logo on a white rounded tile (logos vary in colour/aspect — a white tile
+  // keeps them legible on the rose field; preserveAspectRatio centres + fits each).
+  const logoUri = (partner) => pngUri(path.join(assets, partner.logo.replace(/^\/images\//, '')), 640);
+  const tile = (uri, x, y, w, h) =>
+    `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${h * 0.14}" fill="#ffffff"/>`
+    + `<image href="${uri}" x="${x + w * 0.13}" y="${y + h * 0.18}" width="${w * 0.74}" height="${h * 0.64}" preserveAspectRatio="xMidYMid meet"/>`;
+
+  const W = 1080, cx = W / 2;
+  const venueUris = await Promise.all(venueProviders.map(logoUri));
+  const supUris = await Promise.all(supporters.map(logoUri));
+  let body = logoImage(cx, 54, 176)
+    + text(cx, 320, 'OUR PARTNERS', { size: 54, fill: BURGUNDY, weight: 800, spacing: 6 })
+    + text(cx, 362, 'The organizations that host and support us', { size: 25, fill: PINK, weight: 600 })
+    + text(cx, 446, 'VENUE PARTNERS', { size: 24, fill: PINK, weight: 700, spacing: 4 });
+  const vW = 380, vGap = 44, vX = (W - (2 * vW + vGap)) / 2, vY = 470, vH = 156;
+  venueUris.forEach((u, i) => { body += tile(u, vX + i * (vW + vGap), vY, vW, vH); });
+  body += text(cx, 706, 'SUPPORTERS', { size: 24, fill: PINK, weight: 700, spacing: 4 });
+  const sW = 292, sGap = 28, sX = (W - (3 * sW + 2 * sGap)) / 2, sY = 730, sH = 146;
+  supUris.forEach((u, i) => { body += tile(u, sX + i * (sW + sGap), sY, sW, sH); });
+  body += text(cx, 1030, 'cloudnative.lv', { size: 30, fill: PINK, weight: 700, spacing: 2 });
+
+  await sharp(Buffer.from(frame(W, 1080, body))).png().toFile(path.join(OUT, 'sponsors-card.png'));
+  return ['sponsors-card.png'];
 }

@@ -18,6 +18,8 @@
     "generate:artifacts": "node scripts/generate-artifacts.mjs",
     "generate:brand": "node scripts/generate-brand.mjs",
     "generate:sponsor-pdf": "node scripts/generate-sponsor-pdf.mjs",
+    "generate:sponsors-card": "node scripts/generate-sponsors-card.mjs",
+    "generate:rss": "node scripts/generate-rss.mjs",
     "prerender": "node scripts/prerender.mjs",
     "import:eventbrite": "node --env-file-if-exists=.env scripts/eventbrite-attendees.mjs",
     "import:attendees": "node --env-file-if-exists=.env scripts/import-attendees.mjs",

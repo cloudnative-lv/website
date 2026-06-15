@@ -72,6 +72,14 @@ export function YouTubeIcon({ className = "w-5 h-5" }) {
   );
 }
 
+export function RssIcon({ className = "w-5 h-5" }) {
+  return (
+    <svg className={className} fill="currentColor" viewBox="0 0 24 24">
+      <path d="M6.503 20.752c0 1.794-1.456 3.248-3.251 3.248-1.796 0-3.252-1.454-3.252-3.248 0-1.794 1.456-3.248 3.252-3.248 1.795 0 3.251 1.454 3.251 3.248zm-6.503-12.572v4.811c6.05.062 10.96 4.966 11.022 11.009h4.817c-.062-8.71-7.118-15.758-15.839-15.82zm0-8.18v4.819c12.484.076 22.917 10.065 22.98 22.201h4.02c-.076-14.898-12.185-26.973-27-27.02z"/>
+    </svg>
+  );
+}
+
 export function SocialLink({ href, icon, title, className = "text-gray-400 hover:text-rose-600 transition-colors" }) {
   return (
     <a

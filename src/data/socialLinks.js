@@ -1,5 +1,5 @@
 import {
-  CncfIcon, LinkedInIcon, BlueskyIcon, YouTubeIcon, EventbriteIcon, GitHubIcon, EmailIcon,
+  CncfIcon, LinkedInIcon, BlueskyIcon, YouTubeIcon, EventbriteIcon, GitHubIcon, EmailIcon, RssIcon,
 } from '../components/SocialIcons';
 
 // Canonical social links — single source for the Footer and the subscribe modal.
@@ -11,4 +11,5 @@ export const SOCIAL_LINKS = [
   { key: 'eventbrite', href: 'https://www.eventbrite.com/o/cloud-native-latvia-95498498498', title: 'Eventbrite', Icon: EventbriteIcon },
   { key: 'github', href: 'https://github.com/cloud-native-latvia', title: 'GitHub', Icon: GitHubIcon },
   { key: 'email', href: 'mailto:hello@cloudnative.lv', title: 'Email', Icon: EmailIcon },
+  { key: 'rss', href: '/feed.xml', title: 'RSS Feed', Icon: RssIcon },
 ];
