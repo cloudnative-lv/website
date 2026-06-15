@@ -10,9 +10,10 @@ import { barsSvg, lineSvg, tableSvg, SERIES_COLORS } from './charts.mjs';
 import { svgToPng, withPage } from './render.mjs';
 import { renderInfographics } from './infographics.mjs';
 
-// LinkedIn followers milestone shown on the community infographics (a page-level vanity
-// figure that isn't a single CRM column; events/speakers/talks are derived from the data).
-const FOLLOWERS = '420+';
+// LinkedIn followers shown on the community infographics — the live LinkedIn-page count
+// (a page-level figure that isn't a single CRM column; events/speakers/talks are derived
+// from the data). Bump this when the page grows.
+const FOLLOWERS = '427';
 
 export const shortLabel = (slug) => { const m = slug.match(/meetup-0*(\d+)/); return m ? `#${m[1]}` : slug; };
 const nameKey = (f, l) => `${lower(transliterate(f))} ${lower(transliterate(l))}`.trim();
