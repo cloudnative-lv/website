@@ -172,6 +172,7 @@ idempotent per source, so the same person can appear under several sources until
 | `npm run import:linkedin-events` | Parse LinkedIn **event attendee** lists → per-event rosters + CRM | save each event's attendees page to `data/linkedin-<N>.html` (N = meetup #) | HTML → `attendees/<slug>.csv` + CRM (`source=linkedin`) |
 | `npm run import:ocg` | Parse OCG / CNCF **members** → CRM | copy the members table into `data/ocg-followers.txt` (`docs/ocg_*.png`) | text → CRM (`source=ocg`) |
 | `npm run import:subscribers -- --source <name> <file.csv>` | Merge a generic contact CSV (e.g. Zoho) into the CRM; `--from-r2-attendees` rolls all rosters in | save the export under `data/` | CSV → `subscribers.csv` |
+| `npm run import:feedback` | Retrofit Google Form feedback into R2 (rewrites `feedback/<slug>.csv`; also restores a deleted one) | save `data/feedback-<N>.xlsx` (N = meetup #) | xlsx → `feedback/<slug>.csv` |
 | `npm run report:subscribers` | Community & registrations report: size, sources, growth, registrations per event, repeat & duplicate registrations, top fans | — | → `data/reports/subscribers/` |
 | `npm run report:feedback` | Feedback digest: ratings per/over events + word clouds — the local replacement for a "digest worker"; run ~1 day after an event | — | `feedback/*.csv` → `data/reports/feedback/` |
 | `npm run crm:cleanup` | Occasional hygiene — dedupe/discover vs NetHunt; `--write` backfills emails | NetHunt export at `data/nethunt-contacts.csv` | → `data/reports/crm/` |
@@ -195,10 +196,13 @@ a time. (It's also the reliable path because `wrangler r2 object get` caches rea
 - **OCG / CNCF members** — open the chapter's Members page (`docs/ocg_attendees.png`),
   select the members table and copy it into `data/ocg-followers.txt` (`docs/ocg_email.png`). Run
   `npm run import:ocg`.
-- **OCG / CNCF event attendees** — export each event's attendee list as `data/event-<N>.csv`
+- **OCG / CNCF event attendees** — export each event's attendee list as `data/ocg-event-<N>.csv`
   (N = meetup number) or `data/event-<cncf-code>-attendees.csv`. `npm run import:attendees
-  data/event-<N>.csv` auto-maps `<N>` → `meetup-00N` (the code form maps via the event's
+  data/ocg-event-<N>.csv` auto-maps `<N>` → `meetup-00N` (the code form maps via the event's
   `cncfUrl`). These lists are emailless (name only).
+- **Feedback (Google Forms)** — export each event's responses as `data/feedback-<N>.xlsx`
+  (N = meetup number); `npm run import:feedback` (re)writes `feedback/<slug>.csv` in R2 from
+  them, which also restores a feedback CSV deleted from R2.
 - **Zoho / NetHunt** — export contacts as CSV into `data/`. Feed Zoho with
   `import:subscribers --source zoho data/zoho-campaigns.csv`; point `crm:cleanup` at the
   NetHunt file (`data/nethunt-contacts.csv`).

@@ -10,7 +10,6 @@ const LOGOS = [
   { name: 'Light (on dark)', file: '/images/logo_light.svg', dark: true },
   { name: 'Mono black', file: '/images/brand/logo-horizontal-mono-black.svg', dark: false },
   { name: 'Mono white (on dark)', file: '/images/brand/logo-horizontal-mono-white.svg', dark: true },
-  { name: 'Icon', file: '/favicon.svg', dark: false },
 ];
 
 const COLORS = [

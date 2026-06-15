@@ -8,13 +8,18 @@ const SRC = 'public/images';
 const OUT = 'public/images/brand';
 await mkdir(OUT, { recursive: true });
 
-// Flatten every fill (pink #cd4a77, burgundy #9c213b, white highlight) to one colour
-// → a clean single-colour silhouette of the mark / lockup.
-const monoize = (svg, color) => svg
-  .replace(/#cd4a77/gi, color)
-  .replace(/#9c213b/gi, color)
-  .replace(/#ffffff/gi, color)
-  .replace(/fill="white"/gi, `fill="${color}"`);
+// Recolour the cube/cloud faces to one tone, but KEEP the flag slit (the cube's
+// red-white-red stripe) contrasting so the Latvian flag stays recognisable:
+//   mono-black: dark mark, white flag stripe (the #ffffff stripe is left untouched).
+//   mono-white: white mark, dark flag stripe.
+const monoBlack = (svg) => svg.replace(/#cd4a77/gi, '#1a1a1a').replace(/#9c213b/gi, '#1a1a1a');
+const monoWhite = (svg) => {
+  const TMP = '#012345'; // park the stripe so the faces→white swap doesn't catch it
+  return svg
+    .replace(/#ffffff/gi, TMP).replace(/fill="white"/gi, `fill="${TMP}"`)
+    .replace(/#cd4a77/gi, '#ffffff').replace(/#9c213b/gi, '#ffffff')
+    .replaceAll(TMP, '#1a1a1a');
+};
 
 const sources = [
   { src: 'logo.svg', name: 'logo-mark' },
@@ -23,8 +28,8 @@ const sources = [
 
 for (const s of sources) {
   const svg = await readFile(path.join(SRC, s.src), 'utf8');
-  await writeFile(path.join(OUT, `${s.name}-mono-black.svg`), monoize(svg, '#1a1a1a'));
-  await writeFile(path.join(OUT, `${s.name}-mono-white.svg`), monoize(svg, '#ffffff'));
+  await writeFile(path.join(OUT, `${s.name}-mono-black.svg`), monoBlack(svg));
+  await writeFile(path.join(OUT, `${s.name}-mono-white.svg`), monoWhite(svg));
   console.log(`✓ ${s.name}-mono-black.svg + ${s.name}-mono-white.svg`);
 }
 // Riga skyline illustration used across the banners — copy to a public path so the

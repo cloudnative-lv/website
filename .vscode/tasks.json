@@ -189,6 +189,14 @@
       "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
     },
     {
+      "label": "Ops: Import feedback (Google Forms → R2)",
+      "type": "npm",
+      "script": "import:feedback",
+      "problemMatcher": [],
+      "group": { "kind": "build", "isDefault": true },
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+    },
+    {
       "label": "Ops: Report feedback (digest)",
       "type": "npm",
       "script": "report:feedback",
