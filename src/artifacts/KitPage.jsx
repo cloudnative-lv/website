@@ -61,11 +61,13 @@ export default function KitPage() {
   const social = eventSocial(event);
 
   const pubSteps = [
-    { title: 'CNCF / OCG (ocgroups.dev)', body: 'Create or confirm the event. Upload the OCG banner (under <code>brand/</code>) once per group — every event inherits it.', link: event.cncfUrl },
-    { title: 'Eventbrite', body: 'Use <code>eventbrite.png</code> (or <code>eventbrite-speakers.png</code>) as the event cover.', link: event.eventbriteUrl },
-    { title: 'LinkedIn', body: 'Create a LinkedIn Event and post <code>linkedin-event-speakers.png</code> with the Announcement copy below.', link: event.linkedinUrl },
-    { title: 'Bluesky', body: 'Post the Announcement copy with <code>linkedin-post.png</code>.' },
-    { title: 'Speaker spotlights', body: 'A few days out, post each <code>speaker-N.png</code> with its Speaker intro copy.' },
+    { title: 'CNCF / OCG event (ocgroups.dev)', body: 'Create or confirm the event. Upload the OCG banner (under <code>brand/</code>) once per group — every event inherits it.', link: event.cncfUrl },
+    { title: 'Eventbrite event', body: 'Create the event and use <code>eventbrite.png</code> (or <code>eventbrite-speakers.png</code>) as the cover.', link: event.eventbriteUrl },
+    { title: 'LinkedIn Event', body: 'Create a LinkedIn Event and set <code>linkedin-event-speakers.png</code> as its banner.', link: event.linkedinUrl },
+    { title: 'Announcement → Buffer → LinkedIn + Bluesky', body: 'Schedule <strong>one</strong> post in Buffer with the Announcement copy below + <code>linkedin-post.png</code>. Buffer publishes it to <strong>LinkedIn and Bluesky</strong> together.' },
+    { title: 'Speaker spotlights → Buffer', body: 'A few days out, schedule each <code>speaker-N.png</code> with its Speaker intro copy in Buffer (also cross-posts to LinkedIn + Bluesky).' },
+    { title: 'Zoho email campaign', body: 'Send the announcement to the community subscribers as a Zoho Campaigns email.' },
+    { title: 'Notify OCG members', body: 'Send the event notification to OCG members from the group page (see <code>docs/ocg_email.png</code> for where).' },
     { title: 'Opening deck', body: 'Download the <code>.pptx</code> above, tweak it, and present it at the venue.' },
     { title: 'After the event', body: `Add ~800px photos to <code>src/assets/events/${event.id}/</code>, set <code>photosUrl</code>, and add <code>slidesUrl</code> per talk.` },
   ];
