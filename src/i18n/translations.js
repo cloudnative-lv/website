@@ -44,9 +44,7 @@ export const translations = {
       subtitle: 'Join us for meetups exploring cloud native technologies',
       upcoming: 'Upcoming Events',
       past: 'Past Events',
-      noUpcoming: 'The next meetup hasn\'t been announced yet - subscribe or follow us to hear about it first!',
-      register: 'Register',
-      viewDetails: 'View Details'
+      noUpcoming: 'The next meetup hasn\'t been announced yet - subscribe or follow us to hear about it first!'
     },
     // Event detail
     eventDetail: {
