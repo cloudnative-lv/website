@@ -17,7 +17,7 @@ plus per-event rosters (`attendees/<slug>.csv`). See README.md → Local operati
 [x] Extract OCG/Bevy attendees + members — `import:attendees` (event CSVs) + `import:ocg` (members)
 [x] Unified list + check vs CRM — everyone merged into subscribers.csv; `crm:cleanup` reconciles vs NetHunt
 [x] Community & registrations report — `report:subscribers` (size, registrations/event, repeat/dup, fans)
-[ ] MANUAL: Count people on events from photos (no automation)
+[x] Count people on events from photos — `attendance` in each event YAML (#1 35, #2 28, #3 30, #4 33, #5 21, #6 27)
 
 [ ] Verify forms round-trip: feedback submit → R2 row (subscribe done ✓); decide if "contact" needs a real form or stays mailto
 

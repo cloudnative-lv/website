@@ -8,6 +8,7 @@ endTime: "21:00"
 eventbriteUrl: "https://www.eventbrite.com/e/1990809756573"
 cncfUrl: "https://ocgroups.dev/cncf/group/xggmcq8/event/qhptsyq"
 photosUrl: "https://photos.app.goo.gl/7RCKDNKkv9Y2yLsGA"
+attendance: 27  # in-room headcount from the event photo (approx)
 venue:
   name: "GoCardless"
   address: "Marijas iela 2A, Rīga, LV-1050"

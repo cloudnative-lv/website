@@ -8,6 +8,7 @@ endTime: "20:30"
 eventbriteUrl: "https://www.eventbrite.com/e/1779173368439"
 cncfUrl: "https://community.cncf.io/e/m5bfkt/"
 photosUrl: "https://photos.app.goo.gl/ZY1KutRK3S5rmuEz7"
+attendance: 28  # in-room headcount from the event photo (approx)
 venue:
   name: "Accenture"
   address: "Brīvības gatve 214, Rīga, LV-1039"
