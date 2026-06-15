@@ -1,13 +1,13 @@
 name: Deploy Workers
 
-# Manual for now. Once the prerequisites are set (see workers/README.md — R2
-# bucket, verified email destination, CLOUDFLARE_ACCOUNT_ID secret), uncomment
-# the push trigger to auto-deploy on changes under workers/.
+# Auto-deploys on push to main when anything under workers/ (or this file)
+# changes, plus manual workflow_dispatch. Prereqs: R2 bucket, verified email
+# destination, CLOUDFLARE_ACCOUNT_ID + CLOUDFLARE_API_KEY secrets.
 on:
   workflow_dispatch:
-  # push:
-  #   branches: [main]
-  #   paths: ['workers/**', '.github/workflows/workers.yml']
+  push:
+    branches: [main]
+    paths: ['workers/**', '.github/workflows/workers.yml']
 
 jobs:
   setup:

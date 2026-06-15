@@ -12,10 +12,12 @@ custom_domain = true
 
 [vars]
 ALLOWED_ORIGINS = "https://cloudnative.lv,http://localhost:5173,http://localhost:4173"
-# send_email can only deliver to a *verified* Email Routing destination address.
-# andrey@extremeautomation.io is already verified (the catch-all / andrey@ target), so
-# notifications deliver with no dashboard step. hello@cloudnative.lv is a Worker *route*,
-# not a destination, so it can't receive worker-sent mail.
+# send_email can only deliver to *verified* Email Routing destination addresses.
+# NOTIFY_TO is one or more of them, comma-separated. andrey@extremeautomation.io is
+# already verified (the andrey@ / catch-all target). To also reach Linda without putting
+# her address in git, set a NOTIFY_TO *secret* (e.g. "andrey@…,linda…@gmail.com"). To
+# fan out via info@ instead, first add info@cloudnative.lv as a verified destination (its
+# verification email routes to you — click it), then set NOTIFY_TO = "info@cloudnative.lv".
 NOTIFY_TO = "andrey@extremeautomation.io"
 NOTIFY_FROM = "noreply@cloudnative.lv"
 SUBSCRIBERS_KEY = "subscribers.csv"

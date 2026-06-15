@@ -1,4 +1,4 @@
-// Cloudflare Worker: newsletter subscribe endpoint for cloudnative.lv.
+// Cloudflare Worker: community signup endpoint for cloudnative.lv.
 //
 // POST { email } ->
 //   1. append `email,timestamp,source` to subscribers.csv in R2 (source of truth)
@@ -50,20 +50,29 @@ export default {
   },
 };
 
+// Notify the organizers. NOTIFY_TO is one or more *verified* Email Routing
+// destination addresses (comma-separated); each gets its own message, and one
+// bad recipient never blocks the others.
 async function notify(env, email) {
   if (!env.NOTIFY) return; // send_email binding not configured
   const from = env.NOTIFY_FROM || "noreply@cloudnative.lv";
-  const to = env.NOTIFY_TO || "hello@cloudnative.lv";
-  const raw = [
-    `From: Cloud Native Latvia <${from}>`,
-    `To: ${to}`,
-    "Subject: New newsletter subscriber",
-    `Message-ID: <${crypto.randomUUID()}@cloudnative.lv>`,
-    `Date: ${new Date().toUTCString()}`,
-    "MIME-Version: 1.0",
-    'Content-Type: text/plain; charset="utf-8"',
-    "",
-    `New subscriber: ${email}`,
-  ].join("\r\n");
-  await env.NOTIFY.send(new EmailMessage(from, to, raw));
+  const recipients = (env.NOTIFY_TO || "").split(",").map((s) => s.trim()).filter(Boolean);
+  for (const to of recipients) {
+    const raw = [
+      `From: Cloud Native Latvia <${from}>`,
+      `To: ${to}`,
+      "Subject: New community member",
+      `Message-ID: <${crypto.randomUUID()}@cloudnative.lv>`,
+      `Date: ${new Date().toUTCString()}`,
+      "MIME-Version: 1.0",
+      'Content-Type: text/plain; charset="utf-8"',
+      "",
+      `${email} just joined the Cloud Native Latvia community.`,
+    ].join("\r\n");
+    try {
+      await env.NOTIFY.send(new EmailMessage(from, to, raw));
+    } catch (err) {
+      console.error("notify failed for", to, err);
+    }
+  }
 }
