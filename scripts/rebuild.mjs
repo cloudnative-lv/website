@@ -142,16 +142,16 @@ if (!DRY) {
 const rostersBySlug = new Map();
 const eventMeta = new Map();
 for (const e of events) {
-  if (e.date) eventMeta.set(e.slug, { date: e.date });
+  eventMeta.set(e.slug, { date: e.date, attendance: e.attendance });
   if (rosters.has(e.slug)) rostersBySlug.set(e.slug, [...rosters.get(e.slug).values()].map((r) => ({ email: r.email, name: r.name })));
 }
-const cr = await renderCommunityReport({ crmRows: [...crm.values()], rostersBySlug, eventMeta, OUT: 'data/reports/subscribers' });
+const cr = await renderCommunityReport({ crmRows: [...crm.values()], rostersBySlug, eventMeta, OUT: 'reports/subscribers' });
 console.log(`Community report: ${cr.uniquePeople} people (rows ${cr.total}), ${cr.totalRegistrations} registrations, ${cr.repeatAttendees} repeat.`);
 
 const feedbackBySlug = new Map();
 for (const e of events) { const t = r2ReadText(`feedback/${e.slug}.csv`); if (t) { const rows = parseFeedbackCsv(t); if (rows.length) feedbackBySlug.set(e.slug, rows); } }
 if (feedbackBySlug.size) {
-  const fr = await renderFeedbackReport({ feedbackBySlug, eventMeta, rostersBySlug, OUT: 'data/reports/feedback' });
+  const fr = await renderFeedbackReport({ feedbackBySlug, eventMeta, rostersBySlug, OUT: 'reports/feedback' });
   console.log(`Feedback report: ${fr.responses} responses across ${fr.meetups} meetups, overall ${fr.overall.toFixed(2)}.`);
 }
 console.log('\nDone.');

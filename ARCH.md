@@ -44,7 +44,7 @@ flowchart TD
     CLEAN[crm:cleanup]
     VERIFY[r2:verify<br/>feedback:restore / crm:restore]
     DATA[data - raw exports]
-    REPORTS[data/reports - md + PNG]
+    REPORTS[reports - md + PNG]
   end
 
   subgraph ext[External sources]
@@ -106,7 +106,7 @@ flowchart TD
    `data/` (LinkedIn, OCG/CNCF, Zoho, NetHunt), writing per-event rosters
    (`attendees/<slug>.csv`) and merging everyone into the common CRM (`subscribers.csv`).
 3. **Reports** — `report:subscribers` (community & registrations) and `report:feedback`
-   read R2 and render markdown + charts to `data/reports/` (both gitignored).
+   read R2 and render markdown + charts to `reports/` (both gitignored).
 4. **Cleanup** — `crm:cleanup` reconciles the CRM against the NetHunt export (dedup
    discovery + email backfill).
 5. **Deploy** — pushing to `main` triggers `deploy.yml` (site) and, for `workers/**`

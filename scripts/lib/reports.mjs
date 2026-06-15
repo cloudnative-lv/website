@@ -57,6 +57,12 @@ export async function renderCommunityReport({ crmRows, rostersBySlug, eventMeta 
     const dt = new Date(d + 'T12:00:00');
     return dt.toLocaleDateString('en', { month: 'short', day: 'numeric', year: 'numeric' });
   };
+  // Actual attendance = head-count from the event photos (speakers + organizers already
+  // in frame) + 1 for the organizer behind the camera, who never appears in the shot.
+  const actualOf = (slug) => {
+    const a = eventMeta.get(slug)?.attendance;
+    return Number.isFinite(a) ? a + 1 : null;
+  };
 
   // --- Per-event analysis ---
   const perEvent = [];
@@ -129,8 +135,15 @@ export async function renderCommunityReport({ crmRows, rostersBySlug, eventMeta 
   await svgToPng(barsSvg({ title: 'Contacts by source', groups: sources.map(([s]) => s), series: [{ name: 'contacts', color: SERIES_COLORS[0], values: sources.map(([, n]) => n) }] }), path.join(OUT, 'by-source.png'));
   await svgToPng(barsSvg({ title: 'Contactability', groups: ['CRM rows', 'unique', 'with email', 'with LinkedIn'], series: [{ name: 'contacts', color: SERIES_COLORS[1], values: [total, uniquePeople, withEmail, withLinkedin] }], width: 980 }), path.join(OUT, 'contactability.png'));
   if (growth.length) await svgToPng(lineSvg({ title: 'CRM growth (cumulative)', points: growth, yLabel: 'contacts' }), path.join(OUT, 'growth.png'));
+  const hasActual = perEvent.some((e) => actualOf(e.slug) != null);
   if (perEvent.length) {
     await svgToPng(barsSvg({ title: 'Registrations per event', groups: perEvent.map((e) => e.label), series: [{ name: 'registrations', color: SERIES_COLORS[0], values: perEvent.map((e) => e.n) }] }), path.join(OUT, 'registrations-by-event.png'));
+    if (hasActual) {
+      await svgToPng(barsSvg({ title: 'Registered vs actual attendance', groups: perEvent.map((e) => e.label), series: [
+        { name: 'registered', color: SERIES_COLORS[0], values: perEvent.map((e) => e.n) },
+        { name: 'actual', color: SERIES_COLORS[1], values: perEvent.map((e) => actualOf(e.slug) ?? 0) },
+      ] }), path.join(OUT, 'registered-vs-actual.png'));
+    }
     if (newVsReturn.length) {
       await svgToPng(barsSvg({ title: 'New vs returning attendees', groups: newVsReturn.map((e) => e.label), series: [
         { name: 'new', color: SERIES_COLORS[0], values: newVsReturn.map((e) => e.new) },
@@ -177,6 +190,22 @@ ${topFans.map((f) => `| ${f.name} | ${f.count} | ${allEventLabels.map((l) => f.a
 ![Active community members](active-fans-table.png)
 ` : '';
 
+  const eventsWithActual = perEvent.filter((e) => actualOf(e.slug) != null);
+  const totalActual = eventsWithActual.reduce((a, e) => a + actualOf(e.slug), 0);
+  const showupRates = eventsWithActual.filter((e) => e.n).map((e) => actualOf(e.slug) / e.n);
+  const avgShowup = showupRates.length ? showupRates.reduce((a, b) => a + b, 0) / showupRates.length : 0;
+
+  const regHeader = hasActual
+    ? '| Event | Date | Registered | Actual | Show-up | New | Returning |\n|---|---|---:|---:|---:|---:|---:|'
+    : '| Event | Date | Registered | New | Returning |\n|---|---|---:|---:|---:|';
+  const regRow = (e, i) => {
+    const actual = actualOf(e.slug);
+    const mid = hasActual
+      ? ` ${actual ?? '\u2013'} | ${actual != null && e.n ? `${Math.round((actual / e.n) * 100)}%` : '\u2013'} |`
+      : '';
+    return `| ${e.label} | ${fmtDate(e.slug)} | ${e.n} |${mid} ${newVsReturn[i]?.new ?? '\u2013'} | ${newVsReturn[i]?.returning ?? '\u2013'} |`;
+  };
+
   const regBlock = perEvent.length ? `
 ## Registrations
 
@@ -184,13 +213,12 @@ ${topFans.map((f) => `| ${f.name} | ${f.count} | ${allEventLabels.map((l) => f.a
 - **Average per event:** ${avgRegistrations.toFixed(1)}
 - **Unique attendees:** ${uniqueAttendees}
 - **Repeat attendees (\u22652 events):** ${repeatAttendees} (${pct(repeatAttendees, uniqueAttendees)} of attendees)
-
-| Event | Date | Registrations | New | Returning |
-|---|---|---:|---:|---:|
-${perEvent.map((e, i) => `| ${e.label} | ${fmtDate(e.slug)} | ${e.n} | ${newVsReturn[i]?.new ?? '\u2013'} | ${newVsReturn[i]?.returning ?? '\u2013'} |`).join('\n')}
-
+${hasActual ? `- **Actual attendance (from event photos + 1):** ${totalActual} across ${eventsWithActual.length} events \u00b7 avg show-up ${Math.round(avgShowup * 100)}% of registrations\n` : ''}
+${regHeader}
+${perEvent.map(regRow).join('\n')}
+${hasActual ? '\n> Actual attendance = people counted in the event photos (speakers and organizers included) + 1 for the organizer behind the camera.\n' : ''}
 ![Registrations per event](registrations-by-event.png)
-![New vs returning](new-vs-returning.png)
+${hasActual ? '![Registered vs actual attendance](registered-vs-actual.png)\n' : ''}![New vs returning](new-vs-returning.png)
 ![Events attended per person](repeat-registrations.png)
 ${retentionBlock}${fansBlock}` : '\n_No per-event rosters yet._\n';
 
@@ -292,8 +320,10 @@ export async function renderFeedbackReport({ feedbackBySlug, eventMeta = new Map
   if (wordclouds) {
     try {
       const wcPath = createRequire(import.meta.url).resolve('wordcloud');
-      await withPage(async (page) => {
-        for (const [words, file] of cloudFiles) {
+      // One fresh page per cloud: wordcloud2.js leaves a per-canvas timer running, so a
+      // second render in the same page can fire `wordcloudstop` immediately and come out blank.
+      for (const [words, file] of cloudFiles) {
+        await withPage(async (page) => {
           const W = 1200, H = 700, max = words[0][1];
           await page.setViewportSize({ width: W, height: H });
           await page.setContent(`<!doctype html><html><body style="margin:0;background:#fff"><canvas id="c" width="${W}" height="${H}"></canvas></body></html>`, { waitUntil: 'load' });
@@ -306,8 +336,8 @@ export async function renderFeedbackReport({ feedbackBySlug, eventMeta = new Map
           }), { words, max });
           await page.waitForTimeout(150);
           await writeFile(path.join(OUT, file), await (await page.$('#c')).screenshot({ type: 'png' }));
-        }
-      });
+        });
+      }
     } catch { wordclouds = false; }
   }
 

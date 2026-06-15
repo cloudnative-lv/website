@@ -1,6 +1,6 @@
 // Community & registrations report: reads R2 subscribers.csv (the CRM) and every
 // per-event roster (attendees/<slug>.csv) and writes a markdown summary + charts to
-// data/reports/subscribers/.    npm run report:subscribers
+// reports/subscribers/.    npm run report:subscribers
 import { parseCrm, CRM_KEY } from './lib/crm.mjs';
 import { r2ReadText } from './lib/r2.mjs';
 import { readEvents } from './lib/events.mjs';
@@ -14,10 +14,10 @@ const events = (await readEvents()).sort((a, b) => (a.date || '').localeCompare(
 const rostersBySlug = new Map();
 const eventMeta = new Map();
 for (const e of events) {
-  if (e.date) eventMeta.set(e.slug, { date: e.date });
+  eventMeta.set(e.slug, { date: e.date, attendance: e.attendance });
   const map = readRoster(`attendees/${e.slug}.csv`);
   if (map.size) rostersBySlug.set(e.slug, [...map.values()].map((r) => ({ email: r.email, name: r.name })));
 }
 
-const r = await renderCommunityReport({ crmRows, rostersBySlug, eventMeta, OUT: 'data/reports/subscribers' });
-console.log(`Wrote data/reports/subscribers/ — community ${r.uniquePeople} (rows ${r.total}), registrations ${r.totalRegistrations} over ${rostersBySlug.size} events, repeat ${r.repeatAttendees}.`);
+const r = await renderCommunityReport({ crmRows, rostersBySlug, eventMeta, OUT: 'reports/subscribers' });
+console.log(`Wrote reports/subscribers/ — community ${r.uniquePeople} (rows ${r.total}), registrations ${r.totalRegistrations} over ${rostersBySlug.size} events, repeat ${r.repeatAttendees}.`);

@@ -85,7 +85,7 @@ Kept deliberately simple — these are handled outside Workers:
   `subscribers.csv` by the npm ops (Eventbrite API, LinkedIn, OCG, Zoho, NetHunt).
 - **Feedback digest & community stats** — local ops, not a cron worker:
   `npm run report:feedback` and `npm run report:subscribers` read R2 and render the
-  reports to `data/reports/`. (A scheduled "digest worker" was considered and dropped.)
+  reports to `reports/`. (A scheduled "digest worker" was considered and dropped.)
 - **Reminders / YouTube** — dropped (not needed).
 
 All local ops: [README.md → Local operations](../README.md#local-operations).

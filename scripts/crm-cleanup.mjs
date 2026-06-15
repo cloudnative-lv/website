@@ -4,7 +4,7 @@
 //   - duplicate clusters inside the CRM (the same person across sources)
 //   - CRM contacts already in / missing from NetHunt
 //   - emailless CRM rows whose LinkedIn/name matches a NetHunt email (backfill)
-// Writes a report to data/reports/crm/. With --write it backfills those emails into the
+// Writes a report to reports/crm/. With --write it backfills those emails into the
 // CRM (safe enrichment only — it never deletes rows; dedup stays a manual review).
 //   npm run crm:cleanup [-- --nethunt data/nethunt-contacts.csv --write]
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
@@ -21,7 +21,7 @@ for (let i = 0; i < argv.length; i++) {
   if (a === '--nethunt') opts.nethunt = argv[++i];
   else if (a === '--write') opts.write = true;
 }
-const OUT = 'data/reports/crm';
+const OUT = 'reports/crm';
 await mkdir(OUT, { recursive: true });
 
 const nameKey = (first, last) => `${lower(transliterate(first))} ${lower(transliterate(last))}`.trim();

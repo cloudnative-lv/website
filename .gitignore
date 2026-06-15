@@ -39,5 +39,7 @@ eventbrite.yml
 
 # Local data exports (attendee/feedback CSVs etc.) — NOT src/data, which is tracked
 /data/
+# Generated reports (community / feedback / crm — md + PNG)
+/reports/
 # Stray local feedback/ dir — feedback CSVs live in R2, never in the repo
 /feedback/

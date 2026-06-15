@@ -15,7 +15,10 @@ export async function readEvents() {
     const eventbriteId = (txt.match(/eventbriteUrl:\s*"?https:\/\/www\.eventbrite\.com\/e\/(\d+)/) || [])[1] || null;
     // cncfUrl is either community.cncf.io/e/<code> or ocgroups.dev/.../event/<code>
     const cncfCode = (txt.match(/cncfUrl:\s*"?[^"\n]*?\/(?:e|event)\/([a-z0-9]+)/i) || [])[1] || null;
-    if (slug) out.push({ file: f, slug, date: date || null, eventbriteId, cncfCode });
+    // attendance: head-count from the event photos (speakers + organizers included)
+    const attendanceRaw = (txt.match(/^attendance:\s*(\d+)/m) || [])[1];
+    const attendance = attendanceRaw != null ? Number(attendanceRaw) : null;
+    if (slug) out.push({ file: f, slug, date: date || null, eventbriteId, cncfCode, attendance });
   }
   return out;
 }
