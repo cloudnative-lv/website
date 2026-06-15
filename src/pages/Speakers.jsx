@@ -147,7 +147,7 @@ export default function Speakers() {
               description={t('speakers.cta.description')}
             >
               <div className="flex flex-wrap justify-center gap-4">
-                <Button href="mailto:speakers@cloudnative.lv">{t('speakers.cta.submit')}</Button>
+                <Button href="mailto:hello@cloudnative.lv?subject=Talk proposal">{t('speakers.cta.submit')}</Button>
                 <Button to="/events" variant="secondary">{t('speakers.cta.viewEvents')}</Button>
               </div>
             </CTASection>
