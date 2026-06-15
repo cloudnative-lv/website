@@ -32,6 +32,21 @@ async function loadImage(url) {
   }
 }
 
+// Like loadImage but also returns the image's natural pixel size, so logos can be placed at
+// their true aspect ratio (pptxgenjs `sizing: contain` stretches our wide wordmarks to fill
+// the box instead of honouring the ratio).
+async function loadImageSized(url) {
+  const data = await loadImage(url);
+  if (!data) return null;
+  const dims = await new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => resolve({ w: img.naturalWidth || 1, h: img.naturalHeight || 1 });
+    img.onerror = () => resolve({ w: 1, h: 1 });
+    img.src = data;
+  });
+  return { data, ...dims };
+}
+
 // Build and download an opening deck (.pptx) that matches the real Cloud Native
 // Latvia presentation style: Lexend fonts, cream background with Riga skyline,
 // centered headings, time-based agenda, "Next up:" talk slides with speaker
@@ -155,7 +170,7 @@ export async function downloadDeck(event) {
 
   // --- 4) Partners (logos + names).
   if (allPartners.length) {
-    const logos = await Promise.all(allPartners.map((p) => loadImage(p.logo)));
+    const logos = await Promise.all(allPartners.map((p) => loadImageSized(p.logo)));
     const pa = textSlide();
     pa.addText('Sponsors', {
       x: 0, y: 0.5, w: W, h: 0.8, fontSize: 28, fontFace: FONT_TITLE, bold: true, color: BURGUNDY, align: 'center',
@@ -163,9 +178,16 @@ export async function downloadDeck(event) {
     const cellW = Math.min(3.0, (W - 3) / allPartners.length);
     const totalW = cellW * allPartners.length;
     const startX = (W - totalW) / 2;
+    const boxW = cellW - 0.6, boxH = 1.6, boxY = 2.2;
     allPartners.forEach((p, i) => {
       const x = startX + i * cellW;
-      if (logos[i]) pa.addImage({ data: logos[i], x: x + 0.3, y: 2.2, w: cellW - 0.6, h: 1.6, sizing: { type: 'contain', w: cellW - 0.6, h: 1.6 } });
+      const L = logos[i];
+      if (L) {
+        // Fit within the cell box at the logo's real aspect ratio, centred.
+        const scale = Math.min(boxW / L.w, boxH / L.h);
+        const w = L.w * scale, h = L.h * scale;
+        pa.addImage({ data: L.data, x: x + 0.3 + (boxW - w) / 2, y: boxY + (boxH - h) / 2, w, h });
+      }
       pa.addText(p.name, { x, y: 4.0, w: cellW, h: 0.4, fontSize: 12, fontFace: FONT_BODY, align: 'center', color: '666666' });
     });
   }
