@@ -44,11 +44,12 @@ for (const s of sources) {
   await writeFile(path.join(OUT, `${s.name}-mono-white.svg`), monoWhite(svg));
   console.log(`✓ ${s.name}-mono-black.svg + ${s.name}-mono-white.svg`);
 }
-// Riga skyline illustration used across the banners — copy to a public path so the
-// /brand page can preview + offer it for download.
+// Riga skyline illustrations used across the banners — copy to a public path so the
+// /brand page can preview + offer them for download (detailed + the simple silhouette).
 try {
   await copyFile('src/artifacts/assets/skyline.svg', path.join(OUT, 'skyline.svg'));
-  console.log('✓ skyline.svg');
+  await copyFile('src/artifacts/assets/skyline-simple.svg', path.join(OUT, 'skyline-simple.svg'));
+  console.log('✓ skyline.svg + skyline-simple.svg');
 } catch (err) {
   console.warn(`skyline copy skipped: ${err.message}`);
 }

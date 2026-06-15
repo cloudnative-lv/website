@@ -3,7 +3,7 @@
 All contact imports are now local npm ops that build the common CRM (`subscribers.csv`)
 plus per-event rosters (`attendees/<slug>.csv`). See README.md → Local operations.
 
-[ ] Verify the feedback form round-trips end to end (real submission → `feedback/<slug>.csv` row). Subscribe is verified ✓; the feedback audit-write + `feedback:restore` path is verified, but a real form submission hasn't been confirmed yet.
+[x] Verify the feedback form round-trips end to end — confirmed 2026-06-15: a real M6 submission wrote `feedback/incoming/meetup-006-gpus-ai-agents/…json` and appended row 12 to `feedback/meetup-006-gpus-ai-agents.csv`. Subscribe also verified ✓.
 [ ] Review `reports/crm/crm-cleanup.md` and decide whether to apply `crm:cleanup --write` (149 email backfills, 70 dup clusters).
 
 # Design

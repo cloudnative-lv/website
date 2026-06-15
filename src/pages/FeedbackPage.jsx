@@ -95,7 +95,7 @@ export default function FeedbackPage() {
       <SEO title={`Feedback — ${event.title}`} description="Share your feedback on the event." path={`/events/${event.slug}/feedback`} noindex />
       <WebPageJsonLd title={`Feedback - ${event.title}`} description="Share your feedback on the event." path={`/events/${event.slug}/feedback`} />
       <PageHeader title={t('feedback.title')} subtitle={event.title} />
-      <div className="max-w-xl mx-auto px-4 py-12">
+      <div className="max-w-2xl mx-auto px-4 py-12">
         <div className="bg-white rounded-2xl shadow-lg p-8">
           {status === 'success' ? (
             <div className="py-6 text-center">

@@ -1,28 +1,34 @@
 import skyline from '../assets/skyline.svg';
+import skylineSimple from '../assets/skyline-simple.svg';
+
+export { skyline, skylineSimple };
 
 // Fixed-size canvas with the Riga skyline backdrop. Every banner template renders
 // inside one at exact pixel dimensions; the screenshot pipeline targets
-// [data-artifact-frame]. `skylineClass` tunes the backdrop per template.
+// [data-artifact-frame]. `skylineSrc` picks the backdrop (detailed default, or the
+// clean `skylineSimple` for wide/short channel covers); `skylinePos` is `bottom`
+// (the skyline sits along the foot) or `cover-top` (the silhouette fills the frame,
+// anchored to the top); `skylineClass` tunes opacity.
 export default function BannerFrame({
   width,
   height,
   className = '',
   baseClass = 'bg-rose-50',
   skylineClass = 'opacity-60',
+  skylineSrc = skyline,
+  skylinePos = 'bottom',
   children,
 }) {
+  const pos = skylinePos === 'cover-top'
+    ? 'absolute inset-0 h-full w-full object-cover object-top'
+    : 'absolute inset-x-0 bottom-0 w-full';
   return (
     <div
       data-artifact-frame
       className={`relative overflow-hidden ${baseClass} ${className}`}
       style={{ width: `${width}px`, height: `${height}px` }}
     >
-      <img
-        src={skyline}
-        alt=""
-        aria-hidden="true"
-        className={`pointer-events-none absolute inset-x-0 bottom-0 w-full select-none ${skylineClass}`}
-      />
+      <img src={skylineSrc} alt="" aria-hidden="true" className={`pointer-events-none select-none ${pos} ${skylineClass}`} />
       <div className="relative h-full w-full">{children}</div>
     </div>
   );
