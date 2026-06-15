@@ -1,4 +1,4 @@
-import { skyline } from './skylines';
+import skyline from '../assets/skyline.svg';
 
 // Fixed-size canvas with the Riga skyline backdrop. Every banner template renders
 // inside one at exact pixel dimensions; the screenshot pipeline targets
