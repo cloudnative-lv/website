@@ -12,6 +12,12 @@ import { EmailMessage } from "cloudflare:email";
 
 const EMAIL_RE = /^[^\s@,]+@[^\s@,]+\.[^\s@,]+$/;
 
+// Every R2 write goes through here so it's always no-store: `wrangler r2 object get`
+// caches reads and won't bust them on overwrite, so without no-store the local ops would
+// read a stale subscribers.csv.
+const putR2 = (binding, key, body, contentType) =>
+  binding.put(key, body, { httpMetadata: { contentType, cacheControl: "no-store, max-age=0" } });
+
 export default {
   async fetch(request, env) {
     const origin = request.headers.get("Origin") || "";
@@ -41,9 +47,8 @@ export default {
 
     // 1) Persist the raw signup as an immutable per-submission JSON record FIRST, so the
     //    CRM CSV can always be re-derived even if the read-modify-write below fails.
-    await env.SUBSCRIBERS.put(`subscribers/incoming/${ts}_${crypto.randomUUID()}.json`,
-      JSON.stringify({ ts, email, source: "web" }),
-      { httpMetadata: { contentType: "application/json" } });
+    await putR2(env.SUBSCRIBERS, `subscribers/incoming/${ts}_${crypto.randomUUID()}.json`,
+      JSON.stringify({ ts, email, source: "web" }), "application/json");
 
     // 2) Then inject into the CRM CSV (read-modify-write; signups are low volume).
     const key = env.SUBSCRIBERS_KEY || "subscribers.csv";
@@ -58,8 +63,7 @@ export default {
 
     if (!duplicate) {
       const next = `${csv}${email},,,,web,,${ts.slice(0, 10)}\n`;
-      // no-store so `wrangler r2 object get` (which caches reads) never serves a stale copy.
-      await env.SUBSCRIBERS.put(key, next, { httpMetadata: { contentType: "text/csv", cacheControl: "no-store, max-age=0" } });
+      await putR2(env.SUBSCRIBERS, key, next, "text/csv");
       await notify(env, email).catch((err) => console.error("notify failed:", err));
     }
     return json({ ok: true, duplicate });

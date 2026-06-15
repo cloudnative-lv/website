@@ -6,6 +6,11 @@ const RATING_RE = /^[1-5]?$/; // empty or 1-5
 const EVENT_RE = /^[a-z0-9-]{1,80}$/;
 const HEADER = "timestamp,overall,talks,organization,topics,comments\n";
 
+// Every R2 write goes through here so it's always no-store (see the subscribe worker:
+// `wrangler r2 object get` caches reads and won't bust them on overwrite).
+const putR2 = (binding, key, body, contentType) =>
+  binding.put(key, body, { httpMetadata: { contentType, cacheControl: "no-store, max-age=0" } });
+
 export default {
   async fetch(request, env) {
     const origin = request.headers.get("Origin") || "";
@@ -44,9 +49,8 @@ export default {
 
     // 1) Persist the raw submission as an immutable per-event JSON record FIRST, so a
     //    failed or garbled CSV append can always be re-derived. The key never collides.
-    await env.FEEDBACK.put(`${prefix}incoming/${event}/${ts}_${crypto.randomUUID()}.json`,
-      JSON.stringify({ ts, event, overall, talks, organization, topics, comments }),
-      { httpMetadata: { contentType: "application/json" } });
+    await putR2(env.FEEDBACK, `${prefix}incoming/${event}/${ts}_${crypto.randomUUID()}.json`,
+      JSON.stringify({ ts, event, overall, talks, organization, topics, comments }), "application/json");
 
     // 2) Then inject it into the aggregate feedback/<event>.csv (text fields quoted, RFC 4180).
     const q = (s) => `"${String(s).replace(/"/g, '""')}"`;
@@ -54,8 +58,7 @@ export default {
     const existing = await env.FEEDBACK.get(key);
     const csv = existing ? await existing.text() : HEADER;
     const row = `${ts},${overall},${talks},${organization},${q(topics)},${q(comments)}\n`;
-    // no-store so `wrangler r2 object get` (which caches reads) never serves a stale copy.
-    await env.FEEDBACK.put(key, csv + row, { httpMetadata: { contentType: "text/csv", cacheControl: "no-store, max-age=0" } });
+    await putR2(env.FEEDBACK, key, csv + row, "text/csv");
     return json({ ok: true });
   },
 };
