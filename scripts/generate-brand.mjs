@@ -8,17 +8,29 @@ const SRC = 'public/images';
 const OUT = 'public/images/brand';
 await mkdir(OUT, { recursive: true });
 
-// Recolour the cube/cloud faces to one tone, but KEEP the flag slit (the cube's
-// red-white-red stripe) contrasting so the Latvian flag stays recognisable:
-//   mono-black: dark mark, white flag stripe (the #ffffff stripe is left untouched).
-//   mono-white: white mark, dark flag stripe.
+// Recolour the cube/cloud faces to one tone, but keep the Latvian flag recognisable.
+// The flag's three cube-face bands carry class hooks in the source SVGs:
+// `flag-stripe-center` is the white middle band, `flag-stripe-side` the two carmine
+// bands above/below it.
+//   mono-black: dark mark on light; the carmine sides go dark and the white middle band
+//     stays white — reads as carmine/white/carmine.
+//   mono-white: white mark on dark; the middle band stays WHITE while the two side bands
+//     go TRANSPARENT, so the dark background shows through as the carmine stripes — a
+//     recognisable flag in negative (white centre, open edges).
+const setFillByClass = (svg, cls, fill) =>
+  svg.replace(/<path\b[\s\S]*?\/>/g, (el) =>
+    el.includes(`"${cls}"`) ? el.replace(/fill="[^"]*"/i, `fill="${fill}"`) : el);
+
 const monoBlack = (svg) => svg.replace(/#cd4a77/gi, '#1a1a1a').replace(/#9c213b/gi, '#1a1a1a');
 const monoWhite = (svg) => {
-  const TMP = '#012345'; // park the stripe so the faces→white swap doesn't catch it
-  return svg
+  const TMP = '#012345'; // park existing whites so the faces→white swap doesn't catch them
+  let out = svg
     .replace(/#ffffff/gi, TMP).replace(/fill="white"/gi, `fill="${TMP}"`)
     .replace(/#cd4a77/gi, '#ffffff').replace(/#9c213b/gi, '#ffffff')
     .replaceAll(TMP, '#1a1a1a');
+  out = setFillByClass(out, 'flag-stripe-center', '#ffffff'); // middle band stays white
+  out = setFillByClass(out, 'flag-stripe-side', 'none');      // side bands transparent
+  return out;
 };
 
 const sources = [
