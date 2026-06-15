@@ -22,7 +22,7 @@ Each sets `account_id` + `workers_dev = false` and is served under cloudnative.l
 |---|---|---|
 | **subscribe** | `subscribe.cloudnative.lv` (custom domain) | R2 `SUBSCRIBERS`, `send_email` NOTIFY |
 | **feedback** | `feedback.cloudnative.lv` (custom domain) | R2 `FEEDBACK` |
-| **cloudnative-lv-info** | Email Routing (hello@/info@) | — (forwards) |
+| **forward** (CF: `cloudnative-lv-info`) | Email Routing (hello@/info@) | — (forwards) |
 
 Deploy one: `cd workers/<name> && npx wrangler deploy`.
 Or run the **Deploy Workers** GitHub Action (manual `workflow_dispatch`; matrix of all
@@ -30,7 +30,8 @@ workers) — it auto-creates the R2 bucket first.
 
 ### Email Routing
 - `hello@cloudnative.lv` / `info@cloudnative.lv` are custom addresses forwarded to the
-  organizers by the **cloudnative-lv-info** Email Worker (`FORWARD_TO` secret).
+  organizers by the **forward** Email Worker (deployed as `cloudnative-lv-info`;
+  `FORWARD_TO` secret).
 - the subscribe worker sends a notification via the `send_email` binding to `NOTIFY_TO`.
   `send_email` can only deliver to a **verified Email Routing _destination_ address**, so
   `NOTIFY_TO = andrey@extremeautomation.io` (already verified as the catch-all / andrey@
@@ -38,7 +39,7 @@ workers) — it auto-creates the R2 bucket first.
   receive worker-sent mail. R2 logging records every subscriber regardless of email.
 
 ### Worker secrets (`wrangler secret put <NAME>` from the worker's folder)
-- **cloudnative-lv-info** → `FORWARD_TO` = comma-separated forward addresses (keeps
+- **forward** (CF `cloudnative-lv-info`) → `FORWARD_TO` = comma-separated forward addresses (keeps
   personal addresses out of git).
 
 ## Attendees (local import)

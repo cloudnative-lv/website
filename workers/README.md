@@ -44,15 +44,16 @@ Event attendees live in the same bucket as `attendees/<event-slug>.csv`. They're
 imported locally (no worker) from Eventbrite / OCG / LinkedIn CSV exports with
 `node scripts/import-attendees.mjs` — see `BOOTSTRAP.md`.
 
-## cloudnative-lv-info (email forward)
+## forward (email forward)
 
-Email Worker that forwards inbound mail for `hello@cloudnative.lv` /
-`info@cloudnative.lv` to the organizers. Deploying from the repo **takes over** the
-existing dashboard-managed worker (same name); the Email Routing rules keep
-pointing at it.
+Email Worker (folder `forward`, **deployed as `cloudnative-lv-info`** — its
+original CF name, so the Email Routing rules + `FORWARD_TO` secret stay valid)
+that forwards inbound mail for `hello@cloudnative.lv` / `info@cloudnative.lv` to
+the organizers. Deploying from the repo **takes over** the existing
+dashboard-managed worker; the Email Routing rules keep pointing at it.
 
 - Set the destinations once (keeps personal addresses out of git):
-  `cd workers/cloudnative-lv-info && npx wrangler secret put FORWARD_TO`
+  `cd workers/forward && npx wrangler secret put FORWARD_TO`
   (comma-separated, e.g. `andrey@extremeautomation.io,linda.arende@gmail.com`).
 - Deploy: the same **Deploy Workers** action (it's in the matrix), or
   `npx wrangler deploy` locally.

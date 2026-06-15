@@ -1,3 +1,6 @@
+# Folder renamed to workers/forward for clarity; the deployed Worker keeps its
+# original CF name so the Email Routing rules + FORWARD_TO secret stay valid.
+# Do NOT change `name`.
 name = "cloudnative-lv-info"
 main = "src/index.js"
 compatibility_date = "2026-06-01"
@@ -8,5 +11,5 @@ account_id = "2206fc831247e31fb22b657089145789"
 # info@cloudnative.lv) are Email Routing rules in the dashboard pointing here.
 # Forward destinations come from the FORWARD_TO secret (comma-separated), so
 # personal addresses aren't committed:
-#   cd workers/cloudnative-lv-info && npx wrangler secret put FORWARD_TO
+#   cd workers/forward && npx wrangler secret put FORWARD_TO
 #   (value e.g. "andrey@extremeautomation.io,linda.arende@gmail.com")
