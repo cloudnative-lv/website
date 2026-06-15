@@ -31,6 +31,7 @@ talks:
     description: "When the manual management of secrets becomes unsustainable, a new way to conveniently handle them is needed. In this talk we will share our journey to create a secret management solution that allows our teams to work autonomously in an ever growing hybrid environment. We will touch on challenges faced, the decisions made, and the solutions implemented in this journey we continue to refine."
   - title: "Practical Hybrid Cloud"
     speaker: "Alex Rimlin"
+    slidesUrl: "/slides/2025-08-26-meetup-001/practical-hybrid-cloud.pdf"
     description: "Most modern tech companies rely on cloud hyperscalers and some wouldn't survive a day without it, but what we save in time today may come at a huge financial cost tomorrow. With Kubernetes, eBPF and mesh networking we can save money and connect our clouds, all while securing the traffic and tackling latency without it becoming a maintenance hell."
 tags:
   - secrets-management
