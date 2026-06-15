@@ -9,12 +9,43 @@ import { useLanguage } from '../i18n/useLanguage';
 // responses into R2. Unlisted page — reached only by the per-event QR.
 const ENDPOINT = import.meta.env.VITE_FEEDBACK_ENDPOINT;
 
+// One 1–5 linear-scale question with min/max captions. Single-select; clicking
+// the selected value again clears it (every question is optional).
+function Rating({ q, min, max, value, onChange }) {
+  return (
+    <div>
+      <p className="mb-3 font-semibold text-burgundy">{q}</p>
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+        <span className="w-full text-xs text-gray-500 sm:w-32 sm:text-right">{min}</span>
+        <div className="flex gap-2">
+          {[1, 2, 3, 4, 5].map((n) => (
+            <button
+              key={n}
+              type="button"
+              onClick={() => onChange(value === n ? 0 : n)}
+              aria-label={String(n)}
+              aria-pressed={value === n}
+              className={`h-11 w-11 rounded-full text-lg font-bold transition-colors ${value === n ? 'bg-pink text-white' : 'bg-rose-50 text-pink hover:bg-rose-100'}`}
+            >
+              {n}
+            </button>
+          ))}
+        </div>
+        <span className="w-full text-xs text-gray-500 sm:w-32">{max}</span>
+      </div>
+    </div>
+  );
+}
+
 export default function FeedbackPage() {
   const { t } = useLanguage();
   const { slug } = useParams();
   const event = getEventBySlug(slug);
-  const [rating, setRating] = useState(0);
-  const [comment, setComment] = useState('');
+  const [overall, setOverall] = useState(0);
+  const [talks, setTalks] = useState(0);
+  const [organization, setOrganization] = useState(0);
+  const [topics, setTopics] = useState('');
+  const [comments, setComments] = useState('');
   const [hp, setHp] = useState('');
   const [status, setStatus] = useState('idle');
 
@@ -33,15 +64,25 @@ export default function FeedbackPage() {
     );
   }
 
+  const hasAny = overall || talks || organization || topics.trim() || comments.trim();
+
   const submit = async (e) => {
     e.preventDefault();
-    if (!rating) return;
+    if (!hasAny) return;
     setStatus('loading');
     try {
       const res = await fetch(ENDPOINT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({ event: event.slug, rating: String(rating), comment, hp }),
+        body: JSON.stringify({
+          event: event.slug,
+          overall: overall ? String(overall) : '',
+          talks: talks ? String(talks) : '',
+          organization: organization ? String(organization) : '',
+          topics,
+          comments,
+          hp,
+        }),
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       setStatus('success');
@@ -68,30 +109,29 @@ export default function FeedbackPage() {
               <p className="font-semibold text-green-600">{t('feedback.thanks')}</p>
             </div>
           ) : (
-            <form onSubmit={submit} className="space-y-6">
+            <form onSubmit={submit} className="space-y-7">
+              <p className="text-sm text-gray-600">{t('feedback.intro')}</p>
+              <Rating q={t('feedback.overall.q')} min={t('feedback.overall.min')} max={t('feedback.overall.max')} value={overall} onChange={setOverall} />
+              <Rating q={t('feedback.talks.q')} min={t('feedback.talks.min')} max={t('feedback.talks.max')} value={talks} onChange={setTalks} />
+              <Rating q={t('feedback.organization.q')} min={t('feedback.organization.min')} max={t('feedback.organization.max')} value={organization} onChange={setOrganization} />
               <div>
-                <p className="mb-2 font-semibold text-burgundy">{t('feedback.rating')}</p>
-                <div className="flex gap-2">
-                  {[1, 2, 3, 4, 5].map((n) => (
-                    <button
-                      key={n}
-                      type="button"
-                      onClick={() => setRating(n)}
-                      aria-label={String(n)}
-                      className={`h-11 w-11 rounded-full text-lg font-bold transition-colors ${rating >= n ? 'bg-pink text-white' : 'bg-rose-50 text-pink hover:bg-rose-100'}`}
-                    >
-                      {n}
-                    </button>
-                  ))}
-                </div>
+                <label htmlFor="topics" className="mb-2 block font-semibold text-burgundy">{t('feedback.topics')}</label>
+                <textarea
+                  id="topics"
+                  value={topics}
+                  onChange={(e) => setTopics(e.target.value)}
+                  rows={3}
+                  maxLength={2000}
+                  className="w-full rounded-xl border-2 border-gray-200 px-4 py-3 transition-colors focus:border-pink focus:outline-none"
+                />
               </div>
               <div>
-                <label htmlFor="comment" className="mb-2 block font-semibold text-burgundy">{t('feedback.comment')}</label>
+                <label htmlFor="comments" className="mb-2 block font-semibold text-burgundy">{t('feedback.comments')}</label>
                 <textarea
-                  id="comment"
-                  value={comment}
-                  onChange={(e) => setComment(e.target.value)}
-                  rows={5}
+                  id="comments"
+                  value={comments}
+                  onChange={(e) => setComments(e.target.value)}
+                  rows={3}
                   maxLength={2000}
                   className="w-full rounded-xl border-2 border-gray-200 px-4 py-3 transition-colors focus:border-pink focus:outline-none"
                 />
@@ -100,7 +140,7 @@ export default function FeedbackPage() {
               {status === 'error' && <p className="text-sm text-red-600">{t('feedback.error')}</p>}
               <button
                 type="submit"
-                disabled={!rating || status === 'loading'}
+                disabled={!hasAny || status === 'loading'}
                 className="w-full rounded-xl bg-pink py-3 font-semibold text-white transition-all hover:bg-rose-500 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {status === 'loading' ? t('feedback.sending') : t('feedback.submit')}

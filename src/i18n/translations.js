@@ -283,8 +283,24 @@ export const translations = {
     },
     feedback: {
       title: 'Event feedback',
-      rating: 'How would you rate the event? (1–5)',
-      comment: 'Anything you\'d like to share?',
+      intro: 'Thanks for taking the time to make our community events better. Your feedback matters — every question is optional.',
+      overall: {
+        q: 'What\'s your overall feeling about the event as a whole?',
+        min: 'Eh, was a miss for me.',
+        max: 'Great, excited for the next one!'
+      },
+      talks: {
+        q: 'What\'s your opinion about the content of the talks?',
+        min: 'Eh, was a miss for me.',
+        max: 'Great, want more to come!'
+      },
+      organization: {
+        q: 'How do you feel about the organization and info clarity?',
+        min: 'Eh, was awkward and unclear.',
+        max: 'Great, all went smooth!'
+      },
+      topics: 'What topics do you want to hear more talks about?',
+      comments: 'Any questions or comments to the orgs that stayed unclear or unsaid in a public setting?',
       submit: 'Send feedback',
       sending: 'Sending...',
       thanks: 'Thank you for your feedback!',
@@ -576,8 +592,24 @@ export const translations = {
     },
     feedback: {
       title: 'Pasākuma atsauksmes',
-      rating: 'Kā tu novērtētu pasākumu? (1–5)',
-      comment: 'Ko vēlies pastāstīt?',
+      intro: 'Paldies, ka veltī laiku, lai uzlabotu kopienas pasākumus. Tava atsauksme ir svarīga — visi jautājumi ir neobligāti.',
+      overall: {
+        q: 'Kāda ir tava kopējā sajūta par pasākumu?',
+        min: 'Eh, man negāja.',
+        max: 'Lieliski, gaidu nākamo!'
+      },
+      talks: {
+        q: 'Kāds ir tavs viedoklis par priekšlasījumu saturu?',
+        min: 'Eh, man negāja.',
+        max: 'Lieliski, gribu vēl!'
+      },
+      organization: {
+        q: 'Kā tev šķita organizācija un informācijas skaidrība?',
+        min: 'Eh, bija neveikli un neskaidri.',
+        max: 'Lieliski, viss noritēja gludi!'
+      },
+      topics: 'Par kādām tēmām vēlies dzirdēt vairāk priekšlasījumu?',
+      comments: 'Jautājumi vai komentāri organizatoriem, kas palika neskaidri vai nepateikti publiski?',
       submit: 'Nosūtīt atsauksmi',
       sending: 'Nosūta...',
       thanks: 'Paldies par atsauksmi!',

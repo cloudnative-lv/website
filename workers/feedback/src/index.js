@@ -1,8 +1,10 @@
 // Cloudflare Worker: event feedback endpoint for cloudnative.lv.
-// POST { event, rating, comment } -> append a row to feedback/<event>.csv in R2.
-// Honeypot + validation + CORS. Reviewed in bulk later (the source of truth).
-const RATING_RE = /^[1-5]$/;
+// POST { event, overall, talks, organization, topics, comments } -> append a row to
+// feedback/<event>.csv in R2. Mirrors the Google Form: three 1-5 ratings + two free-
+// text fields, all optional (at least one required). Honeypot + validation + CORS.
+const RATING_RE = /^[1-5]?$/; // empty or 1-5
 const EVENT_RE = /^[a-z0-9-]{1,80}$/;
+const HEADER = "timestamp,overall,talks,organization,topics,comments\n";
 
 export default {
   async fetch(request, env) {
@@ -25,16 +27,24 @@ export default {
     if (body.hp) return json({ ok: true }); // honeypot
 
     const event = String(body.event || "").trim().toLowerCase();
-    const rating = String(body.rating || "").trim();
-    const comment = String(body.comment || "").slice(0, 2000);
     if (!EVENT_RE.test(event)) return json({ error: "invalid event" }, 400);
-    if (!RATING_RE.test(rating)) return json({ error: "invalid rating" }, 400);
 
-    // Append a CSV row (comment quoted per RFC 4180).
+    const rating = (v) => String(v ?? "").trim();
+    const overall = rating(body.overall);
+    const talks = rating(body.talks);
+    const organization = rating(body.organization);
+    const topics = String(body.topics || "").slice(0, 2000);
+    const comments = String(body.comments || "").slice(0, 2000);
+
+    if (![overall, talks, organization].every((r) => RATING_RE.test(r))) return json({ error: "invalid rating" }, 400);
+    if (!(overall || talks || organization || topics.trim() || comments.trim())) return json({ error: "empty feedback" }, 400);
+
+    // Append a CSV row (text fields quoted per RFC 4180).
+    const q = (s) => `"${String(s).replace(/"/g, '""')}"`;
     const key = `${env.FEEDBACK_PREFIX || "feedback/"}${event}.csv`;
     const existing = await env.FEEDBACK.get(key);
-    const csv = existing ? await existing.text() : "timestamp,rating,comment\n";
-    const row = `${new Date().toISOString()},${rating},"${comment.replace(/"/g, '""')}"\n`;
+    const csv = existing ? await existing.text() : HEADER;
+    const row = `${new Date().toISOString()},${overall},${talks},${organization},${q(topics)},${q(comments)}\n`;
     await env.FEEDBACK.put(key, csv + row, { httpMetadata: { contentType: "text/csv" } });
     return json({ ok: true });
   },
