@@ -177,6 +177,7 @@ test.describe('Site Navigation', () => {
     await page.goto(href);
     await expect(page.locator('h1')).toContainText(title);
     await expect(page.getByText(/Presented by|Prezentē/)).toBeVisible();
-    await expect(page.locator('a[href="/events/meetup-006-gpus-ai-agents"]')).toBeVisible();
+    // The talk page links back to its event from both the hero and the details sidebar.
+    await expect(page.locator('a[href="/events/meetup-006-gpus-ai-agents"]').first()).toBeVisible();
   });
 });
