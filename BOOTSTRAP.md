@@ -50,9 +50,11 @@ workers) — it auto-creates the R2 bucket first.
   addresses (where new-member notifications go; keeps personal addresses out of git).
 
 ## Local operations (CRM, imports, reports)
-Community data jobs are **local npm ops** (no workers): they read/write this bucket via
-`wrangler` and read config from `.env` (copy `.env.example`; set `EVENTBRITE_TOKEN`,
-`CLOUDFLARE_ACCOUNT_ID`, `R2_BUCKET`). They build the common CRM in `subscribers.csv` and
+Community data jobs are **local npm ops** (no workers): they read/write this bucket via the
+**R2 S3 API** when the `R2_*` S3 keys are in `.env` (the cache-immune path; `wrangler`
+fallback otherwise). Copy `.env.example` and set `EVENTBRITE_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`,
+`R2_BUCKET`, and the S3 keys (`R2_ENDPOINT`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`).
+They build the common CRM in `subscribers.csv` and
 the per-event rosters in `attendees/<slug>.csv`, and render the feedback + community
 reports. The full op list, flags and the manual export steps (LinkedIn, OCG, Zoho,
 NetHunt) are in [README.md → Local operations](./README.md#local-operations); each op is

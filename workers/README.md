@@ -30,12 +30,12 @@ is restricted to `ALLOWED_ORIGINS` in `wrangler.toml`.
    `CLOUDFLARE_ACCOUNT_ID` (the CI workflow does this).
 
 ### Deploy
-- **CI:** the **Deploy Workers** action (`.github/workflows/workers.yml`, manual
-  `workflow_dispatch`) runs `wrangler deploy`, authenticating with the
+- **CI:** the **Deploy Workers** action (`.github/workflows/workers.yml`)
+  auto-deploys on push to `main` when anything under `workers/` changes, plus a
+  manual `workflow_dispatch`. It runs `wrangler deploy`, authenticating with the
   `CLOUDFLARE_API_KEY` secret — a **scoped API token** with *Workers Scripts:
   Edit* + *Workers R2 Storage: Edit* + *Account Settings: Read* — and the
-  `CLOUDFLARE_ACCOUNT_ID` secret. Uncomment the `push:` trigger once it deploys
-  cleanly to auto-deploy on changes under `workers/`.
+  `CLOUDFLARE_ACCOUNT_ID` secret.
 - **Local:** `cd workers/subscribe && npx wrangler deploy` (after `wrangler login`).
 
 ### Wire up the website

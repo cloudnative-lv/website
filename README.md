@@ -228,6 +228,10 @@ stale data. The S3 path is cache-immune and avoids that.)
 | `npm run validate:events` | Validate event YAML (fields + formats) |
 | `npm run validate:i18n` | Check EN/LV translation-key parity |
 | `npm run generate:artifacts` | Generate every event's artifacts → `dist/artifacts/` |
+| `npm run generate:brand` | Regenerate the mono logo variants + skyline → `public/images/brand/` |
+| `npm run generate:rss` | Build the events RSS feed → `dist/feed.xml` |
+| `npm run generate:sponsor-pdf` | Render the sponsor one-pager → `dist/sponsor-onepager.pdf` |
+| `npm run generate:sponsors-card` | Render the partners/supporters social card → `reports/sponsors/` |
 | `npm run prerender` | Bake per-route SEO/OG meta into static HTML (crawlers don't run JS) |
 | `npm run test:unit` | Unit tests (`src/artifacts/*.test.js`) |
 | `npm run test:e2e` | Playwright E2E tests |
@@ -239,7 +243,10 @@ Chromium install (`npx playwright install --with-deps chromium`). Community/CRM 
 ## CI/CD
 
 - **`.github/workflows/deploy.yml`** — on push to `main`: validate → build → generate
-  artifacts → prerender → deploy to GitHub Pages + upload the `event-artifacts` set.
+  RSS feed + artifacts + sponsor one-pager PDF → prerender → deploy to GitHub Pages +
+  upload the `event-artifacts` set.
+- **`.github/workflows/workers.yml`** — deploys the Workers on push to `main` touching
+  `workers/**`, plus manual `workflow_dispatch`.
 - **`.github/workflows/e2e.yml`** — Playwright E2E tests on push/PR to `main`.
 
 ## Project layout & conventions

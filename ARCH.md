@@ -132,7 +132,7 @@ and clobber. Three mitigations in the ops:
    and one write per object, reports rendered from memory — so a bulk import is always
    consistent regardless of the cache.
 
-The workers write each submission to an immutable `*/incoming/<ts>.json` record **before**
+The workers write each submission to an immutable `*/incoming/<ts>_<uuid>.json` record **before**
 appending to the aggregate CSV, so `feedback:restore` / `crm:restore` can replay the audit
 log into the CSVs if an append is ever lost.
 

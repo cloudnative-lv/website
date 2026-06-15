@@ -1,5 +1,5 @@
 // crm:restore — reconcile the subscribe worker's immutable audit log into the CRM. The
-// worker writes each web signup to subscribers/incoming/<ts>.json FIRST, then upserts a
+// worker writes each web signup to subscribers/incoming/<ts>_<uuid>.json FIRST, then upserts a
 // row into subscribers.csv; if that upsert ever fails (or the CRM is rebuilt from data/
 // sources that don't include web signups), this op replays the audit log so no signup is
 // lost. Idempotent — re-running never duplicates (web contacts key on email).
