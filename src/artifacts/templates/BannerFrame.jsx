@@ -2,10 +2,10 @@ import { skyline } from './skylines';
 
 // Fixed-size canvas with the Riga skyline backdrop. Every banner template renders
 // inside one at exact pixel dimensions; the screenshot pipeline targets
-// [data-artifact-frame]. `skylineSrc` picks the backdrop (detailed default, or the
-// clean `skylineSimple` for wide/short channel covers); `skylinePos` is `bottom`
-// (the skyline sits along the foot) or `cover-top` (the silhouette fills the frame,
-// anchored to the top); `skylineClass` tunes opacity.
+// [data-artifact-frame]. `skylineSrc` picks the backdrop (the detailed Riga skyline by
+// default); `skylinePos` is `bottom` (the skyline sits along the foot — event banners) or
+// `cover` (it fills the frame, centred on the buildings — the wide/short channel covers, so
+// they aren't cropped to bare bases); `skylineClass` tunes opacity.
 export default function BannerFrame({
   width,
   height,
@@ -16,16 +16,21 @@ export default function BannerFrame({
   skylinePos = 'bottom',
   children,
 }) {
-  const pos = skylinePos === 'cover-top'
-    ? 'absolute inset-0 h-full w-full object-cover object-top'
-    : 'absolute inset-x-0 bottom-0 w-full';
+  const cover = skylinePos === 'cover';
+  const pos = cover ? 'absolute inset-0 h-full w-full object-cover' : 'absolute inset-x-0 bottom-0 w-full';
   return (
     <div
       data-artifact-frame
       className={`relative overflow-hidden ${baseClass} ${className}`}
       style={{ width: `${width}px`, height: `${height}px` }}
     >
-      <img src={skylineSrc} alt="" aria-hidden="true" className={`pointer-events-none select-none ${pos} ${skylineClass}`} />
+      <img
+        src={skylineSrc}
+        alt=""
+        aria-hidden="true"
+        className={`pointer-events-none select-none ${pos} ${skylineClass}`}
+        style={cover ? { objectPosition: 'center 60%' } : undefined}
+      />
       <div className="relative h-full w-full">{children}</div>
     </div>
   );
