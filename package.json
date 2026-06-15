@@ -16,6 +16,7 @@
     "validate:events": "node scripts/validate-events.mjs",
     "validate": "npm run lint && npm run validate:i18n && npm run validate:events && npm run test:unit",
     "generate:artifacts": "node scripts/generate-artifacts.mjs",
+    "generate:brand": "node scripts/generate-brand.mjs",
     "prerender": "node scripts/prerender.mjs",
     "import:eventbrite": "node --env-file-if-exists=.env scripts/eventbrite-attendees.mjs",
     "import:attendees": "node --env-file-if-exists=.env scripts/import-attendees.mjs",

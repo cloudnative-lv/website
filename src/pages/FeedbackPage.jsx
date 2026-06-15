@@ -3,11 +3,10 @@ import { useParams, Link, Navigate } from 'react-router-dom';
 import { getEventBySlug } from '../data/events';
 import PageHeader from '../components/PageHeader';
 import SEO from '../components/SEO';
+import { WebPageJsonLd } from '../components/JsonLd';
 import { useLanguage } from '../i18n/useLanguage';
 
-// Set VITE_FEEDBACK_ENDPOINT (a Cloudflare feedback Worker URL) to collect
-// responses into R2. Unlisted page — reached only by the per-event QR.
-const ENDPOINT = import.meta.env.VITE_FEEDBACK_ENDPOINT;
+const ENDPOINT = 'https://feedback.cloudnative.lv';
 
 // One 1–5 linear-scale question with min/max captions. Single-select; clicking
 // the selected value again clears it (every question is optional).
@@ -94,12 +93,11 @@ export default function FeedbackPage() {
   return (
     <div className="min-h-screen bg-pink-light">
       <SEO title={`Feedback — ${event.title}`} description="Share your feedback on the event." path={`/events/${event.slug}/feedback`} noindex />
+      <WebPageJsonLd title={`Feedback - ${event.title}`} description="Share your feedback on the event." path={`/events/${event.slug}/feedback`} />
       <PageHeader title={t('feedback.title')} subtitle={event.title} />
       <div className="max-w-xl mx-auto px-4 py-12">
         <div className="bg-white rounded-2xl shadow-lg p-8">
-          {!ENDPOINT ? (
-            <p className="text-center text-gray-600">{t('feedback.notEnabled')}</p>
-          ) : status === 'success' ? (
+          {status === 'success' ? (
             <div className="py-6 text-center">
               <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
                 <svg className="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">

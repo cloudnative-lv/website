@@ -79,6 +79,28 @@ export const translations = {
       slides: 'View slides',
       partOf: 'Part of'
     },
+    brand: {
+      title: 'Brand',
+      subtitle: 'Logos, colours and assets for using the Cloud Native Latvia brand.',
+      logos: 'Logos',
+      logosNote: 'Download the SVGs. Use the light or mono-white version on dark backgrounds, and keep clear space around the mark.',
+      colors: 'Colours',
+      illustrations: 'Illustrations',
+      skylineNote: 'The Riga skyline we use across our banners.',
+      typography: 'Typography',
+      typographyNote: 'We use Noto Sans everywhere, including Latvian diacritics.',
+      usage: 'Usage',
+      do: 'Do',
+      dont: "Don't",
+      do1: 'Keep clear space around the logo equal to the height of the cube.',
+      do2: 'Use the light or mono-white logo on dark or busy backgrounds.',
+      do3: 'Use the official brand colours.',
+      dont1: 'Stretch, rotate or recolour the logo.',
+      dont2: 'Place the colour logo on a low-contrast background.',
+      dont3: 'Add effects, outlines or shadows to the mark.',
+      download: 'Download',
+      kitNote: 'Event banners and other generic templates live in the organizer kit.'
+    },
     // Event card
     eventCard: {
       upcoming: 'Upcoming',
@@ -247,7 +269,6 @@ export const translations = {
       button: 'Join',
       buttonShort: 'Join',
       loading: 'Joining...',
-      success: 'Redirecting to CNCF Community...',
       subscribed: 'Thanks for joining!',
       error: 'Something went wrong - please try again.',
       followUs: 'Or follow us on social media'
@@ -304,8 +325,7 @@ export const translations = {
       submit: 'Send feedback',
       sending: 'Sending...',
       thanks: 'Thank you for your feedback!',
-      error: 'Something went wrong - please try again.',
-      notEnabled: 'Feedback collection isn\'t set up yet — check back soon.'
+      error: 'Something went wrong - please try again.'
     }
   },
   lv: {
@@ -387,6 +407,28 @@ export const translations = {
       presentedBy: 'Prezentē',
       slides: 'Skatīt slaidus',
       partOf: 'Daļa no'
+    },
+    brand: {
+      title: 'Zīmols',
+      subtitle: 'Logotipi, krāsas un materiāli Cloud Native Latvia zīmola lietošanai.',
+      logos: 'Logotipi',
+      logosNote: 'Lejupielādē SVG failus. Uz tumša fona izmanto gaišo vai monohromo balto versiju un saglabā brīvo telpu ap zīmi.',
+      colors: 'Krāsas',
+      illustrations: 'Ilustrācijas',
+      skylineNote: 'Rīgas silueta ilustrācija, ko izmantojam mūsu baneros.',
+      typography: 'Tipogrāfija',
+      typographyNote: 'Mēs visur izmantojam Noto Sans, ieskaitot latviešu diakritiskās zīmes.',
+      usage: 'Lietošana',
+      do: 'Dari',
+      dont: 'Nedari',
+      do1: 'Saglabā brīvo telpu ap logotipu kuba augstuma apmērā.',
+      do2: 'Uz tumša vai raiba fona izmanto gaišo vai monohromo balto logotipu.',
+      do3: 'Izmanto oficiālās zīmola krāsas.',
+      dont1: 'Nestiep, negriez un nepārkrāso logotipu.',
+      dont2: 'Nenovieto krāsaino logotipu uz zema kontrasta fona.',
+      dont3: 'Nepievieno zīmei efektus, kontūras vai ēnas.',
+      download: 'Lejupielādēt',
+      kitNote: 'Pasākumu baneri un citi vispārīgie šabloni ir pieejami organizatoru komplektā.'
     },
     // Event card
     eventCard: {
@@ -556,7 +598,6 @@ export const translations = {
       button: 'Pierakstīties',
       buttonShort: 'Pierakstīties',
       loading: 'Notiek pierakstīšanās...',
-      success: 'Pāradresē uz CNCF kopienu...',
       subscribed: 'Paldies, ka pievienojies!',
       error: 'Kaut kas nogāja greizi - lūdzu, mēģini vēlreiz.',
       followUs: 'Vai seko mums sociālajos tīklos'
@@ -613,8 +654,7 @@ export const translations = {
       submit: 'Nosūtīt atsauksmi',
       sending: 'Nosūta...',
       thanks: 'Paldies par atsauksmi!',
-      error: 'Kaut kas nogāja greizi - lūdzu, mēģini vēlreiz.',
-      notEnabled: 'Atsauksmju vākšana vēl nav iestatīta — ielūkojies vēlāk.'
+      error: 'Kaut kas nogāja greizi - lūdzu, mēģini vēlreiz.'
     }
   }
 };

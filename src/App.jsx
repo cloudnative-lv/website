@@ -18,6 +18,7 @@ const Swag = lazy(() => import('./pages/Swag'));
 const Sponsors = lazy(() => import('./pages/Sponsors'));
 const Speakers = lazy(() => import('./pages/Speakers'));
 const Privacy = lazy(() => import('./pages/Privacy'));
+const Brand = lazy(() => import('./pages/Brand'));
 // Organizer "kit" routes (unlisted): download pages, manifest + screenshot target.
 const KitIndex = lazy(() => import('./artifacts/KitIndex'));
 const KitPage = lazy(() => import('./artifacts/KitPage'));
@@ -61,6 +62,7 @@ function App() {
             <Route path="/sponsors" element={<Sponsors />} />
             <Route path="/speakers" element={<Speakers />} />
             <Route path="/privacy" element={<Privacy />} />
+            <Route path="/brand" element={<Brand />} />
           </Route>
           {/* Unlisted artifact routes (no site chrome). */}
           <Route path="/kit" element={<Suspense fallback={null}><KitIndex /></Suspense>} />

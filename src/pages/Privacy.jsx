@@ -1,5 +1,6 @@
 import PageHeader from '../components/PageHeader';
 import SEO from '../components/SEO';
+import { WebPageJsonLd } from '../components/JsonLd';
 import { useLanguage } from '../i18n/useLanguage';
 
 const SECTIONS = ['collect', 'basis', 'storage', 'retention', 'sharing', 'rights'];
@@ -13,6 +14,7 @@ export default function Privacy() {
         description="How Cloud Native Latvia collects and handles your data."
         path="/privacy"
       />
+      <WebPageJsonLd title="Privacy Policy - Cloud Native Latvia" description="How Cloud Native Latvia collects and handles your data." path="/privacy" />
       <PageHeader title={t('privacy.title')} subtitle={t('privacy.updated')} />
       <div className="max-w-3xl mx-auto px-4 py-12">
         <div className="bg-white rounded-2xl shadow-lg p-8 space-y-6">

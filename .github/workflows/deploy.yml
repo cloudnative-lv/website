@@ -36,11 +36,6 @@ jobs:
 
       - name: Build
         run: npm run build
-        env:
-          # Cloudflare Worker URLs; unset -> the forms degrade gracefully. Set
-          # repo variables SUBSCRIBE_ENDPOINT / FEEDBACK_ENDPOINT to enable.
-          VITE_SUBSCRIBE_ENDPOINT: ${{ vars.SUBSCRIBE_ENDPOINT }}
-          VITE_FEEDBACK_ENDPOINT: ${{ vars.FEEDBACK_ENDPOINT }}
 
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium
