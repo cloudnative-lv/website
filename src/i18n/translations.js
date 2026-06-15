@@ -455,7 +455,7 @@ export const translations = {
           bio: 'Platformu inženiere, kas aizraujas ar Kubernetes, politiku kā kodu un drošu mākoņdatošanas platformu veidošanu.'
         },
         andrey: {
-          role: 'CTO, Apmācītājs',
+          role: 'CTO, Pasniedzējs',
           bio: 'Mākoņdatošanas entuziasts un kopienas veidotājs. Palīdz apvienot mākoņdatošanas kopienu Latvijā.'
         }
       }
