@@ -8,6 +8,11 @@ import { parseCsv, lower, norm } from './csv.mjs';
 import { transliterate } from './translit.mjs';
 import { barsSvg, lineSvg, tableSvg, SERIES_COLORS } from './charts.mjs';
 import { svgToPng, withPage } from './render.mjs';
+import { renderInfographics } from './infographics.mjs';
+
+// LinkedIn followers milestone shown on the community infographics (a page-level vanity
+// figure that isn't a single CRM column; events/speakers/talks are derived from the data).
+const FOLLOWERS = '420+';
 
 export const shortLabel = (slug) => { const m = slug.match(/meetup-0*(\d+)/); return m ? `#${m[1]}` : slug; };
 const nameKey = (f, l) => `${lower(transliterate(f))} ${lower(transliterate(l))}`.trim();
@@ -180,6 +185,17 @@ export async function renderCommunityReport({ crmRows, rostersBySlug, eventMeta 
     }
   }
 
+  // --- Community infographics (share cards) ---
+  let igSpeakers = 0, igTalks = 0;
+  for (const m of eventMeta.values()) { igSpeakers += (m.speakers || []).length; igTalks += (m.talks || 0); }
+  const igStats = [
+    { value: FOLLOWERS, label: 'FOLLOWERS' },
+    { value: String(eventMeta.size), label: 'EVENTS' },
+    { value: String(igSpeakers), label: 'SPEAKERS' },
+    { value: String(igTalks), label: 'TALKS' },
+  ];
+  const infographics = eventMeta.size ? await renderInfographics({ stats: igStats, OUT }).catch(() => []) : [];
+
   // --- Markdown report ---
   const pct = (n, d = total) => `${Math.round((n / (d || 1)) * 100)}%`;
   const genDate = new Date().toISOString().slice(0, 10);
@@ -243,6 +259,14 @@ ${retentionBlock}${fansBlock}` : '\n_No per-event rosters yet._\n';
 
   const bulkNote = bulkMonths.length ? `\n> **Note:** The growth chart includes bulk imports (${bulkMonths.join(', ')}). Organic growth is steadier than the curve suggests.\n` : '';
 
+  const infographicsBlock = infographics.length ? `
+## Community infographics
+
+Share cards (${FOLLOWERS} followers \u00b7 ${eventMeta.size} events \u00b7 ${igSpeakers} speakers \u00b7 ${igTalks} talks) \u2014 pick the format that fits the channel.
+
+${infographics.map((f) => `![${f.replace(/community-|\.png/g, '')}](${f})`).join('\n')}
+` : '';
+
   const md = `# Cloud Native Latvia \u2014 community & registrations report
 
 _Generated ${genDate} from R2 \`subscribers.csv\` + \`attendees/<slug>.csv\`._
@@ -262,7 +286,7 @@ ${sources.map(([s, n]) => `| ${s} | ${n} |`).join('\n')}
 
 ![By source](by-source.png)
 ![Contactability](contactability.png)
-${growth.length ? `\n![Growth](growth.png)${bulkNote}` : ''}${regBlock}`;
+${growth.length ? `\n![Growth](growth.png)${bulkNote}` : ''}${infographicsBlock}${regBlock}`;
   await writeFile(path.join(OUT, 'community-report.md'), md);
   return { total, uniquePeople, totalRegistrations, repeatAttendees, sources: sources.length };
 }

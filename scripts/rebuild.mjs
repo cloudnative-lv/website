@@ -142,7 +142,7 @@ if (!DRY) {
 const rostersBySlug = new Map();
 const eventMeta = new Map();
 for (const e of events) {
-  eventMeta.set(e.slug, { date: e.date, attendance: e.attendance, speakers: e.speakers });
+  eventMeta.set(e.slug, { date: e.date, attendance: e.attendance, speakers: e.speakers, talks: e.talks });
   if (rosters.has(e.slug)) rostersBySlug.set(e.slug, [...rosters.get(e.slug).values()].map((r) => ({ email: r.email, name: r.name })));
 }
 const cr = await renderCommunityReport({ crmRows: [...crm.values()], rostersBySlug, eventMeta, OUT: 'reports/subscribers' });

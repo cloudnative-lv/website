@@ -175,7 +175,7 @@ idempotent per source, so the same person can appear under several sources until
 | `npm run import:ocg` | Parse OCG / CNCF **members** → CRM | copy the members table into `data/ocg-followers.txt` (`docs/ocg_*.png`) | text → CRM (`source=ocg`) |
 | `npm run import:subscribers -- --source <name> <file.csv>` | Merge a generic contact CSV (e.g. Zoho) into the CRM; `--from-r2-attendees` rolls all rosters in | save the export under `data/` | CSV → `subscribers.csv` |
 | `npm run import:feedback` | Retrofit Google Form feedback into R2 (rewrites `feedback/<slug>.csv`; also restores a deleted one) | save `data/feedback-<N>.xlsx` (N = meetup #) | xlsx → `feedback/<slug>.csv` |
-| `npm run report:subscribers` | Community & registrations report: size, sources, growth, registrations per event, repeat & duplicate registrations, top fans | — | → `reports/subscribers/` |
+| `npm run report:subscribers` | Community & registrations report: size, sources, growth, registrations per event, repeat & duplicate registrations, top fans, **community infographics** (3 share-card sizes) | — | → `reports/subscribers/` |
 | `npm run report:feedback` | Feedback digest: ratings per/over events + word clouds — the local replacement for a "digest worker"; run ~1 day after an event | — | `feedback/*.csv` → `reports/feedback/` |
 | `npm run crm:cleanup` | Occasional hygiene — dedupe/discover vs NetHunt; `--write` backfills emails | NetHunt export at `data/nethunt-contacts.csv` | → `reports/crm/` |
 | `npm run r2:verify` | Read-only health check via the S3 API: CRM size + sources, per-event rosters/feedback, audit-log counts | — (needs the `R2_*` S3 keys) | live R2 → stdout |

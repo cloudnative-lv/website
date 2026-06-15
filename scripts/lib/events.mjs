@@ -40,7 +40,8 @@ export async function readEvents() {
     const attendanceRaw = (txt.match(/^attendance:\s*(\d+)/m) || [])[1];
     const attendance = attendanceRaw != null ? Number(attendanceRaw) : null;
     const speakers = parseSpeakers(txt);
-    if (slug) out.push({ file: f, slug, date: date || null, eventbriteId, cncfCode, attendance, speakers });
+    const talks = (txt.match(/^\s*-\s+title:/gm) || []).length; // talk list items under `talks:`
+    if (slug) out.push({ file: f, slug, date: date || null, eventbriteId, cncfCode, attendance, speakers, talks });
   }
   return out;
 }
