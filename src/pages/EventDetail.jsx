@@ -12,6 +12,7 @@ import { formatEventDate } from '../utils/dates';
 import SEO from '../components/SEO';
 import { EventJsonLd, BreadcrumbJsonLd } from '../components/JsonLd';
 import { useLanguage } from '../i18n/useLanguage';
+import { eventSchedule } from '../artifacts/fields';
 
 export default function EventDetail() {
   const { t, language } = useLanguage();
@@ -38,6 +39,7 @@ export default function EventDetail() {
 
   const formattedDate = formatEventDate(event.date, language, { weekday: 'long' });
   const isUpcoming = event.status === 'upcoming';
+  const schedule = eventSchedule(event);
 
   return (
     <div className="min-h-screen bg-pink-light">
@@ -89,6 +91,20 @@ export default function EventDetail() {
                 ))}
               </div>
             </section>
+
+            {schedule.length > 0 && (
+              <section className="bg-white rounded-2xl shadow-lg p-6 mb-8">
+                <h2 className="text-2xl font-black text-burgundy mb-4">{t('eventDetail.schedule')}</h2>
+                <ul className="space-y-2">
+                  {schedule.map((s, i) => (
+                    <li key={i} className="flex gap-4">
+                      <span className="w-14 shrink-0 font-semibold text-pink tabular-nums">{s.time}</span>
+                      <span className={s.isTalk ? 'font-semibold text-burgundy' : 'text-gray-600'}>{s.label}</span>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
 
             {event.talks && event.talks.length > 0 && (
               <section className="bg-white rounded-2xl shadow-lg p-6">

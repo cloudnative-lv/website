@@ -1,6 +1,6 @@
 import {
   meetupNumber, cleanTitle, dateLong, startTime, venueLine,
-  talkSpeakerNames, speakerRole,
+  talkSpeakerNames, speakerRole, eventSchedule,
 } from './fields';
 import { getSpeakerInfo, speakerSlug } from '../data/speakers';
 
@@ -28,19 +28,22 @@ const firstSentence = (text) => {
 };
 
 export const announcementPost = (event) => {
+  const sched = eventSchedule(event);
   const lines = [
     `🚀 Cloud Native Latvia Meetup #${meetupNumber(event)}: ${cleanTitle(event.title)}`,
     '',
     `📅 ${dateLong(event.date)}${startTime(event) ? `, ${startTime(event)}` : ''}`,
     `📍 ${venueLine(event.venue)}`,
     '',
-    'Talks:',
-    ...(event.talks || []).map((t) => {
+  ];
+  if (sched.length) {
+    lines.push('🗓 Schedule:', ...sched.map((s) => `${s.time} — ${s.label}`), '');
+  } else {
+    lines.push('Talks:', ...(event.talks || []).map((t) => {
       const who = talkSpeakerNames(t).join(' & ');
       return `• ${t.title}${who ? ` - ${who}` : ''}`;
-    }),
-    '',
-  ];
+    }), '');
+  }
   const reg = registerLine(event);
   if (reg) lines.push(reg, '');
   lines.push(hashtags(event));
@@ -96,8 +99,10 @@ export const eventbriteDescription = (event) => {
     '',
     'Join the Cloud Native Latvia community for an evening of talks on Kubernetes, cloud native tooling and the CNCF ecosystem. Free to attend - everyone welcome.',
     '',
-    'Agenda:',
   ];
+  const sched = eventSchedule(event);
+  if (sched.length) lines.push('Schedule:', ...sched.map((s) => `${s.time} — ${s.label}`), '');
+  lines.push('Talks:');
   (event.talks || []).forEach((t) => {
     const who = talkSpeakerNames(t).join(' & ');
     lines.push(`• ${t.title}${who ? ` - ${who}` : ''}`);

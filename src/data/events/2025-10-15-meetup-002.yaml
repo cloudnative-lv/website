@@ -14,14 +14,22 @@ venue:
   address: "Brīvības gatve 214, Rīga, LV-1039"
 description: |
   Deep dive into observability with OpenTelemetry and learn how to implement guardrails for your cloud native applications.
-  
-  17:45: Doors open
-  18:00: Welcome by Cloud Native Latvia
-  18:15: Talk 1
-  19:00: Break with snacks
-  19:15: Talk 2
-  20:00: Networking
-  20:30: Doors close
+
+schedule:
+  - time: "17:45"
+    item: "Doors open"
+  - time: "18:00"
+    item: "Welcome by Cloud Native Latvia"
+  - time: "18:15"
+    talk: 1
+  - time: "19:00"
+    item: "Break with snacks"
+  - time: "19:15"
+    talk: 2
+  - time: "20:00"
+    item: "Networking"
+  - time: "20:30"
+    item: "Doors close"
 talks:
   - title: "OpenTelemetry: From Core Concepts to Scaling Insights"
     speaker: "Gundega Dekena"

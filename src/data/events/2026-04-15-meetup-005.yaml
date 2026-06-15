@@ -15,13 +15,21 @@ venue:
 description: |
   From CNCF certifications to Kubernetes at the edge across thousands of stores - two practical talks on leveling up and scaling out.
 
-  18:15: Doors open
-  18:30: Welcome by Cloud Native Latvia
-  18:45: Talk 1
-  19:30: Break with refreshments
-  19:45: Talk 2
-  20:30: Networking
-  21:00: Doors close
+schedule:
+  - time: "18:15"
+    item: "Doors open"
+  - time: "18:30"
+    item: "Welcome by Cloud Native Latvia"
+  - time: "18:45"
+    talk: 1
+  - time: "19:30"
+    item: "Break with refreshments"
+  - time: "19:45"
+    talk: 2
+  - time: "20:30"
+    item: "Networking"
+  - time: "21:00"
+    item: "Doors close"
 talks:
   - title: "What's a Kubestronaut (good for)?"
     speaker: "Gerret Apelt"

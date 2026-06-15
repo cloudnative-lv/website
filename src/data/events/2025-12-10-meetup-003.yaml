@@ -14,14 +14,22 @@ venue:
   address: "Brīvības gatve 214, Rīga, LV-1039"
 description: |
   Join us for a deep dive into lessons learned around self-hosted Kubernetes setup and how to use Karpenter for Greenscaling!
-  
-  18:15: Doors open
-  18:30: Welcome by Cloud Native Latvia
-  18:45: Talk 1
-  19:30: Break with snacks
-  19:45: Talk 2
-  20:30: Networking
-  21:00: Doors close
+
+schedule:
+  - time: "18:15"
+    item: "Doors open"
+  - time: "18:30"
+    item: "Welcome by Cloud Native Latvia"
+  - time: "18:45"
+    talk: 1
+  - time: "19:30"
+    item: "Break with snacks"
+  - time: "19:45"
+    talk: 2
+  - time: "20:30"
+    item: "Networking"
+  - time: "21:00"
+    item: "Doors close"
 talks:
   - title: "Halfway Home: Lessons from Our First Year Running Self-Hosted Kubernetes"
     speakers:

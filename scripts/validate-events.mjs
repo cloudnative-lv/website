@@ -45,6 +45,20 @@ for (const file of files) {
       }
     });
   }
+  // Optional structured run-of-show: each item is { time, item } or { time, talk: N }.
+  if (e.schedule != null) {
+    if (!Array.isArray(e.schedule)) err('"schedule" must be a list');
+    else e.schedule.forEach((s, i) => {
+      if (!TIME.test(String(s.time ?? ''))) err(`schedule ${i + 1} "time" must be quoted HH:MM (got ${JSON.stringify(s.time)})`);
+      if (s.talk != null) {
+        const n = Number(s.talk);
+        if (!Number.isInteger(n) || n < 1 || n > (e.talks?.length || 0)) err(`schedule ${i + 1} "talk: ${s.talk}" is out of range`);
+      } else if (!isStr(s.item)) {
+        err(`schedule ${i + 1} needs "item" text or a "talk" reference`);
+      }
+    });
+  }
+
   if (!Array.isArray(e.tags) || e.tags.length === 0) err('missing "tags"');
 }
 

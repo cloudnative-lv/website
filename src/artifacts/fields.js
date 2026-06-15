@@ -73,3 +73,22 @@ export const venueLine = (venue = {}) => {
   const street = String(venue.address || '').split(',')[0].trim();
   return [street, venue.name].filter(Boolean).join(', ');
 };
+
+// The timed run-of-show, from the structured `schedule:` field in the event YAML
+// (doors, welcome, talks, breaks, networking, doors close). A `{ time, talk: N }` item
+// expands to the real talk title + speaker(s); other items carry `{ time, item }`.
+// Returns [{ time, label, isTalk }], or [] when an event has no schedule.
+export const eventSchedule = (event = {}) => {
+  const talks = event.talks || [];
+  return (event.schedule || []).map((s) => {
+    if (s.talk != null) {
+      const t = talks[Number(s.talk) - 1];
+      if (t) {
+        const who = talkSpeakerNames(t).join(' & ');
+        return { time: s.time, label: `${t.title}${who ? ` — ${who}` : ''}`, isTalk: true };
+      }
+    }
+    const label = String(s.item ?? s.label ?? '');
+    return { time: s.time, label, isTalk: talks.some((t) => label.toLowerCase().includes(String(t.title || '').toLowerCase().slice(0, 20))) };
+  });
+};

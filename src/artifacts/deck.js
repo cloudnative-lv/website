@@ -1,6 +1,6 @@
 import pptxgen from 'pptxgenjs';
 import { getSpeakerInfo } from '../data/speakers';
-import { meetupNumber, cleanTitle, dateDots, startTime, talkSpeakerNames, speakerRole } from './fields';
+import { meetupNumber, cleanTitle, dateDots, startTime, talkSpeakerNames, speakerRole, eventSchedule } from './fields';
 import { allPartners } from '../data/partners';
 import { SOCIAL_LINKS } from '../data/socialLinks';
 import QRCode from 'qrcode';
@@ -216,18 +216,12 @@ export async function downloadDeck(event) {
   await pptx.writeFile({ fileName: `${event.slug}-deck.pptx` });
 }
 
-// Build time-based agenda lines from the event description (which contains the
-// time slots) or fall back to synthesizing from talks.
+// Build time-based agenda lines from the event's structured schedule, or fall back to
+// synthesizing from the talks if an event has none.
 function buildAgendaLines(event, talks) {
-  // Try parsing timed lines from the description (format: "HH:MM: Description").
-  const desc = event.description || '';
-  const timedLines = desc.split('\n').filter((l) => /^\s*\d{1,2}:\d{2}\s*:/.test(l));
-  if (timedLines.length >= 3) {
-    return timedLines.map((l) => {
-      const text = l.trim();
-      const isTalk = talks.some((t) => text.toLowerCase().includes(t.title?.toLowerCase()?.slice(0, 20)));
-      return { text, highlight: isTalk, dim: false };
-    });
+  const sched = eventSchedule(event);
+  if (sched.length >= 3) {
+    return sched.map((s) => ({ text: `${s.time}:  ${s.label}`, highlight: s.isTalk, dim: /break|doors\s*close/i.test(s.label) }));
   }
 
   // Fallback: synthesize from event time + talks.

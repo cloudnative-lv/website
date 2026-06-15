@@ -1,21 +1,19 @@
 import { getEventTalks } from '../data/events';
 import { getSpeakerInfo } from '../data/speakers';
-import { meetupNumber, cleanTitle, dateDots, startTime, talkSpeakerNames, speakerRole } from './fields';
+import { meetupNumber, cleanTitle, dateDots, startTime, talkSpeakerNames, speakerRole, eventSchedule } from './fields';
 import { allPartners } from '../data/partners';
 import { SOCIAL_LINKS } from '../data/socialLinks';
 
 const SITE = 'https://cloudnative.lv';
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
-// Build time-based agenda lines from the event description or synthesize from talks.
+// Build time-based agenda lines from the event's structured schedule or synthesize from talks.
 function buildAgendaHtml(event, talks) {
-  const desc = event.description || '';
-  const timedLines = desc.split('\n').filter((l) => /^\s*\d{1,2}:\d{2}\s*:/.test(l));
-  if (timedLines.length >= 3) {
-    return timedLines.map((l) => {
-      const text = l.trim();
-      const isTalk = talks.some((t) => text.toLowerCase().includes(t.title?.toLowerCase()?.slice(0, 20)));
-      return `<li${isTalk ? ' class="highlight"' : ''}>${esc(text)}</li>`;
+  const sched = eventSchedule(event);
+  if (sched.length >= 3) {
+    return sched.map((s) => {
+      const cls = s.isTalk ? ' class="highlight"' : (/break|doors\s*close/i.test(s.label) ? ' class="dim"' : '');
+      return `<li${cls}>${esc(`${s.time}:  ${s.label}`)}</li>`;
     }).join('');
   }
   // Fallback: synthesize from event time + talks.
