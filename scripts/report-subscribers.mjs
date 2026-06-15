@@ -14,7 +14,7 @@ const events = (await readEvents()).sort((a, b) => (a.date || '').localeCompare(
 const rostersBySlug = new Map();
 const eventMeta = new Map();
 for (const e of events) {
-  eventMeta.set(e.slug, { date: e.date, attendance: e.attendance });
+  eventMeta.set(e.slug, { date: e.date, attendance: e.attendance, speakers: e.speakers });
   const map = readRoster(`attendees/${e.slug}.csv`);
   if (map.size) rostersBySlug.set(e.slug, [...map.values()].map((r) => ({ email: r.email, name: r.name })));
 }

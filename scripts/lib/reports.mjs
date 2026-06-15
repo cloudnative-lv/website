@@ -26,7 +26,8 @@ export function parseFeedbackCsv(text) {
 
 // crmRows: [{email,first,last,linkedin,source,event,added}]
 // rostersBySlug: Map(slug -> [{email,name}]) in chronological order
-// eventMeta: Map(slug -> {date}) — optional, enriches labels with dates
+// eventMeta: Map(slug -> {date, attendance, speakers}) — date enriches labels; attendance
+// (event-photo head-count) + speakers drive the community actual-attendance comparison.
 export async function renderCommunityReport({ crmRows, rostersBySlug, eventMeta = new Map(), OUT }) {
   await mkdir(OUT, { recursive: true });
   const total = crmRows.length;
@@ -57,18 +58,35 @@ export async function renderCommunityReport({ crmRows, rostersBySlug, eventMeta 
     const dt = new Date(d + 'T12:00:00');
     return dt.toLocaleDateString('en', { month: 'short', day: 'numeric', year: 'numeric' });
   };
-  // Actual attendance = head-count from the event photos (speakers + organizers already
-  // in frame) + 1 for the organizer behind the camera, who never appears in the shot.
+  // Organizers + each event's speakers aren't "community" attendees — exclude them from
+  // both sides (registrations and actual attendance) so the comparison is community-to-
+  // community. Organizers attend every event; speakers are present for the event they speak at.
+  const stripDiacritics = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '');
+  const normName = (s) => stripDiacritics(lower(transliterate(norm(s))));
+  const ORG = new Set(['andrey adamovich', 'linda arende', 'lena adamovich']);
+  // Speakers that aren't already organizers (so org-speakers like Linda@#2 / Andrey@#6
+  // aren't subtracted twice).
+  const speakersNotOrg = (slug) => (eventMeta.get(slug)?.speakers || []).map(normName).filter((n) => !ORG.has(n));
+
+  // Per-event roster with organizers and that event's speakers removed (matched by name).
+  const communityRosters = new Map();
+  for (const [slug, roster] of rostersBySlug) {
+    const exclude = new Set([...ORG, ...speakersNotOrg(slug)]);
+    communityRosters.set(slug, roster.filter((a) => { const nm = normName(a.name || ''); return !nm || !exclude.has(nm); }));
+  }
+
+  // Actual community attendance = event-photo head-count + 1 (organizer behind the camera)
+  // − 3 organizers − the event's non-organizer speakers (present regardless of registration).
   const actualOf = (slug) => {
     const a = eventMeta.get(slug)?.attendance;
-    return Number.isFinite(a) ? a + 1 : null;
+    return Number.isFinite(a) ? (a + 1) - 3 - speakersNotOrg(slug).length : null;
   };
 
-  // --- Per-event analysis ---
+  // --- Per-event analysis (community only) ---
   const perEvent = [];
   const eventsByAttendee = new Map();
   const nameByAttendee = new Map();
-  for (const [slug, roster] of rostersBySlug) {
+  for (const [slug, roster] of communityRosters) {
     let n = 0;
     for (const a of roster) {
       const id = attendeeId(a);
@@ -93,7 +111,7 @@ export async function renderCommunityReport({ crmRows, rostersBySlug, eventMeta 
   // --- New vs returning per event ---
   const seenBefore = new Set();
   const newVsReturn = [];
-  for (const [slug, roster] of rostersBySlug) {
+  for (const [slug, roster] of communityRosters) {
     const currentIds = new Set();
     let newCount = 0, retCount = 0;
     for (const a of roster) {
@@ -109,7 +127,7 @@ export async function renderCommunityReport({ crmRows, rostersBySlug, eventMeta 
 
   // --- Retention between consecutive events ---
   const eventIdSets = [];
-  for (const [slug, roster] of rostersBySlug) {
+  for (const [slug, roster] of communityRosters) {
     const ids = new Set();
     for (const a of roster) { const id = attendeeId(a); if (id) ids.add(id); }
     eventIdSets.push({ label: shortLabel(slug), ids });
@@ -121,13 +139,11 @@ export async function renderCommunityReport({ crmRows, rostersBySlug, eventMeta 
     retention.push({ from: prev.label, to: curr.label, retained, prevSize: prev.ids.size, rate: prev.ids.size ? retained / prev.ids.size : 0 });
   }
 
-  // --- Top fans with per-event attendance grid ---
+  // --- Top fans with per-event attendance grid (organizers + speakers already removed) ---
   const allEventLabels = perEvent.map((e) => e.label);
-  const organizers = new Set(['andrey adamovich', 'linda arende']);
-  const stripDiacritics = (s) => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
   const topFans = [...eventsByAttendee.entries()]
     .map(([id, set]) => ({ name: nameByAttendee.get(id) || id, count: set.size, attended: new Set(set) }))
-    .filter((f) => f.count >= 2 && !organizers.has(stripDiacritics(lower(transliterate(f.name)))))
+    .filter((f) => f.count >= 2)
     .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name))
     .slice(0, 15);
 
@@ -209,14 +225,17 @@ ${topFans.map((f) => `| ${f.name} | ${f.count} | ${allEventLabels.map((l) => f.a
   const regBlock = perEvent.length ? `
 ## Registrations
 
+_Community only \u2014 the 3 organizers (Andrey, Linda, Lena Adamovich) and each event's
+speakers are excluded from both registrations and actual attendance._
+
 - **Total registrations:** ${totalRegistrations} across ${perEvent.length} events
 - **Average per event:** ${avgRegistrations.toFixed(1)}
 - **Unique attendees:** ${uniqueAttendees}
 - **Repeat attendees (\u22652 events):** ${repeatAttendees} (${pct(repeatAttendees, uniqueAttendees)} of attendees)
-${hasActual ? `- **Actual attendance (from event photos + 1):** ${totalActual} across ${eventsWithActual.length} events \u00b7 avg show-up ${Math.round(avgShowup * 100)}% of registrations\n` : ''}
+${hasActual ? `- **Actual community attendance:** ${totalActual} across ${eventsWithActual.length} events \u00b7 avg show-up ${Math.round(avgShowup * 100)}% of registrations\n` : ''}
 ${regHeader}
 ${perEvent.map(regRow).join('\n')}
-${hasActual ? '\n> Actual attendance = people counted in the event photos (speakers and organizers included) + 1 for the organizer behind the camera.\n' : ''}
+${hasActual ? '\n> Actual = event-photo head-count + 1 (organizer behind the camera) \u2212 3 organizers \u2212 the event\'s non-organizer speakers. Registered = roster with the same people removed.\n' : ''}
 ![Registrations per event](registrations-by-event.png)
 ${hasActual ? '![Registered vs actual attendance](registered-vs-actual.png)\n' : ''}![New vs returning](new-vs-returning.png)
 ![Events attended per person](repeat-registrations.png)
