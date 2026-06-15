@@ -50,7 +50,7 @@ export default function Navbar() {
   ];
 
   return (
-    <nav className="bg-white border-b border-rose-100 shadow-sm sticky top-0 z-50">
+    <nav className="bg-white border-b border-rose-100 shadow-sm sticky top-0 z-50 print:hidden">
       <div className="max-w-6xl mx-auto px-4">
         <div className="flex items-center gap-4 h-16">
           <Link to="/" className="flex items-center gap-2.5 shrink-0" aria-label="Cloud Native Latvia">

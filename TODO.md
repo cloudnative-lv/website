@@ -4,7 +4,7 @@
 [x] Update instructions about local wrangler — BOOTSTRAP.md + README.md
 [x] Document local operations/docs — README.md "Local operations", BOOTSTRAP.md, ARCH.md
 [x] Per-page SEO review + microformats — Organization/Event/Talk/Person/BreadcrumbList JSON-LD (JsonLd.jsx); prerender bakes JSON-LD into the static HTML
-[ ] Write sponsor menu one-pager — PDF
+[x] Write sponsor menu one-pager — PDF (`npm run generate:sponsor-pdf` → dist/sponsor-onepager.pdf, built in CI from the /sponsors page)
 
 # Data
 

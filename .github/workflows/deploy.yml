@@ -46,6 +46,7 @@ jobs:
           for i in $(seq 1 60); do curl -sf http://localhost:4173 >/dev/null && break; sleep 1; done
           npm run generate:artifacts
           npm run prerender
+          npm run generate:sponsor-pdf
           kill %1 || true
 
       - name: Upload event artifacts (pipeline)

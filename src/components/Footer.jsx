@@ -6,7 +6,7 @@ export default function Footer() {
   const { t } = useLanguage();
 
   return (
-    <footer className="bg-rose-900 text-white py-12">
+    <footer className="bg-rose-900 text-white py-12 print:hidden">
       <div className="max-w-6xl mx-auto px-4">
         <div className="grid md:grid-cols-3 gap-8">
           <div>
