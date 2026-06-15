@@ -111,11 +111,6 @@ export const translations = {
       subtitle: 'Meet the amazing speakers who have shared their knowledge at our meetups',
       noSpeakers: 'No speakers yet. Stay tuned for upcoming events!',
       with: 'with',
-      talks: 'talk',
-      talksPlural: 'talks',
-      at: 'at',
-      event: 'event',
-      eventsPlural: 'events',
       cta: {
         title: 'Want to Speak?',
         description: 'We\'re always looking for speakers to share their experiences with cloud native technologies. Whether it\'s a 20-minute talk or a lightning talk, we\'d love to hear from you!',
@@ -371,9 +366,7 @@ export const translations = {
       subtitle: 'Pievienojies mūsu tikšanās reizēm par mākoņdatošanas tehnoloģijām',
       upcoming: 'Gaidāmie pasākumi',
       past: 'Pagājušie pasākumi',
-      noUpcoming: 'Nākamā tikšanās vēl nav izsludināta - abonē jaunumus vai seko mums, lai uzzinātu pirmais!',
-      register: 'Reģistrēties',
-      viewDetails: 'Skatīt detaļas'
+      noUpcoming: 'Nākamā tikšanās vēl nav izsludināta - abonē jaunumus vai seko mums, lai uzzinātu pirmais!'
     },
     // Event detail
     eventDetail: {
@@ -440,11 +433,6 @@ export const translations = {
       subtitle: 'Iepazīsties ar brīnišķīgajiem runātājiem, kas dalījušies ar zināšanām mūsu tikšanās reizēs',
       noSpeakers: 'Pagaidām nav runātāju. Seko līdzi gaidāmajiem pasākumiem!',
       with: 'kopā ar',
-      talks: 'prezentācija',
-      talksPlural: 'prezentācijas',
-      at: '',
-      event: 'pasākumā',
-      eventsPlural: 'pasākumos',
       cta: {
         title: 'Vēlies uzstāties?',
         description: 'Mēs vienmēr meklējam runātājus, kas vēlas dalīties ar savu pieredzi mākoņdatošanas tehnoloģijās. Vai tā būtu 20 minūšu prezentācija vai īsa uzstāšanās - mēs labprāt uzklausītu!',

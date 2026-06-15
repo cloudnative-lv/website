@@ -21,10 +21,19 @@ const events = readdirSync(EVENTS_DIR)
   .map((f) => yaml.load(readFileSync(path.join(EVENTS_DIR, f), 'utf8')))
   .sort((a, b) => (a.date < b.date ? 1 : -1));
 
+// Date of the last Sunday of `month` (0-indexed) in year `y` — EU DST switches then.
+const lastSunday = (y, month) => {
+  const last = new Date(Date.UTC(y, month + 1, 0));
+  return last.getUTCDate() - last.getUTCDay();
+};
 const rfc822 = (date, time = '18:00') => {
   const [y, m, d] = date.split('-').map(Number);
   const [hh, mm] = time.split(':').map(Number);
-  const dt = new Date(Date.UTC(y, m - 1, d, hh - 3, mm)); // Riga is UTC+2/+3; approximate
+  // Riga: EEST (UTC+3) from the last Sunday of March to the last Sunday of October, else EET (UTC+2).
+  const afterMar = m > 3 || (m === 3 && d >= lastSunday(y, 2));
+  const beforeOct = m < 10 || (m === 10 && d < lastSunday(y, 9));
+  const offset = afterMar && beforeOct ? 3 : 2;
+  const dt = new Date(Date.UTC(y, m - 1, d, hh - offset, mm));
   return dt.toUTCString();
 };
 
