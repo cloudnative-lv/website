@@ -40,8 +40,9 @@ export default function KitIndex() {
         <section className="mt-12">
           <h2 className="mb-1 text-xl font-bold text-burgundy">Platform assets</h2>
           <p className="mb-4 text-sm text-gray-600">
-            Set-once OCG (Open Community Groups) banner strips — upload at the group/community
-            level; all events inherit them.
+            Event-agnostic brand assets, set once per channel: the square logo (profile
+            picture), the LinkedIn / Bluesky / Eventbrite cover banners, and the OCG (Open
+            Community Groups) strips that every event inherits.
           </p>
           <div className="grid gap-6 lg:grid-cols-2">
             {brand.map((a) => {
