@@ -238,7 +238,7 @@ organizer kit page, and the event-page hero/OG image.
 
 All social touchpoints (update in Footer.jsx, JsonLd.jsx, index.html):
 - LinkedIn: https://www.linkedin.com/company/cloud-native-latvia
-- CNCF Community: https://ocgroups.dev/cncf/group/xggmcq8
+- CNCF Community: https://community.cncf.io/cloud-native-latvia/
 - Bluesky: https://bsky.app/profile/cloudnative.lv
 - YouTube: https://www.youtube.com/@CloudNativeLatvia
 - Eventbrite: https://www.eventbrite.com/o/cloud-native-latvia-95498498498

@@ -8,7 +8,7 @@ const siteConfig = {
   email: 'hello@cloudnative.lv',
   socialLinks: [
     'https://www.linkedin.com/company/cloud-native-latvia',
-    'https://ocgroups.dev/cncf/group/xggmcq8',
+    'https://community.cncf.io/cloud-native-latvia/',
     'https://bsky.app/profile/cloudnative.lv',
     'https://www.youtube.com/@CloudNativeLatvia',
     'https://www.eventbrite.com/o/cloud-native-latvia-95498498498',

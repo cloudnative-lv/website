@@ -4,7 +4,7 @@ import {
 
 // Canonical social links — single source for the Footer and the subscribe modal.
 export const SOCIAL_LINKS = [
-  { key: 'cncf', href: 'https://ocgroups.dev/cncf/group/xggmcq8', title: 'CNCF Community', Icon: CncfIcon },
+  { key: 'cncf', href: 'https://community.cncf.io/cloud-native-latvia/', title: 'CNCF Community', Icon: CncfIcon },
   { key: 'linkedin', href: 'https://www.linkedin.com/company/cloud-native-latvia', title: 'LinkedIn', Icon: LinkedInIcon },
   { key: 'bluesky', href: 'https://bsky.app/profile/cloudnative.lv', title: 'Bluesky', Icon: BlueskyIcon },
   { key: 'youtube', href: 'https://www.youtube.com/@CloudNativeLatvia', title: 'YouTube', Icon: YouTubeIcon },

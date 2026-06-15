@@ -18,7 +18,7 @@ export default function SubscribeModal({ isOpen, onClose }) {
 
     // No mailing-list endpoint configured yet: open the CNCF/OCG group page.
     if (!ENDPOINT) {
-      window.open('https://ocgroups.dev/cncf/group/xggmcq8', '_blank', 'noopener');
+      window.open('https://community.cncf.io/cloud-native-latvia/', '_blank', 'noopener');
       setStatus('success');
       setTimeout(() => { setEmail(''); setStatus('idle'); onClose(); }, 2000);
       return;

@@ -124,7 +124,7 @@ regenerates them on every deploy, so you only generate locally to preview/upload
 
 ### 5. Announce on the platforms
 
-- **CNCF / OCG** ([ocgroups.dev](https://ocgroups.dev/cncf/group/xggmcq8)) — create the
+- **CNCF / OCG** ([community.cncf.io](https://community.cncf.io/cloud-native-latvia/)) — create the
   event. The breadcrumb banner (`brand/ocg-banner-*`) is inherited group-wide, so you
   upload it only once, not per event.
 - **Eventbrite** — use `eventbrite*.png` as the cover.
