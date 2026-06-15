@@ -12,4 +12,4 @@ account_id = "2206fc831247e31fb22b657089145789"
 # Forward destinations come from the FORWARD_TO secret (comma-separated), so
 # personal addresses aren't committed:
 #   cd workers/forward && npx wrangler secret put FORWARD_TO
-#   (value e.g. "andrey@extremeautomation.io,linda.arende@gmail.com")
+#   (value: comma-separated forward addresses, e.g. "you@example.com,colleague@example.com")

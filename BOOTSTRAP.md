@@ -32,15 +32,17 @@ workers) — it auto-creates the R2 bucket first.
 - `hello@cloudnative.lv` / `info@cloudnative.lv` are custom addresses forwarded to the
   organizers by the **forward** Email Worker (deployed as `cloudnative-lv-info`;
   `FORWARD_TO` secret).
-- the subscribe worker sends a notification via the `send_email` binding to `NOTIFY_TO`.
-  `send_email` can only deliver to a **verified Email Routing _destination_ address**, so
-  `NOTIFY_TO = andrey@extremeautomation.io` (already verified as the catch-all / andrey@
-  target). `hello@cloudnative.lv` is a Worker *route*, not a destination, so it can't
-  receive worker-sent mail. R2 logging records every subscriber regardless of email.
+- the subscribe worker sends a notification via the `send_email` binding to `NOTIFY_TO`,
+  a **secret** holding one or more **verified Email Routing _destination_ addresses**
+  (comma-separated) — so no personal addresses live in git. `hello@` / `info@cloudnative.lv`
+  are Worker *routes*, not destinations, so they can't receive worker-sent mail directly.
+  R2 logging records every subscriber regardless of email.
 
 ### Worker secrets (`wrangler secret put <NAME>` from the worker's folder)
 - **forward** (CF `cloudnative-lv-info`) → `FORWARD_TO` = comma-separated forward addresses (keeps
   personal addresses out of git).
+- **subscribe** → `NOTIFY_TO` = comma-separated *verified* Email Routing destination
+  addresses (where new-member notifications go; keeps personal addresses out of git).
 
 ## Attendees (local import)
 Eventbrite / OCG / LinkedIn export attendee lists as CSV. Consolidate them into the

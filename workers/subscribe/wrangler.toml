@@ -12,15 +12,15 @@ custom_domain = true
 
 [vars]
 ALLOWED_ORIGINS = "https://cloudnative.lv,http://localhost:5173,http://localhost:4173"
-# send_email can only deliver to *verified* Email Routing destination addresses.
-# NOTIFY_TO is one or more of them, comma-separated. andrey@extremeautomation.io is
-# already verified (the andrey@ / catch-all target). To also reach Linda without putting
-# her address in git, set a NOTIFY_TO *secret* (e.g. "andrey@…,linda…@gmail.com"). To
-# fan out via info@ instead, first add info@cloudnative.lv as a verified destination (its
-# verification email routes to you — click it), then set NOTIFY_TO = "info@cloudnative.lv".
-NOTIFY_TO = "andrey@extremeautomation.io"
 NOTIFY_FROM = "noreply@cloudnative.lv"
 SUBSCRIBERS_KEY = "subscribers.csv"
+
+# NOTIFY_TO is a *secret* (not a var — a same-named var would collide and an auto-deploy
+# could clobber it). It holds one or more *verified* Email Routing destination addresses,
+# comma-separated, so no personal addresses live in git. Set it once:
+#   cd workers/subscribe && npx wrangler secret put NOTIFY_TO
+# send_email only delivers to *verified* destinations; to fan out via info@, verify
+# info@cloudnative.lv as a destination first, then use that as the value.
 
 # R2 bucket that stores subscribers.csv — the single source of truth.
 # Create it once: npx wrangler r2 bucket create cloudnative-lv

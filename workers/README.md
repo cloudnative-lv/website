@@ -18,9 +18,10 @@ is restricted to `ALLOWED_ORIGINS` in `wrangler.toml`.
 1. **R2 bucket:** `npx wrangler r2 bucket create cloudnative-lv` (match
    `bucket_name` in `wrangler.toml`).
 2. **Notification recipient:** `send_email` can only deliver to a **verified Email
-   Routing destination**, so `NOTIFY_TO` is `andrey@extremeautomation.io` (already
-   verified). `hello@cloudnative.lv` is a Worker route, not a destination, so it
-   can't receive worker-sent mail.
+   Routing destination**, so `NOTIFY_TO` is a **secret** with your verified
+   destination address(es), comma-separated (`wrangler secret put NOTIFY_TO`).
+   `hello@cloudnative.lv` is a Worker route, not a destination, so it can't receive
+   worker-sent mail.
 3. **Account id:** set `account_id` in `wrangler.toml`, or pass
    `CLOUDFLARE_ACCOUNT_ID` (the CI workflow does this).
 
@@ -54,7 +55,7 @@ dashboard-managed worker; the Email Routing rules keep pointing at it.
 
 - Set the destinations once (keeps personal addresses out of git):
   `cd workers/forward && npx wrangler secret put FORWARD_TO`
-  (comma-separated, e.g. `andrey@extremeautomation.io,linda.arende@gmail.com`).
+  (comma-separated, e.g. `you@example.com,colleague@example.com`).
 - Deploy: the same **Deploy Workers** action (it's in the matrix), or
   `npx wrangler deploy` locally.
 
