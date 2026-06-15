@@ -19,7 +19,7 @@ export default function EventTitleBanner({ width, height, event, withSpeakers = 
   const roleU = n <= 2 ? 2.5 : n === 3 ? 2.1 : 1.8;
   const gap = (n <= 2 ? 3 : 2) * u;
   const stackTop = (n <= 1 ? 31 : n === 2 ? 27 : 23) * u;
-  const titleTop = (n === 0 ? 59 : n <= 2 ? 73 : 77) * u;
+  const titleTop = (n === 0 ? 59 : n <= 2 ? 72 : 74) * u;
 
   return (
     <BannerFrame width={width} height={height} skylineClass="opacity-25">
@@ -58,9 +58,16 @@ export default function EventTitleBanner({ width, height, event, withSpeakers = 
         </div>
       )}
 
-      {/* Title band — full-bleed, semi-transparent */}
-      <div className="absolute inset-x-0 flex items-center justify-center bg-burgundy/90" style={{ top: `${titleTop}px`, height: `${15 * u}px` }}>
-        <div className="text-center font-bold text-white" style={{ fontSize: `${7 * u}px`, lineHeight: 1.15, paddingLeft: `${5 * u}px`, paddingRight: `${5 * u}px` }}>
+      {/* Title band — full-bleed, semi-transparent; grows taller (with line
+          spacing) for two-line titles, keeps a min height for one-liners. */}
+      <div
+        className="absolute inset-x-0 flex items-center justify-center bg-burgundy/90"
+        style={{ top: `${titleTop}px`, minHeight: `${15 * u}px`, paddingTop: `${2.4 * u}px`, paddingBottom: `${2.4 * u}px` }}
+      >
+        <div
+          className="text-center font-bold text-white"
+          style={{ fontSize: `${7 * u}px`, lineHeight: 1.32, paddingLeft: `${5 * u}px`, paddingRight: `${5 * u}px` }}
+        >
           {cleanTitle(event.title)}
         </div>
       </div>
