@@ -10,11 +10,11 @@ import { barsSvg, lineSvg, tableSvg, SERIES_COLORS } from './charts.mjs';
 import { svgToPng, withPage } from './render.mjs';
 import { renderInfographics } from './infographics.mjs';
 
-// The "followers" stat on the community infographics is the unique people across our owned
-// channels — LinkedIn followers + Eventbrite + OCG attendees — name-deduped (the only field
-// common to all three; see report's cross-channel note). Email-campaign (zoho) and web
-// signups are excluded.
-const FOLLOWER_SOURCES = new Set(['linkedin', 'eventbrite', 'ocg']);
+// The "community" stat on the infographics is the unique people across our owned channels
+// — LinkedIn followers + Eventbrite + OCG attendees — name-deduped (the only field common
+// to all three; see the report's cross-channel note). Email-campaign (zoho) and web signups
+// are excluded.
+const COMMUNITY_SOURCES = new Set(['linkedin', 'eventbrite', 'ocg']);
 
 export const shortLabel = (slug) => { const m = slug.match(/meetup-0*(\d+)/); return m ? `#${m[1]}` : slug; };
 const nameKey = (f, l) => `${lower(transliterate(f))} ${lower(transliterate(l))}`.trim();
@@ -190,10 +190,10 @@ export async function renderCommunityReport({ crmRows, rostersBySlug, eventMeta 
   for (const m of eventMeta.values()) { igSpeakers += (m.speakers || []).length; igTalks += (m.talks || 0); }
   // Unique followers/attendees across LinkedIn + Eventbrite + OCG, deduped by name (the
   // field common to all three; falls back to email/linkedin when there's no full name).
-  const followerKey = (r) => { const n = normName(`${r.first} ${r.last}`); return n.includes(' ') ? n : (lower(r.email) || r.linkedin || ''); };
-  const followers = new Set(crmRows.filter((r) => FOLLOWER_SOURCES.has(r.source)).map(followerKey).filter(Boolean)).size;
+  const communityKey = (r) => { const n = normName(`${r.first} ${r.last}`); return n.includes(' ') ? n : (lower(r.email) || r.linkedin || ''); };
+  const community = new Set(crmRows.filter((r) => COMMUNITY_SOURCES.has(r.source)).map(communityKey).filter(Boolean)).size;
   const igStats = [
-    { value: String(followers), label: 'FOLLOWERS' },
+    { value: String(community), label: 'COMMUNITY' },
     { value: String(eventMeta.size), label: 'EVENTS' },
     { value: String(igSpeakers), label: 'SPEAKERS' },
     { value: String(igTalks), label: 'TALKS' },
@@ -264,7 +264,7 @@ ${retentionBlock}${fansBlock}` : '\n_No per-event rosters yet._\n';
   const infographicsBlock = infographics.length ? `
 ## Community infographics
 
-Share cards (${followers} followers \u00b7 ${eventMeta.size} events \u00b7 ${igSpeakers} speakers \u00b7 ${igTalks} talks) \u2014 pick the format that fits the channel.
+Share cards (${community} community \u00b7 ${eventMeta.size} events \u00b7 ${igSpeakers} speakers \u00b7 ${igTalks} talks) \u2014 pick the format that fits the channel.
 
 ${infographics.map((f) => `![${f.replace(/community-|\.png/g, '')}](${f})`).join('\n')}
 ` : '';
