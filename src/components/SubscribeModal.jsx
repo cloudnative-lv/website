@@ -3,9 +3,7 @@ import { useLanguage } from '../i18n/useLanguage';
 import { SocialLink } from './SocialIcons';
 import { SOCIAL_LINKS } from '../data/socialLinks';
 
-// Set VITE_SUBSCRIBE_ENDPOINT (e.g. a Formspree form URL) to POST emails to a
-// mailing list. Until it's set, we fall back to opening the CNCF/OCG group page.
-const ENDPOINT = import.meta.env.VITE_SUBSCRIBE_ENDPOINT;
+const ENDPOINT = 'https://subscribe.cloudnative.lv';
 
 export default function SubscribeModal({ isOpen, onClose }) {
   const { t } = useLanguage();
@@ -15,15 +13,6 @@ export default function SubscribeModal({ isOpen, onClose }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus('loading');
-
-    // No mailing-list endpoint configured yet: open the CNCF/OCG group page.
-    if (!ENDPOINT) {
-      window.open('https://community.cncf.io/cloud-native-latvia/', '_blank', 'noopener');
-      setStatus('success');
-      setTimeout(() => { setEmail(''); setStatus('idle'); onClose(); }, 2000);
-      return;
-    }
-
     try {
       const res = await fetch(ENDPOINT, {
         method: 'POST',
@@ -83,7 +72,7 @@ export default function SubscribeModal({ isOpen, onClose }) {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
             </div>
-            <p className="text-green-600 font-semibold">{t('subscribe.success')}</p>
+            <p className="text-green-600 font-semibold">{t('subscribe.subscribed')}</p>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-4">

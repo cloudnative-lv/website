@@ -77,7 +77,7 @@ export default function TalkDetail() {
         <ArtifactImage src={`/artifacts/${event.id}/speaker-${talk.index + 1}.png`} alt={`${talk.title} banner`} />
       </div>
 
-      <div className="max-w-5xl mx-auto px-4 py-12 grid md:grid-cols-3 gap-8">
+      <div className="max-w-4xl mx-auto px-4 py-12 grid md:grid-cols-3 gap-8">
         <div className="md:col-span-2 space-y-8">
           {talk.description && (
             <section className="bg-white rounded-2xl shadow-lg p-6">
