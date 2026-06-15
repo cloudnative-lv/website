@@ -10,7 +10,7 @@ const siteConfig = {
   socialLinks: [
     'https://www.linkedin.com/company/cloud-native-latvia',
     'https://community.cncf.io/cloud-native-latvia/',
-    'https://bsky.app/profile/cloudnative.lv',
+    'https://bsky.app/profile/cloudnativelatvia.bsky.social',
     'https://www.youtube.com/@CloudNativeLatvia',
     'https://www.eventbrite.com/o/cloud-native-latvia-95498498498',
     'https://github.com/cloud-native-latvia'
@@ -44,7 +44,7 @@ export function OrganizationJsonLd() {
     '@context': 'https://schema.org',
     '@type': 'Organization',
     name: siteConfig.siteName,
-    alternateName: 'CNCF Latvia',
+    alternateName: 'CNLV',
     url: siteConfig.siteUrl,
     logo: siteConfig.logo,
     description: siteConfig.description,
@@ -134,7 +134,7 @@ export function TalkJsonLd({ event, talk }) {
     '@type': 'Event',
     name: talk.title,
     description: talk.description,
-    startDate: rigaIsoString(event.date, event.startTime || event.time || '18:00'),
+    startDate: rigaIsoString(event.date, event.time || '18:00'),
     endDate: rigaIsoString(event.date, event.endTime || event.time || '23:59'),
     eventStatus: 'https://schema.org/EventScheduled',
     eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',

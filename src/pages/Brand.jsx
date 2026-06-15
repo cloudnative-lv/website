@@ -16,8 +16,6 @@ const LOGOS = [
 const COLORS = [
   { name: 'Burgundy', hex: '#8b1538' },
   { name: 'Pink', hex: '#d4567c' },
-  { name: 'Mark Pink', hex: '#cd4a77' },
-  { name: 'Deep Burgundy', hex: '#9c213b' },
   { name: 'Pink Light', hex: '#fdf2f4', border: true },
   { name: 'Ink', hex: '#1a1a1a' },
 ];

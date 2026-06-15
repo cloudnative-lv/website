@@ -26,7 +26,7 @@ const teamConfigs = [
     photo: '/images/team/andrey.jpg',
     ring: 'ring-burgundy',
     social: {
-      linkedin: 'https://www.linkedin.com/in/andreysadamovich/',
+      linkedin: 'https://www.linkedin.com/in/andreyadamovich/',
       twitter: 'https://x.com/codingandrey'
     }
   }

@@ -110,7 +110,7 @@ export default function TalkDetail() {
             </div>
             <div className="flex items-start gap-3">
               <ClockIcon className="w-5 h-5 text-pink shrink-0 mt-0.5" />
-              <p className="text-gray-700 text-sm">{event.startTime || event.time} - {event.endTime}</p>
+              <p className="text-gray-700 text-sm">{event.time} - {event.endTime}</p>
             </div>
             <div className="flex items-start gap-3">
               <MapPinIcon className="w-5 h-5 text-pink shrink-0 mt-0.5" />

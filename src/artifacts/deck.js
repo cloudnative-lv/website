@@ -7,7 +7,7 @@ import QRCode from 'qrcode';
 
 const BURGUNDY = '8B1538';
 const PINK = 'D4567C';
-const ROSE = 'FFF6F4'; // matches real deck background
+const ROSE = 'FDF2F4'; // bg-rose-50, matches the banners/infographics cream
 const W = 13.333; // LAYOUT_WIDE inches (16:9)
 const H = 7.5;
 const FONT_TITLE = 'Lexend Light';

@@ -85,7 +85,7 @@ function buildHtmlDeck(event) {
 
   const html = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(cleanTitle(event.title))} — Cloud Native Latvia</title><style>
 @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;700&display=swap');
-:root{--burgundy:#8b1538;--pink:#d4567c;--rose:#fff6f4}
+:root{--burgundy:#8b1538;--pink:#d4567c;--rose:#fdf2f4}
 *{box-sizing:border-box;margin:0}html,body{height:100%}
 body{font-family:'Lexend',system-ui,sans-serif;scroll-snap-type:y mandatory;overflow-y:scroll}
 section{min-height:100vh;scroll-snap-align:start;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:8vh 10vw;background:var(--rose);text-align:center}
