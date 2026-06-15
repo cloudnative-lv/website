@@ -6,6 +6,7 @@ import { useLanguage } from '../i18n/useLanguage';
 // Logo variants. `dark` tiles preview on the deep rose background.
 const LOGOS = [
   { name: 'Primary lockup', file: '/images/logo-horizontal.svg', dark: false },
+  { name: 'Stacked lockup', file: '/images/logo-stacked.svg', dark: false },
   { name: 'Mark', file: '/images/logo.svg', dark: false },
   { name: 'Light (on dark)', file: '/images/logo_light.svg', dark: true },
   { name: 'Mono black', file: '/images/brand/logo-horizontal-mono-black.svg', dark: false },
