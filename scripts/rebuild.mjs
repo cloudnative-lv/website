@@ -140,8 +140,12 @@ if (!DRY) {
 
 // --- reports from in-memory data ---
 const rostersBySlug = new Map();
-for (const e of events) if (rosters.has(e.slug)) rostersBySlug.set(e.slug, [...rosters.get(e.slug).values()].map((r) => ({ email: r.email, name: r.name })));
-const cr = await renderCommunityReport({ crmRows: [...crm.values()], rostersBySlug, OUT: 'data/reports/subscribers' });
+const eventMeta = new Map();
+for (const e of events) {
+  if (e.date) eventMeta.set(e.slug, { date: e.date });
+  if (rosters.has(e.slug)) rostersBySlug.set(e.slug, [...rosters.get(e.slug).values()].map((r) => ({ email: r.email, name: r.name })));
+}
+const cr = await renderCommunityReport({ crmRows: [...crm.values()], rostersBySlug, eventMeta, OUT: 'data/reports/subscribers' });
 console.log(`Community report: ${cr.uniquePeople} people (rows ${cr.total}), ${cr.totalRegistrations} registrations, ${cr.repeatAttendees} repeat.`);
 
 const feedbackBySlug = new Map();

@@ -26,7 +26,8 @@ export function parseFeedbackCsv(text) {
 
 // crmRows: [{email,first,last,linkedin,source,event,added}]
 // rostersBySlug: Map(slug -> [{email,name}]) in chronological order
-export async function renderCommunityReport({ crmRows, rostersBySlug, OUT }) {
+// eventMeta: Map(slug -> {date}) — optional, enriches labels with dates
+export async function renderCommunityReport({ crmRows, rostersBySlug, eventMeta = new Map(), OUT }) {
   await mkdir(OUT, { recursive: true });
   const total = crmRows.length;
   const withEmail = crmRows.filter((r) => r.email).length;
@@ -43,79 +44,167 @@ export async function renderCommunityReport({ crmRows, rostersBySlug, OUT }) {
   for (const r of crmRows) { const mo = (r.added || '').slice(0, 7); if (/^\d{4}-\d{2}$/.test(mo)) byMonth[mo] = (byMonth[mo] || 0) + 1; }
   let cum = 0;
   const growth = Object.keys(byMonth).sort().map((mo) => ({ label: mo.slice(2), value: (cum += byMonth[mo]) }));
+  const bulkMonths = Object.entries(byMonth).filter(([, n]) => n > total * 0.3).map(([mo]) => mo);
 
+  const attendeeId = (a) => {
+    const email = lower(a.email || '');
+    const name = norm(a.name || '');
+    return email || (name ? `name:${lower(transliterate(name))}` : '');
+  };
+  const fmtDate = (slug) => {
+    const d = eventMeta.get(slug)?.date;
+    if (!d) return '';
+    const dt = new Date(d + 'T12:00:00');
+    return dt.toLocaleDateString('en', { month: 'short', day: 'numeric', year: 'numeric' });
+  };
+
+  // --- Per-event analysis ---
   const perEvent = [];
   const eventsByAttendee = new Map();
   const nameByAttendee = new Map();
   for (const [slug, roster] of rostersBySlug) {
     let n = 0;
     for (const a of roster) {
-      const email = lower(a.email || '');
-      const name = norm(a.name || '');
-      const id = email || (name ? `name:${lower(transliterate(name))}` : '');
+      const id = attendeeId(a);
       if (!id) continue;
       if (!eventsByAttendee.has(id)) eventsByAttendee.set(id, new Set());
       eventsByAttendee.get(id).add(shortLabel(slug));
+      const name = norm(a.name || '');
       if (name && !nameByAttendee.has(id)) nameByAttendee.set(id, name);
       n++;
     }
-    perEvent.push({ label: shortLabel(slug), n });
+    perEvent.push({ label: shortLabel(slug), slug, n });
   }
   const totalRegistrations = perEvent.reduce((a, e) => a + e.n, 0);
+  const avgRegistrations = perEvent.length ? totalRegistrations / perEvent.length : 0;
   const uniqueAttendees = eventsByAttendee.size;
   const eventsPer = [...eventsByAttendee.values()].map((s) => s.size);
   const maxEv = Math.min(6, Math.max(1, ...eventsPer, 1));
   const repeatLabels = Array.from({ length: maxEv }, (_, i) => (i + 1 < 6 ? String(i + 1) : '6+'));
   const repeatDist = repeatLabels.map((lab, i) => eventsPer.filter((v) => (lab === '6+' ? v >= 6 : v === i + 1)).length);
   const repeatAttendees = eventsPer.filter((v) => v >= 2).length;
+
+  // --- New vs returning per event ---
+  const seenBefore = new Set();
+  const newVsReturn = [];
+  for (const [slug, roster] of rostersBySlug) {
+    const currentIds = new Set();
+    let newCount = 0, retCount = 0;
+    for (const a of roster) {
+      const id = attendeeId(a);
+      if (!id) continue;
+      currentIds.add(id);
+      if (seenBefore.has(id)) retCount++;
+      else newCount++;
+    }
+    newVsReturn.push({ label: shortLabel(slug), new: newCount, returning: retCount });
+    for (const id of currentIds) seenBefore.add(id);
+  }
+
+  // --- Retention between consecutive events ---
+  const eventIdSets = [];
+  for (const [slug, roster] of rostersBySlug) {
+    const ids = new Set();
+    for (const a of roster) { const id = attendeeId(a); if (id) ids.add(id); }
+    eventIdSets.push({ label: shortLabel(slug), ids });
+  }
+  const retention = [];
+  for (let i = 1; i < eventIdSets.length; i++) {
+    const prev = eventIdSets[i - 1], curr = eventIdSets[i];
+    const retained = [...prev.ids].filter((id) => curr.ids.has(id)).length;
+    retention.push({ from: prev.label, to: curr.label, retained, prevSize: prev.ids.size, rate: prev.ids.size ? retained / prev.ids.size : 0 });
+  }
+
+  // --- Top fans with per-event attendance grid ---
+  const allEventLabels = perEvent.map((e) => e.label);
+  const organizers = new Set(['andrey adamovich', 'linda arende']);
   const topFans = [...eventsByAttendee.entries()]
-    .map(([id, set]) => ({ name: nameByAttendee.get(id) || id, count: set.size, events: [...set].sort((a, b) => +a.slice(1) - +b.slice(1)) }))
-    .filter((f) => f.count >= 2)
+    .map(([id, set]) => ({ name: nameByAttendee.get(id) || id, count: set.size, attended: new Set(set) }))
+    .filter((f) => f.count >= 2 && !organizers.has(lower(transliterate(f.name))))
     .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name))
     .slice(0, 15);
 
+  // --- Charts ---
   await svgToPng(barsSvg({ title: 'Contacts by source', groups: sources.map(([s]) => s), series: [{ name: 'contacts', color: SERIES_COLORS[0], values: sources.map(([, n]) => n) }] }), path.join(OUT, 'by-source.png'));
   await svgToPng(barsSvg({ title: 'Contactability', groups: ['CRM rows', 'unique', 'with email', 'with LinkedIn'], series: [{ name: 'contacts', color: SERIES_COLORS[1], values: [total, uniquePeople, withEmail, withLinkedin] }], width: 980 }), path.join(OUT, 'contactability.png'));
   if (growth.length) await svgToPng(lineSvg({ title: 'CRM growth (cumulative)', points: growth, yLabel: 'contacts' }), path.join(OUT, 'growth.png'));
   if (perEvent.length) {
     await svgToPng(barsSvg({ title: 'Registrations per event', groups: perEvent.map((e) => e.label), series: [{ name: 'registrations', color: SERIES_COLORS[0], values: perEvent.map((e) => e.n) }] }), path.join(OUT, 'registrations-by-event.png'));
+    if (newVsReturn.length) {
+      await svgToPng(barsSvg({ title: 'New vs returning attendees', groups: newVsReturn.map((e) => e.label), series: [
+        { name: 'new', color: SERIES_COLORS[0], values: newVsReturn.map((e) => e.new) },
+        { name: 'returning', color: SERIES_COLORS[1], values: newVsReturn.map((e) => e.returning) },
+      ] }), path.join(OUT, 'new-vs-returning.png'));
+    }
     await svgToPng(barsSvg({ title: 'Events attended per person', groups: repeatLabels.map((l) => `${l} event${l === '1' ? '' : 's'}`), series: [{ name: 'people', color: SERIES_COLORS[1], values: repeatDist }] }), path.join(OUT, 'repeat-registrations.png'));
-    if (topFans.length) await svgToPng(tableSvg({ title: 'Most active fans (>=2 events)', headers: ['Person', 'Events', 'Which'], rows: topFans.map((f) => [f.name, String(f.count), f.events.join(' ')]) }), path.join(OUT, 'active-fans-table.png'));
+    if (retention.length) {
+      await svgToPng(barsSvg({ title: 'Retention rate (event to event)', groups: retention.map((r) => `${r.from}\u2009\u2192\u2009${r.to}`), series: [
+        { name: 'rate %', color: SERIES_COLORS[0], values: retention.map((r) => +(r.rate * 100).toFixed(0)) },
+      ], yMax: 100, fmt: (v) => `${Math.round(v)}%` }), path.join(OUT, 'retention.png'));
+    }
+    if (topFans.length) {
+      const fansCols = [4, 1.5, ...allEventLabels.map(() => 1)];
+      await svgToPng(tableSvg({ title: 'Most active community members', headers: ['Person', 'Events', ...allEventLabels],
+        rows: topFans.map((f) => [f.name, String(f.count), ...allEventLabels.map((l) => f.attended.has(l) ? '\u25CF' : '\u2013')]),
+        colWeights: fansCols }), path.join(OUT, 'active-fans-table.png'));
+    }
   }
 
+  // --- Markdown report ---
   const pct = (n, d = total) => `${Math.round((n / (d || 1)) * 100)}%`;
+  const genDate = new Date().toISOString().slice(0, 10);
+
+  const retentionBlock = retention.length ? `
+### Retention
+
+Event-to-event retention: what share of attendees from one event register for the next.
+
+| Transition | Prev | Retained | Rate |
+|---|---:|---:|---:|
+${retention.map((r) => `| ${r.from} \u2192 ${r.to} | ${r.prevSize} | ${r.retained} | ${(r.rate * 100).toFixed(0)}% |`).join('\n')}
+
+![Retention](retention.png)
+` : '';
+
+  const fansBlock = topFans.length ? `
+### Most active community members (\u22652 events)
+
+| Person | Events | ${allEventLabels.join(' | ')} |
+|---|---:|${allEventLabels.map(() => ':---:').join('|')}|
+${topFans.map((f) => `| ${f.name} | ${f.count} | ${allEventLabels.map((l) => f.attended.has(l) ? '\u25CF' : '\u2013').join(' | ')} |`).join('\n')}
+
+![Active community members](active-fans-table.png)
+` : '';
+
   const regBlock = perEvent.length ? `
 ## Registrations
 
 - **Total registrations:** ${totalRegistrations} across ${perEvent.length} events
+- **Average per event:** ${avgRegistrations.toFixed(1)}
 - **Unique attendees:** ${uniqueAttendees}
-- **Repeat attendees (>=2 events):** ${repeatAttendees} (${pct(repeatAttendees, uniqueAttendees)} of attendees)
+- **Repeat attendees (\u22652 events):** ${repeatAttendees} (${pct(repeatAttendees, uniqueAttendees)} of attendees)
 
-| Event | Registrations |
-|---|---:|
-${perEvent.map((e) => `| ${e.label} | ${e.n} |`).join('\n')}
+| Event | Date | Registrations | New | Returning |
+|---|---|---:|---:|---:|
+${perEvent.map((e, i) => `| ${e.label} | ${fmtDate(e.slug)} | ${e.n} | ${newVsReturn[i]?.new ?? '\u2013'} | ${newVsReturn[i]?.returning ?? '\u2013'} |`).join('\n')}
 
 ![Registrations per event](registrations-by-event.png)
+![New vs returning](new-vs-returning.png)
 ![Events attended per person](repeat-registrations.png)
+${retentionBlock}${fansBlock}` : '\n_No per-event rosters yet._\n';
 
-### Most active fans (>=2 events)
+  const bulkNote = bulkMonths.length ? `\n> **Note:** The growth chart includes bulk imports (${bulkMonths.join(', ')}). Organic growth is steadier than the curve suggests.\n` : '';
 
-| Person | Events | Which |
-|---|---:|---|
-${topFans.map((f) => `| ${f.name} | ${f.count} | ${f.events.join(' ')} |`).join('\n') || '| _none yet_ | | |'}
-${topFans.length ? '\n![Active fans](active-fans-table.png)' : ''}
-` : '\n_No per-event rosters yet._\n';
+  const md = `# Cloud Native Latvia \u2014 community & registrations report
 
-  const md = `# Cloud Native Latvia — community & registrations report
-
-_Generated from R2 \`subscribers.csv\` + \`attendees/<slug>.csv\`._
+_Generated ${genDate} from R2 \`subscribers.csv\` + \`attendees/<slug>.csv\`._
 
 ## Community
 
 - **Community size (unique people):** ${uniquePeople}
 - **CRM rows (all source touchpoints):** ${total}
-- **Duplicate contacts (same person across sources):** ${duplicateContacts} (${pct(duplicateContacts)}) — reconcile with \`npm run crm:cleanup\`
-- **With email:** ${withEmail} (${pct(withEmail)}) · **With LinkedIn:** ${withLinkedin} (${pct(withLinkedin)})
+- **Duplicate contacts (same person across sources):** ${duplicateContacts} (${pct(duplicateContacts)}) \u2014 reconcile with \`npm run crm:cleanup\`
+- **With email:** ${withEmail} (${pct(withEmail)}) \u00B7 **With LinkedIn:** ${withLinkedin} (${pct(withLinkedin)})
 
 ### By source
 
@@ -125,7 +214,7 @@ ${sources.map(([s, n]) => `| ${s} | ${n} |`).join('\n')}
 
 ![By source](by-source.png)
 ![Contactability](contactability.png)
-${growth.length ? '\n![Growth](growth.png)\n' : ''}${regBlock}`;
+${growth.length ? `\n![Growth](growth.png)${bulkNote}` : ''}${regBlock}`;
   await writeFile(path.join(OUT, 'community-report.md'), md);
   return { total, uniquePeople, totalRegistrations, repeatAttendees, sources: sources.length };
 }

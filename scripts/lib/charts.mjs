@@ -7,6 +7,15 @@ const C = {
 };
 export const SERIES_COLORS = [C.burgundy, C.pink, C.rose];
 
+function niceMax(rawMax, ticks = 5) {
+  if (rawMax <= 0) return ticks;
+  const rough = rawMax / ticks;
+  const mag = Math.pow(10, Math.floor(Math.log10(rough)));
+  const r = rough / mag;
+  const nice = r <= 1 ? 1 : r <= 2 ? 2 : r <= 5 ? 5 : 10;
+  return nice * mag * ticks;
+}
+
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
 function frame({ width, height, title }) {
@@ -23,7 +32,7 @@ export function barsSvg({ title, groups, series, yMax, yLabel = '', width = 1100
   const m = { top: title ? 84 : 40, right: 40, bottom: 96, left: 84 };
   const plotW = width - m.left - m.right;
   const plotH = height - m.top - m.bottom;
-  const max = yMax ?? Math.max(1, ...series.flatMap((s) => s.values));
+  const max = yMax ?? niceMax(Math.max(1, ...series.flatMap((s) => s.values)));
   const y = (v) => m.top + plotH - (v / max) * plotH;
   const groupW = plotW / groups.length;
   const n = series.length;
@@ -65,7 +74,7 @@ export function lineSvg({ title, points, yLabel = '', width = 1100, height = 560
   const m = { top: title ? 84 : 40, right: 40, bottom: 96, left: 84 };
   const plotW = width - m.left - m.right;
   const plotH = height - m.top - m.bottom;
-  const max = Math.max(1, ...points.map((p) => p.value));
+  const max = niceMax(Math.max(1, ...points.map((p) => p.value)));
   const x = (i) => m.left + (points.length === 1 ? plotW / 2 : (plotW * i) / (points.length - 1));
   const y = (v) => m.top + plotH - (v / max) * plotH;
   let s = '';
@@ -89,12 +98,18 @@ export function lineSvg({ title, points, yLabel = '', width = 1100, height = 560
 }
 
 // A table image. headers: string[]; rows: string[][].
-export function tableSvg({ title, headers, rows, width = 1100, highlightLast = false }) {
+// colWeights: optional number[] proportional column widths (e.g. [3,1,1,1] = first col 3x wider).
+export function tableSvg({ title, headers, rows, width = 1100, highlightLast = false, colWeights }) {
   const top = title ? 84 : 30;
   const headH = 56, rowH = 52;
   const height = top + headH + rows.length * rowH + 30;
-  const mx = 30, tableW = width - mx * 2, cols = headers.length, colW = tableW / cols;
-  const cellX = (i) => mx + colW * i + (i === 0 ? 18 : colW / 2);
+  const mx = 30, tableW = width - mx * 2, cols = headers.length;
+  const w = colWeights || Array(cols).fill(1);
+  const wSum = w.reduce((a, b) => a + b, 0);
+  const colStarts = []; let cx = 0;
+  for (let i = 0; i < cols; i++) { colStarts.push(cx); cx += (w[i] / wSum) * tableW; }
+  const colW = (i) => (w[i] / wSum) * tableW;
+  const cellX = (i) => mx + colStarts[i] + (i === 0 ? 18 : colW(i) / 2);
   const anchor = (i) => (i === 0 ? 'start' : 'middle');
   let s = `<rect x="${mx}" y="${top}" width="${tableW}" height="${headH}" rx="8" fill="${C.burgundy}"/>`;
   headers.forEach((h, i) => {

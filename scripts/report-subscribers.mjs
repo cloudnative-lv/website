@@ -12,10 +12,12 @@ if (!crmRows.length) { console.error('CRM subscribers.csv is empty (or not creat
 
 const events = (await readEvents()).sort((a, b) => (a.date || '').localeCompare(b.date || ''));
 const rostersBySlug = new Map();
+const eventMeta = new Map();
 for (const e of events) {
+  if (e.date) eventMeta.set(e.slug, { date: e.date });
   const map = readRoster(`attendees/${e.slug}.csv`);
   if (map.size) rostersBySlug.set(e.slug, [...map.values()].map((r) => ({ email: r.email, name: r.name })));
 }
 
-const r = await renderCommunityReport({ crmRows, rostersBySlug, OUT: 'data/reports/subscribers' });
+const r = await renderCommunityReport({ crmRows, rostersBySlug, eventMeta, OUT: 'data/reports/subscribers' });
 console.log(`Wrote data/reports/subscribers/ — community ${r.uniquePeople} (rows ${r.total}), registrations ${r.totalRegistrations} over ${rostersBySlug.size} events, repeat ${r.repeatAttendees}.`);
