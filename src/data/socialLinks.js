@@ -8,8 +8,8 @@ export const SOCIAL_LINKS = [
   { key: 'linkedin', href: 'https://www.linkedin.com/company/cloud-native-latvia', title: 'LinkedIn', Icon: LinkedInIcon },
   { key: 'bluesky', href: 'https://bsky.app/profile/cloudnativelatvia.bsky.social', title: 'Bluesky', Icon: BlueskyIcon },
   { key: 'youtube', href: 'https://www.youtube.com/@CloudNativeLatvia', title: 'YouTube', Icon: YouTubeIcon },
-  { key: 'eventbrite', href: 'https://www.eventbrite.com/o/cloud-native-latvia-95498498498', title: 'Eventbrite', Icon: EventbriteIcon },
-  { key: 'github', href: 'https://github.com/cloud-native-latvia', title: 'GitHub', Icon: GitHubIcon },
+  { key: 'eventbrite', href: 'https://www.eventbrite.com/o/cloud-native-latvia-114451584951', title: 'Eventbrite', Icon: EventbriteIcon },
+  { key: 'github', href: 'https://github.com/cloudnative-lv', title: 'GitHub', Icon: GitHubIcon },
   { key: 'email', href: 'mailto:hello@cloudnative.lv', title: 'Email', Icon: EmailIcon },
   { key: 'rss', href: '/feed.xml', title: 'RSS Feed', Icon: RssIcon },
 ];

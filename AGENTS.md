@@ -241,8 +241,8 @@ All social touchpoints (update in Footer.jsx, JsonLd.jsx, index.html):
 - CNCF Community: https://community.cncf.io/cloud-native-latvia/
 - Bluesky: https://bsky.app/profile/cloudnativelatvia.bsky.social
 - YouTube: https://www.youtube.com/@CloudNativeLatvia
-- Eventbrite: https://www.eventbrite.com/o/cloud-native-latvia-95498498498
-- GitHub: https://github.com/cloud-native-latvia
+- Eventbrite: https://www.eventbrite.com/o/cloud-native-latvia-114451584951
+- GitHub: https://github.com/cloudnative-lv
 - Email: hello@cloudnative.lv
 
 ## Code Style
