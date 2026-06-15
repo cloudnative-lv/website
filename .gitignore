@@ -29,3 +29,11 @@ playwright/.cache/
 *.njsproj
 *.sln
 *.sw?
+eventbrite.yml
+
+# Local ops secrets/config
+.env
+.env.*
+!.env.example
+
+data
