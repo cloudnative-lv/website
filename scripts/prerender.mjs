@@ -13,6 +13,16 @@ import path from 'node:path';
 const BASE = process.env.ARTIFACT_BASE || 'http://localhost:4173';
 const DIST = path.resolve('dist');
 
+// Cache-busting version stamped onto the social-preview image URLs (og:image /
+// twitter:image) baked below. LinkedIn (and other crawlers) cache a scraped image
+// by URL and will NOT re-fetch it on re-scrape unless the URL changes — so when we
+// regenerate an artifact at the same path, an old downscaled copy keeps showing.
+// A per-build token gives every deploy a fresh image URL, so crawlers always
+// re-fetch at full resolution. Static hosting ignores the query string, so the
+// file still resolves. Override with BUILD_ID for reproducible output.
+const BUILD_ID = process.env.BUILD_ID || Date.now().toString(36);
+const withVersion = (url) => (url ? `${url}${url.includes('?') ? '&' : '?'}v=${BUILD_ID}` : url);
+
 const template = await readFile(path.join(DIST, 'index.html'), 'utf8');
 const esc = (s) =>
   String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -25,10 +35,11 @@ function inject(html, m) {
   repl(/(<meta property="og:title" content=")[^"]*(")/, m.title);
   repl(/(<meta property="og:description" content=")[^"]*(")/, m.description);
   repl(/(<meta property="og:url" content=")[^"]*(")/, m.url);
-  repl(/(<meta property="og:image" content=")[^"]*(")/, m.image);
+  const imageV = withVersion(m.image);
+  repl(/(<meta property="og:image" content=")[^"]*(")/, imageV);
   repl(/(<meta name="twitter:title" content=")[^"]*(")/, m.title);
   repl(/(<meta name="twitter:description" content=")[^"]*(")/, m.description);
-  repl(/(<meta name="twitter:image" content=")[^"]*(")/, m.image);
+  repl(/(<meta name="twitter:image" content=")[^"]*(")/, imageV);
   repl(/(<link rel="canonical" href=")[^"]*(")/, m.url);
   // Replace the property meta if present in the template, else append it (the static
   // <head> has og:type but not og:image:width/height or article:published_time).
