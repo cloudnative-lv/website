@@ -1,5 +1,5 @@
 import { useParams, Link, Navigate } from 'react-router-dom';
-import { getEventBySlug, getEventTalks } from '../data/events';
+import { getEventBySlug, getEventTalks, rigaIsoString } from '../data/events';
 import EventQRCode from '../components/EventQRCode';
 import EventPhotoGallery from '../components/EventPhotoGallery';
 import SpeakerBio from '../components/SpeakerBio';
@@ -49,6 +49,8 @@ export default function EventDetail() {
         keywords={event.tags || []}
         path={`/events/${event.slug}`}
         image={`/artifacts/${event.id}/og.png`}
+        type="article"
+        publishedTime={rigaIsoString(event.date, event.time)}
       />
       <EventJsonLd event={event} />
       <BreadcrumbJsonLd items={[{ name: t('nav.home'), path: '/' }, { name: t('nav.events'), path: '/events' }, { name: event.title, path: `/events/${event.slug}` }]} />

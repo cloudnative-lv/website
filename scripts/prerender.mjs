@@ -30,6 +30,18 @@ function inject(html, m) {
   repl(/(<meta name="twitter:description" content=")[^"]*(")/, m.description);
   repl(/(<meta name="twitter:image" content=")[^"]*(")/, m.image);
   repl(/(<link rel="canonical" href=")[^"]*(")/, m.url);
+  // Replace the property meta if present in the template, else append it (the static
+  // <head> has og:type but not og:image:width/height or article:published_time).
+  const setMeta = (prop, val) => {
+    const re = new RegExp(`(<meta property="${prop}" content=")[^"]*(")`);
+    out = re.test(out)
+      ? out.replace(re, (_, p1, p2) => `${p1}${esc(val)}${p2}`)
+      : out.replace('</head>', `    <meta property="${prop}" content="${esc(val)}" />\n  </head>`);
+  };
+  setMeta('og:type', m.type || 'website');
+  setMeta('og:image:width', m.imageWidth || '1200');
+  setMeta('og:image:height', m.imageHeight || '630');
+  if (m.published) setMeta('article:published_time', m.published);
   // Bake the route's JSON-LD (Organization/Event/Talk/Person/Breadcrumb …) into the
   // static <head> so crawlers that don't run JS still see the structured data.
   if (m.jsonld?.length) {
@@ -66,6 +78,10 @@ for (const route of routes) {
       description: g('meta[name="description"]'),
       url: g('link[rel="canonical"]', 'href') || g('meta[property="og:url"]'),
       image: g('meta[property="og:image"]'),
+      type: g('meta[property="og:type"]'),
+      imageWidth: g('meta[property="og:image:width"]'),
+      imageHeight: g('meta[property="og:image:height"]'),
+      published: g('meta[property="article:published_time"]'),
       jsonld: Array.from(document.querySelectorAll('script[type="application/ld+json"]')).map((s) => s.textContent),
     };
   });

@@ -23,7 +23,11 @@ export default function SEO({
   keywords = [],
   path = '',
   image = null,
-  noindex = false
+  noindex = false,
+  type = 'website',
+  publishedTime = null,
+  imageWidth = 1200,
+  imageHeight = 630
 }) {
   const { language } = useLanguage();
 
@@ -60,9 +64,11 @@ export default function SEO({
     updateMeta('og:title', fullTitle, true);
     updateMeta('og:description', fullDescription, true);
     updateMeta('og:url', canonicalUrl, true);
+    updateMeta('og:type', type, true);
     updateMeta('og:image', ogImage, true);
-    updateMeta('og:image:width', '1200', true);
-    updateMeta('og:image:height', '630', true);
+    updateMeta('og:image:width', String(imageWidth), true);
+    updateMeta('og:image:height', String(imageHeight), true);
+    updateMeta('article:published_time', publishedTime || '', true);
     updateMeta('twitter:title', fullTitle);
     updateMeta('twitter:description', fullDescription);
     updateMeta('twitter:image', ogImage);
@@ -74,7 +80,7 @@ export default function SEO({
     }
     
     document.documentElement.lang = language;
-  }, [fullTitle, fullDescription, allKeywords, canonicalUrl, ogImage, language, noindex]);
+  }, [fullTitle, fullDescription, allKeywords, canonicalUrl, ogImage, language, noindex, type, publishedTime, imageWidth, imageHeight]);
 
   return null;
 }

@@ -1,5 +1,5 @@
 import { useParams, Link, Navigate } from 'react-router-dom';
-import { getEventBySlug, getTalk } from '../data/events';
+import { getEventBySlug, getTalk, rigaIsoString } from '../data/events';
 import SpeakerBio from '../components/SpeakerBio';
 import SlidesLink from '../components/SlidesLink';
 import ArtifactImage from '../components/ArtifactImage';
@@ -49,6 +49,10 @@ export default function TalkDetail() {
         keywords={event.tags || []}
         path={`/events/${event.slug}/talks/${talk.talkSlug}`}
         image={`/artifacts/${event.id}/speaker-${talk.index + 1}.png`}
+        imageWidth={1280}
+        imageHeight={720}
+        type="article"
+        publishedTime={rigaIsoString(event.date, event.time)}
       />
       <TalkJsonLd event={event} talk={talk} />
       <BreadcrumbJsonLd
