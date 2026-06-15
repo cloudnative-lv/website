@@ -39,12 +39,21 @@ export default {
     if (![overall, talks, organization].every((r) => RATING_RE.test(r))) return json({ error: "invalid rating" }, 400);
     if (!(overall || talks || organization || topics.trim() || comments.trim())) return json({ error: "empty feedback" }, 400);
 
-    // Append a CSV row (text fields quoted per RFC 4180).
+    const ts = new Date().toISOString();
+    const prefix = env.FEEDBACK_PREFIX || "feedback/";
+
+    // 1) Persist the raw submission as an immutable per-event JSON record FIRST, so a
+    //    failed or garbled CSV append can always be re-derived. The key never collides.
+    await env.FEEDBACK.put(`${prefix}incoming/${event}/${ts}_${crypto.randomUUID()}.json`,
+      JSON.stringify({ ts, event, overall, talks, organization, topics, comments }),
+      { httpMetadata: { contentType: "application/json" } });
+
+    // 2) Then inject it into the aggregate feedback/<event>.csv (text fields quoted, RFC 4180).
     const q = (s) => `"${String(s).replace(/"/g, '""')}"`;
-    const key = `${env.FEEDBACK_PREFIX || "feedback/"}${event}.csv`;
+    const key = `${prefix}${event}.csv`;
     const existing = await env.FEEDBACK.get(key);
     const csv = existing ? await existing.text() : HEADER;
-    const row = `${new Date().toISOString()},${overall},${talks},${organization},${q(topics)},${q(comments)}\n`;
+    const row = `${ts},${overall},${talks},${organization},${q(topics)},${q(comments)}\n`;
     await env.FEEDBACK.put(key, csv + row, { httpMetadata: { contentType: "text/csv" } });
     return json({ ok: true });
   },

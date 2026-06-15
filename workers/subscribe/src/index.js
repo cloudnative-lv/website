@@ -1,7 +1,9 @@
 // Cloudflare Worker: community signup endpoint for cloudnative.lv.
 //
 // POST { email } ->
-//   1. append `email,timestamp,source` to subscribers.csv in R2 (source of truth)
+//   1. append a row to subscribers.csv in R2 — the common CRM and source of truth
+//      (schema: email,first,last,linkedin,source,event,added; a web signup fills
+//      only email + source=web + added, leaving the rest for the local CRM ops)
 //   2. notify the organizers via the Email Routing send_email binding
 //
 // A hidden `hp` honeypot field + strict validation guard against spam; CORS is
@@ -35,14 +37,27 @@ export default {
     const email = String(body.email || "").trim().toLowerCase();
     if (!EMAIL_RE.test(email) || email.length > 254) return json({ error: "invalid email" }, 400);
 
-    // Append to the CSV in R2 (read-modify-write; signups are low volume).
+    const ts = new Date().toISOString();
+
+    // 1) Persist the raw signup as an immutable per-submission JSON record FIRST, so the
+    //    CRM CSV can always be re-derived even if the read-modify-write below fails.
+    await env.SUBSCRIBERS.put(`subscribers/incoming/${ts}_${crypto.randomUUID()}.json`,
+      JSON.stringify({ ts, email, source: "web" }),
+      { httpMetadata: { contentType: "application/json" } });
+
+    // 2) Then inject into the CRM CSV (read-modify-write; signups are low volume).
     const key = env.SUBSCRIBERS_KEY || "subscribers.csv";
+    const HEADER = "email,first,last,linkedin,source,event,added";
     const existing = await env.SUBSCRIBERS.get(key);
-    const csv = existing ? await existing.text() : "email,timestamp,source\n";
+    const csv = existing ? await existing.text() : HEADER + "\n";
+    // Dedup on the email column (col 0). Blank-email rows (LinkedIn/OCG followers added
+    // by the local CRM ops) start with "," so they never match a real signup and survive
+    // the read-modify-write. A legacy email,timestamp,source file is normalized to the
+    // CRM schema the next time a local op writes subscribers.csv.
     const duplicate = csv.split("\n").some((line) => line.slice(0, Math.max(0, line.indexOf(","))) === email);
 
     if (!duplicate) {
-      const next = `${csv}${email},${new Date().toISOString()},website\n`;
+      const next = `${csv}${email},,,,web,,${ts.slice(0, 10)}\n`;
       await env.SUBSCRIBERS.put(key, next, { httpMetadata: { contentType: "text/csv" } });
       await notify(env, email).catch((err) => console.error("notify failed:", err));
     }

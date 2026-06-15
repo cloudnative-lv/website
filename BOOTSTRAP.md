@@ -10,10 +10,15 @@ Cloudflare account that owns the **cloudnative.lv** zone (account id
 - Enabled R2 on the account (Dashboard → R2 → enable; required once).
 - Created the bucket: `npx wrangler r2 bucket create cloudnative-lv`.
 - Objects (the source of truth):
-  - `subscribers.csv` — newsletter subscribers (subscribe worker).
+  - `subscribers.csv` — the **common CRM**: one accumulating contact list
+    (`email,first,last,linkedin,source,event,added`) merged from the website subscribe
+    form plus every local import (Eventbrite, LinkedIn, OCG, Zoho, …).
   - `feedback/<event-slug>.csv` — per-event feedback (feedback worker).
-  - `attendees/<event-slug>.csv` — per-event attendees, imported locally with
-    `node scripts/import-attendees.mjs` (see **Attendees** below).
+  - `attendees/<event-slug>.csv` — per-event roster, imported locally (see
+    **Local operations** below).
+  - `subscribers/incoming/*.json` and `feedback/incoming/<slug>/*.json` — immutable raw
+    per-submission records the workers write **before** updating the CSVs, so the CSVs can
+    always be re-derived (data-integrity log).
 
 ### Workers (`workers/`, deployed with wrangler)
 Each sets `account_id` + `workers_dev = false` and is served under cloudnative.lv:
@@ -44,19 +49,14 @@ workers) — it auto-creates the R2 bucket first.
 - **subscribe** → `NOTIFY_TO` = comma-separated *verified* Email Routing destination
   addresses (where new-member notifications go; keeps personal addresses out of git).
 
-## Attendees (local import)
-Eventbrite / OCG / LinkedIn export attendee lists as CSV. Consolidate them into the
-R2 source of truth with the local tool (no worker — run it when a new list lands):
-
-```
-node scripts/import-attendees.mjs --event <slug> --source eventbrite list.csv
-```
-
-It maps the export's columns (email + name, however they're labelled), dedups on
-email, merges with the existing `attendees/<slug>.csv` in R2 and writes it back via
-`wrangler`. `--dry-run` previews without writing; `--out <file>` also saves a local
-copy. LinkedIn data (kept off-CI for TOS) is merged the same way with
-`--source linkedin`. Needs `wrangler login` (see **Local wrangler**).
+## Local operations (CRM, imports, reports)
+Community data jobs are **local npm ops** (no workers): they read/write this bucket via
+`wrangler` and read config from `.env` (copy `.env.example`; set `EVENTBRITE_TOKEN`,
+`CLOUDFLARE_ACCOUNT_ID`, `R2_BUCKET`). They build the common CRM in `subscribers.csv` and
+the per-event rosters in `attendees/<slug>.csv`, and render the feedback + community
+reports. The full op list, flags and the manual export steps (LinkedIn, OCG, Zoho,
+NetHunt) are in [README.md → Local operations](./README.md#local-operations); each op is
+also a VS Code build task. Needs `wrangler login` (see **Local wrangler**).
 
 ## GitHub (`cloudnative-lv/website` → Settings → Secrets and variables → Actions)
 - **Secrets:** `CLOUDFLARE_API_KEY` (scoped API token: *Workers Scripts: Edit* +

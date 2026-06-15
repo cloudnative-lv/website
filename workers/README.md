@@ -6,9 +6,13 @@ with its own `wrangler.toml`.
 ## subscribe
 
 Backend for the website's newsletter form. `POST { email }`:
-1. appends `email,timestamp,source` to **`subscribers.csv`** in an R2 bucket — the
-   single source of truth (dedups on email);
-2. emails the organizers via the Cloudflare **Email Routing `send_email`** binding
+1. writes an **immutable per-signup record** `subscribers/incoming/<ts>_<id>.json` — the
+   integrity log, written **first** so the CSV can always be re-derived from raw records;
+2. injects it into **`subscribers.csv`** in R2 — the **common CRM** and single source of
+   truth (schema `email,first,last,linkedin,source,event,added`; a web signup fills
+   `email` + `source=web` + `added`, dedups on email, and preserves the blank-email
+   follower rows the local CRM ops add);
+3. emails the organizers via the Cloudflare **Email Routing `send_email`** binding
    (no third party).
 
 A hidden `hp` honeypot field and strict email validation guard against spam; CORS
@@ -40,10 +44,11 @@ Set the repo **variable** `SUBSCRIBE_ENDPOINT` to the deployed worker URL (e.g.
 it as `VITE_SUBSCRIBE_ENDPOINT` (see `.github/workflows/deploy.yml`); when unset,
 the subscribe form falls back to opening the CNCF/OCG group page.
 
-### Attendees
-Event attendees live in the same bucket as `attendees/<event-slug>.csv`. They're
-imported locally (no worker) from Eventbrite / OCG / LinkedIn CSV exports with
-`node scripts/import-attendees.mjs` — see `BOOTSTRAP.md`.
+### Attendees & CRM
+Per-event rosters live in the same bucket as `attendees/<event-slug>.csv`, and everyone
+is merged into the `subscribers.csv` CRM. These are built by **local npm ops** (no
+worker) from the Eventbrite API and manual exports — see
+[README.md → Local operations](../README.md#local-operations).
 
 ## forward (email forward)
 
@@ -62,9 +67,11 @@ dashboard-managed worker; the Email Routing rules keep pointing at it.
 ## feedback
 
 Backend for the unlisted per-event feedback form (`/events/<slug>/feedback`).
-`POST { event, rating, comment }` appends a row to `feedback/<slug>.csv` in R2.
-Honeypot + validation + CORS. Wire it up by setting the repo variable
-`FEEDBACK_ENDPOINT` to the deployed worker URL (the site passes it as
+`POST { event, overall, talks, organization, topics, comments }` (three optional 1-5
+ratings + two free-text fields) writes an **immutable per-submission record**
+`feedback/incoming/<slug>/<ts>_<id>.json` **first**, then injects it into
+`feedback/<slug>.csv` in R2. Honeypot + validation + CORS. Wire it up by setting the repo
+variable `FEEDBACK_ENDPOINT` to the deployed worker URL (the site passes it as
 `VITE_FEEDBACK_ENDPOINT`); reuses the `cloudnative-lv` R2 bucket.
 
 ## Not workers (by design)
@@ -74,6 +81,11 @@ Kept deliberately simple — these are handled outside Workers:
 - **Eventbrite + social** — posted manually. The `/kit` generates all the copy
   (announcement, Eventbrite description, speaker intros) and visuals (Eventbrite,
   LinkedIn, OG, speaker banners).
-- **Attendees** — imported locally from CSV exports into `attendees/<slug>.csv`
-  with `node scripts/import-attendees.mjs` (see `BOOTSTRAP.md`).
+- **Attendees / CRM imports** — built locally into `attendees/<slug>.csv` +
+  `subscribers.csv` by the npm ops (Eventbrite API, LinkedIn, OCG, Zoho, NetHunt).
+- **Feedback digest & community stats** — local ops, not a cron worker:
+  `npm run report:feedback` and `npm run report:subscribers` read R2 and render the
+  reports to `data/reports/`. (A scheduled "digest worker" was considered and dropped.)
 - **Reminders / YouTube** — dropped (not needed).
+
+All local ops: [README.md → Local operations](../README.md#local-operations).

@@ -18,7 +18,15 @@
     "generate:artifacts": "node scripts/generate-artifacts.mjs",
     "prerender": "node scripts/prerender.mjs",
     "import:eventbrite": "node --env-file-if-exists=.env scripts/eventbrite-attendees.mjs",
-    "import:attendees": "node --env-file-if-exists=.env scripts/import-attendees.mjs"
+    "import:attendees": "node --env-file-if-exists=.env scripts/import-attendees.mjs",
+    "import:linkedin": "node --env-file-if-exists=.env scripts/import-linkedin.mjs",
+    "import:linkedin-events": "node --env-file-if-exists=.env scripts/import-linkedin-events.mjs",
+    "import:ocg": "node --env-file-if-exists=.env scripts/import-ocg.mjs",
+    "import:subscribers": "node --env-file-if-exists=.env scripts/import-subscribers.mjs",
+    "report:subscribers": "node --env-file-if-exists=.env scripts/report-subscribers.mjs",
+    "report:feedback": "node --env-file-if-exists=.env scripts/report-feedback.mjs",
+    "crm:cleanup": "node --env-file-if-exists=.env scripts/crm-cleanup.mjs",
+    "rebuild": "node --env-file-if-exists=.env scripts/rebuild.mjs"
   },
   "dependencies": {
     "jszip": "^3.10.1",
@@ -46,6 +54,7 @@
     "postcss": "^8.5.6",
     "sharp": "^0.35.1",
     "tailwindcss": "^4.1.18",
-    "vite": "^7.2.4"
+    "vite": "^7.2.4",
+    "wordcloud": "^1.2.3"
   }
 }
