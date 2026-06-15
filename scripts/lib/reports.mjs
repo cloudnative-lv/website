@@ -46,11 +46,10 @@ export async function renderCommunityReport({ crmRows, rostersBySlug, eventMeta 
   for (const r of crmRows) bySource[r.source] = (bySource[r.source] || 0) + 1;
   const sources = Object.entries(bySource).sort((a, b) => b[1] - a[1]);
 
-  const byMonth = {};
-  for (const r of crmRows) { const mo = (r.added || '').slice(0, 7); if (/^\d{4}-\d{2}$/.test(mo)) byMonth[mo] = (byMonth[mo] || 0) + 1; }
-  let cum = 0;
-  const growth = Object.keys(byMonth).sort().map((mo) => ({ label: mo.slice(2), value: (cum += byMonth[mo]) }));
-  const bulkMonths = Object.entries(byMonth).filter(([, n]) => n > total * 0.3).map(([mo]) => mo);
+  // No CRM "growth over time" chart: `added` is the import date for every bulk-imported
+  // contact (Zoho / LinkedIn / OCG all landed on the retrofit date), so a cumulative curve
+  // is fiction — it shows ~everyone "joining" in one month. Registrations-per-event below is
+  // the real temporal signal.
 
   const attendeeId = (a) => {
     const email = lower(a.email || '');
@@ -155,7 +154,6 @@ export async function renderCommunityReport({ crmRows, rostersBySlug, eventMeta 
   // --- Charts ---
   await svgToPng(barsSvg({ title: 'Contacts by source', groups: sources.map(([s]) => s), series: [{ name: 'contacts', color: SERIES_COLORS[0], values: sources.map(([, n]) => n) }] }), path.join(OUT, 'by-source.png'));
   await svgToPng(barsSvg({ title: 'Contactability', groups: ['CRM rows', 'unique', 'with email', 'with LinkedIn'], series: [{ name: 'contacts', color: SERIES_COLORS[1], values: [total, uniquePeople, withEmail, withLinkedin] }], width: 980 }), path.join(OUT, 'contactability.png'));
-  if (growth.length) await svgToPng(lineSvg({ title: 'CRM growth (cumulative)', points: growth, yLabel: 'contacts' }), path.join(OUT, 'growth.png'));
   const hasActual = perEvent.some((e) => actualOf(e.slug) != null);
   if (perEvent.length) {
     await svgToPng(barsSvg({ title: 'Registrations per event', groups: perEvent.map((e) => e.label), series: [{ name: 'registrations', color: SERIES_COLORS[0], values: perEvent.map((e) => e.n) }] }), path.join(OUT, 'registrations-by-event.png'));
@@ -257,8 +255,6 @@ ${hasActual ? '![Registered vs actual attendance](registered-vs-actual.png)\n' :
 ![Events attended per person](repeat-registrations.png)
 ${retentionBlock}${fansBlock}` : '\n_No per-event rosters yet._\n';
 
-  const bulkNote = bulkMonths.length ? `\n> **Note:** The growth chart includes bulk imports (${bulkMonths.join(', ')}). Organic growth is steadier than the curve suggests.\n` : '';
-
   const infographicsBlock = infographics.length ? `
 ## Community infographics
 
@@ -286,7 +282,7 @@ ${sources.map(([s, n]) => `| ${s} | ${n} |`).join('\n')}
 
 ![By source](by-source.png)
 ![Contactability](contactability.png)
-${growth.length ? `\n![Growth](growth.png)${bulkNote}` : ''}${infographicsBlock}${regBlock}`;
+${infographicsBlock}${regBlock}`;
   await writeFile(path.join(OUT, 'community-report.md'), md);
   return { total, uniquePeople, totalRegistrations, repeatAttendees, sources: sources.length };
 }

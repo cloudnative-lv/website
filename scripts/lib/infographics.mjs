@@ -7,6 +7,7 @@
 //   community-story.png   1080×1350  portrait post / story
 import sharp from 'sharp';
 import path from 'node:path';
+import { venueProviders, supporters } from '../../src/data/partners.js';
 
 const BURGUNDY = '#8b1538', PINK = '#d4567c', ROSE = '#fdf2f4';
 const SUBTITLE = 'A full year of cloud native in Latvia';
@@ -68,10 +69,41 @@ export async function renderInfographics({ stats, subtitle = SUBTITLE, OUT, asse
       + text(cx, 1316, 'cloudnative.lv', { size: 28, fill: PINK, weight: 700, spacing: 2 }));
   };
 
+  // A partner logo on a white rounded tile (logos vary in colour/aspect — a white tile
+  // keeps them legible on the rose field; preserveAspectRatio centres + fits each).
+  const logoUri = async (partner) => {
+    const buf = await sharp(path.join(assets, partner.logo.replace(/^\/images\//, '')), { density: 320 })
+      .resize({ width: 640, withoutEnlargement: false }).png().toBuffer();
+    return `data:image/png;base64,${buf.toString('base64')}`;
+  };
+  const tile = (uri, x, y, w, h) =>
+    `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${h * 0.14}" fill="#ffffff"/>`
+    + `<image href="${uri}" x="${x + w * 0.13}" y="${y + h * 0.18}" width="${w * 0.74}" height="${h * 0.64}" preserveAspectRatio="xMidYMid meet"/>`;
+
+  // square 1080×1080 — sponsors / supporters card for socials
+  const sponsors = async () => {
+    const W = 1080, cx = W / 2;
+    const venueUris = await Promise.all(venueProviders.map(logoUri));
+    const supUris = await Promise.all(supporters.map(logoUri));
+    let body = logoImage(cx, 54, 176)
+      + text(cx, 320, 'OUR PARTNERS', { size: 54, fill: BURGUNDY, weight: 800, spacing: 6 })
+      + text(cx, 362, 'The organizations that host and support us', { size: 25, fill: PINK, weight: 600 })
+      + text(cx, 446, 'VENUE PARTNERS', { size: 24, fill: PINK, weight: 700, spacing: 4 });
+    const vW = 380, vGap = 44, vX = (W - (2 * vW + vGap)) / 2, vY = 470, vH = 156;
+    venueUris.forEach((u, i) => { body += tile(u, vX + i * (vW + vGap), vY, vW, vH); });
+    body += text(cx, 706, 'SUPPORTERS', { size: 24, fill: PINK, weight: 700, spacing: 4 });
+    const sW = 292, sGap = 28, sX = (W - (3 * sW + 2 * sGap)) / 2, sY = 730, sH = 146;
+    supUris.forEach((u, i) => { body += tile(u, sX + i * (sW + sGap), sY, sW, sH); });
+    body += text(cx, 1030, 'cloudnative.lv', { size: 30, fill: PINK, weight: 700, spacing: 2 });
+    return frame(W, 1080, body);
+  };
+
   const files = [];
   for (const [name, build] of [['community-square', square], ['community-wide', wide], ['community-story', story]]) {
     await sharp(Buffer.from(build())).png().toFile(path.join(OUT, `${name}.png`));
     files.push(`${name}.png`);
   }
+  await sharp(Buffer.from(await sponsors())).png().toFile(path.join(OUT, 'community-sponsors.png'));
+  files.push('community-sponsors.png');
   return files;
 }
