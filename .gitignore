@@ -36,4 +36,5 @@ eventbrite.yml
 .env.*
 !.env.example
 
-data
+# Local data exports (attendee/feedback CSVs etc.) — NOT src/data, which is tracked
+/data/
