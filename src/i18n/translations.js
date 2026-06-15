@@ -293,7 +293,7 @@ export const translations = {
       },
       rights: {
         title: 'Your rights',
-        body: 'You can ask us to access, correct, or delete your data at any time — just email <a href="mailto:hello@cloudnative.lv" class="text-pink hover:text-burgundy underline">hello@cloudnative.lv</a> and we\'ll handle it promptly.'
+        body: 'You can ask us to access, correct, or delete your data at any time — just email <a href="mailto:hello@cloudnative.lv?subject=Data request" class="text-pink hover:text-burgundy underline">hello@cloudnative.lv</a> and we\'ll handle it promptly.'
       }
     },
     feedback: {
@@ -616,7 +616,7 @@ export const translations = {
       },
       rights: {
         title: 'Tavas tiesības',
-        body: 'Tu vari jebkurā laikā lūgt piekļūt saviem datiem, tos labot vai dzēst — vienkārši raksti uz <a href="mailto:hello@cloudnative.lv" class="text-pink hover:text-burgundy underline">hello@cloudnative.lv</a>, un mēs to ātri nokārtosim.'
+        body: 'Tu vari jebkurā laikā lūgt piekļūt saviem datiem, tos labot vai dzēst — vienkārši raksti uz <a href="mailto:hello@cloudnative.lv?subject=Datu pieprasījums" class="text-pink hover:text-burgundy underline">hello@cloudnative.lv</a>, un mēs to ātri nokārtosim.'
       }
     },
     feedback: {

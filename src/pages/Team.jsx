@@ -88,7 +88,7 @@ export default function Team() {
             title={t('team.cta.title')}
             description={t('team.cta.description')}
           >
-            <Button href="mailto:hello@cloudnative.lv">{t('team.cta.contact')}</Button>
+            <Button href="mailto:hello@cloudnative.lv?subject=Hello from cloudnative.lv">{t('team.cta.contact')}</Button>
           </CTASection>
         </div>
       </div>

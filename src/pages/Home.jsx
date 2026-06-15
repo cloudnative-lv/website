@@ -138,7 +138,7 @@ export default function Home() {
             {t('home.cta.description')}
           </p>
           <a
-            href="mailto:hello@cloudnative.lv"
+            href="mailto:hello@cloudnative.lv?subject=Talk proposal"
             className="inline-block bg-white text-burgundy px-8 py-3 rounded-full font-semibold hover:bg-rose-50 transition-all shadow-lg hover:shadow-xl"
           >
             {t('home.cta.contact')}

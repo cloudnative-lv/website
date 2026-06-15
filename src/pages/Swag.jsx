@@ -115,7 +115,7 @@ export default function Swag() {
           title={t('swag.cta.title')}
           description={t('swag.cta.description')}
         >
-          <Button href="mailto:hello@cloudnative.lv">{t('swag.cta.contact')}</Button>
+          <Button href="mailto:hello@cloudnative.lv?subject=Swag request">{t('swag.cta.contact')}</Button>
         </CTASection>
       </Container>
     </div>

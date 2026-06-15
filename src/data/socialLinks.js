@@ -10,6 +10,6 @@ export const SOCIAL_LINKS = [
   { key: 'youtube', href: 'https://www.youtube.com/@CloudNativeLatvia', title: 'YouTube', Icon: YouTubeIcon },
   { key: 'eventbrite', href: 'https://www.eventbrite.com/o/cloud-native-latvia-114451584951', title: 'Eventbrite', Icon: EventbriteIcon },
   { key: 'github', href: 'https://github.com/cloudnative-lv', title: 'GitHub', Icon: GitHubIcon },
-  { key: 'email', href: 'mailto:hello@cloudnative.lv', title: 'Email', Icon: EmailIcon },
+  { key: 'email', href: 'mailto:hello@cloudnative.lv?subject=Hello from cloudnative.lv', title: 'Email', Icon: EmailIcon },
   { key: 'rss', href: '/feed.xml', title: 'RSS Feed', Icon: RssIcon },
 ];
