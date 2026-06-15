@@ -127,8 +127,8 @@ export default function KitPage() {
             onClick={async () => {
               setHtmlBusy(true);
               try {
-                const { downloadHtmlDeck } = await import('./htmlDeck');
-                downloadHtmlDeck(event);
+                const { openHtmlDeck } = await import('./htmlDeck');
+                openHtmlDeck(event);
               } finally {
                 setHtmlBusy(false);
               }
@@ -136,7 +136,7 @@ export default function KitPage() {
             disabled={htmlBusy}
             className="mt-4 ml-3 rounded-full bg-white px-5 py-2 font-semibold text-rose-700 hover:bg-rose-50 disabled:opacity-60"
           >
-            {htmlBusy ? 'Building…' : 'Deck (.html)'}
+            {htmlBusy ? 'Building…' : 'Present (.html)'}
           </button>
         </div>
       </header>

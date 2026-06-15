@@ -9,7 +9,7 @@ const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').
 // A self-contained HTML presentation for an event (same content as the .pptx):
 // scroll-snap slides + arrow-key navigation, no external dependencies. Logos
 // reference absolute cloudnative.lv URLs so the file works opened anywhere.
-export function downloadHtmlDeck(event) {
+function buildHtmlDeck(event) {
   const talks = getEventTalks(event);
   const slides = [];
 
@@ -60,8 +60,17 @@ ul li::before{content:'▸ ';color:var(--pink)}
 .logos img{height:60px;max-width:180px;object-fit:contain}.logos figcaption{font-size:12px;color:#777;text-align:center;margin-top:.5em}
 </style></head><body>${slides.join('')}<script>${nav}</script></body></html>`;
 
+  return html;
+}
+
+export function openHtmlDeck(event) {
+  const url = URL.createObjectURL(new Blob([buildHtmlDeck(event)], { type: 'text/html' }));
+  window.open(url, '_blank');
+}
+
+export function downloadHtmlDeck(event) {
   const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([html], { type: 'text/html' }));
+  a.href = URL.createObjectURL(new Blob([buildHtmlDeck(event)], { type: 'text/html' }));
   a.download = `${event.slug}-deck.html`;
   document.body.appendChild(a);
   a.click();
