@@ -132,7 +132,7 @@ export default function Sponsors() {
             title={t('sponsors.custom.title')}
             description={t('sponsors.custom.description')}
           >
-            <Button href="mailto:sponsors@cloudnative.lv">{t('sponsors.custom.contact')}</Button>
+            <Button href="mailto:hello@cloudnative.lv?subject=Sponsorship inquiry">{t('sponsors.custom.contact')}</Button>
           </CTASection>
         </Section>
 
