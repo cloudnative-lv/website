@@ -2,7 +2,7 @@ import { getUpcomingEvents, getPastEvents } from '../data/events';
 import EventCard from '../components/EventCard';
 import PageHeader from '../components/PageHeader';
 import SEO from '../components/SEO';
-import { EventsListJsonLd } from '../components/JsonLd';
+import { EventsListJsonLd, BreadcrumbJsonLd } from '../components/JsonLd';
 import { useLanguage } from '../i18n/useLanguage';
 
 export default function Events() {
@@ -20,6 +20,7 @@ export default function Events() {
         image="/images/og/events.png"
       />
       <EventsListJsonLd events={[...upcomingEvents, ...pastEvents]} />
+      <BreadcrumbJsonLd items={[{ name: t('nav.home'), path: '/' }, { name: t('nav.events'), path: '/events' }]} />
       <PageHeader 
         title={t('events.title')} 
         subtitle={t('events.subtitle')}

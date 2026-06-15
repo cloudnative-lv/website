@@ -1,4 +1,5 @@
 import { rigaIsoString } from '../data/events';
+import { getSpeakerInfo } from '../data/speakers';
 
 const siteConfig = {
   siteName: 'Cloud Native Latvia',
@@ -16,6 +17,19 @@ const siteConfig = {
   ]
 };
 
+// Build a schema.org Person from a speaker name + the speaker YAML/photo data.
+function personFromSpeaker(name) {
+  const info = getSpeakerInfo(name);
+  const person = { '@type': 'Person', name };
+  if (info.title) person.jobTitle = info.title;
+  if (info.company) person.worksFor = { '@type': 'Organization', name: info.company };
+  if (info.bio) person.description = info.bio;
+  if (info.photo) person.image = info.photo.startsWith('http') ? info.photo : `${siteConfig.siteUrl}${info.photo}`;
+  const sameAs = [info.linkedin, info.github, info.cncf].filter(Boolean);
+  if (sameAs.length) person.sameAs = sameAs;
+  return person;
+}
+
 export function JsonLd({ data }) {
   return (
     <script
@@ -23,6 +37,22 @@ export function JsonLd({ data }) {
       dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
     />
   );
+}
+
+export function OrganizationJsonLd() {
+  const data = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: siteConfig.siteName,
+    alternateName: 'CNCF Latvia',
+    url: siteConfig.siteUrl,
+    logo: siteConfig.logo,
+    description: siteConfig.description,
+    email: siteConfig.email,
+    foundingLocation: { '@type': 'Place', name: 'Riga, Latvia' },
+    sameAs: siteConfig.socialLinks
+  };
+  return <JsonLd data={data} />;
 }
 
 export function WebPageJsonLd({ title, description, path }) {
@@ -79,8 +109,8 @@ export function EventJsonLd({ event }) {
       name: siteConfig.siteName,
       url: siteConfig.siteUrl
     },
-    performer: speakerNames.map(name => ({ '@type': 'Person', name })),
-    image: `${siteConfig.siteUrl}/images/og/events.png`
+    performer: speakerNames.map(personFromSpeaker),
+    image: `${siteConfig.siteUrl}/artifacts/${event.id}/og.png`
   };
 
   // Offers only make sense while registration is open.
@@ -94,6 +124,48 @@ export function EventJsonLd({ event }) {
     };
   }
 
+  return <JsonLd data={data} />;
+}
+
+export function TalkJsonLd({ event, talk }) {
+  const speakerNames = Array.isArray(talk.speakers) ? talk.speakers : (talk.speaker ? [talk.speaker] : []);
+  const data = {
+    '@context': 'https://schema.org',
+    '@type': 'Event',
+    name: talk.title,
+    description: talk.description,
+    startDate: rigaIsoString(event.date, event.startTime || event.time || '18:00'),
+    endDate: rigaIsoString(event.date, event.endTime || event.time || '23:59'),
+    eventStatus: 'https://schema.org/EventScheduled',
+    eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+    url: `${siteConfig.siteUrl}/events/${event.slug}/talks/${talk.talkSlug}`,
+    location: {
+      '@type': 'Place',
+      name: event.venue?.name || 'Riga, Latvia',
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: event.venue?.address,
+        addressLocality: 'Riga',
+        addressCountry: 'LV'
+      }
+    },
+    performer: speakerNames.map(personFromSpeaker),
+    organizer: { '@type': 'Organization', name: siteConfig.siteName, url: siteConfig.siteUrl },
+    superEvent: {
+      '@type': 'Event',
+      name: event.title,
+      startDate: rigaIsoString(event.date, event.time || '18:00'),
+      url: `${siteConfig.siteUrl}/events/${event.slug}`
+    },
+    image: `${siteConfig.siteUrl}/artifacts/${event.id}/og.png`
+  };
+  if (talk.slidesUrl) {
+    data.workFeatured = {
+      '@type': 'PresentationDigitalDocument',
+      name: talk.title,
+      url: talk.slidesUrl.startsWith('http') ? talk.slidesUrl : `${siteConfig.siteUrl}${talk.slidesUrl}`
+    };
+  }
   return <JsonLd data={data} />;
 }
 
@@ -181,9 +253,9 @@ export function SpeakersPageJsonLd({ speakers }) {
         '@type': 'ListItem',
         position: index + 1,
         item: {
-          '@type': 'Person',
-          name: speaker.name,
-          description: `Speaker at Cloud Native Latvia with ${speaker.talks.length} talk(s)`
+          ...personFromSpeaker(speaker.name),
+          url: `${siteConfig.siteUrl}/speakers`,
+          description: personFromSpeaker(speaker.name).description || `Speaker at Cloud Native Latvia with ${speaker.talks.length} talk(s)`
         }
       }))
     }

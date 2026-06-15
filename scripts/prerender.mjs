@@ -30,6 +30,12 @@ function inject(html, m) {
   repl(/(<meta name="twitter:description" content=")[^"]*(")/, m.description);
   repl(/(<meta name="twitter:image" content=")[^"]*(")/, m.image);
   repl(/(<link rel="canonical" href=")[^"]*(")/, m.url);
+  // Bake the route's JSON-LD (Organization/Event/Talk/Person/Breadcrumb …) into the
+  // static <head> so crawlers that don't run JS still see the structured data.
+  if (m.jsonld?.length) {
+    const scripts = m.jsonld.map((j) => `<script type="application/ld+json">${j}</script>`).join('\n');
+    out = out.replace('</head>', `${scripts}\n</head>`);
+  }
   return out;
 }
 
@@ -60,6 +66,7 @@ for (const route of routes) {
       description: g('meta[name="description"]'),
       url: g('link[rel="canonical"]', 'href') || g('meta[property="og:url"]'),
       image: g('meta[property="og:image"]'),
+      jsonld: Array.from(document.querySelectorAll('script[type="application/ld+json"]')).map((s) => s.textContent),
     };
   });
   const dir = route === '/' ? DIST : path.join(DIST, route);

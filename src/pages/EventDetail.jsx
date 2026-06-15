@@ -10,7 +10,7 @@ import Button from '../components/Button';
 import { CalendarIcon, ClockIcon, MapPinIcon, ChevronLeftIcon } from '../components/Icons';
 import { formatEventDate } from '../utils/dates';
 import SEO from '../components/SEO';
-import { EventJsonLd } from '../components/JsonLd';
+import { EventJsonLd, BreadcrumbJsonLd } from '../components/JsonLd';
 import { useLanguage } from '../i18n/useLanguage';
 
 export default function EventDetail() {
@@ -49,6 +49,7 @@ export default function EventDetail() {
         image={`/artifacts/${event.id}/og.png`}
       />
       <EventJsonLd event={event} />
+      <BreadcrumbJsonLd items={[{ name: t('nav.home'), path: '/' }, { name: t('nav.events'), path: '/events' }, { name: event.title, path: `/events/${event.slug}` }]} />
       <div className={`${isUpcoming ? 'bg-linear-to-r from-rose-400 to-rose-700' : 'bg-gray-600'} text-white py-16`}>
         <div className="max-w-4xl mx-auto px-4">
           <Link to="/events" className="flex w-fit items-center text-white/80 hover:text-white mb-6">
