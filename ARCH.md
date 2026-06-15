@@ -116,8 +116,10 @@ not invalidate it on overwrite (even `delete` + `put` within the cache window ke
 the old bytes). Naive read-modify-write across separate op runs can therefore read stale data
 and clobber. Two mitigations in the ops:
 
-1. Every write sets `Cache-Control: no-store` (`scripts/lib/r2.mjs`), so reads of objects
-   written by the ops stay fresh going forward.
+1. Every write sets `Cache-Control: no-store` — the local ops (`scripts/lib/r2.mjs`) **and**
+   the subscribe/feedback workers — so reads of those objects stay fresh going forward. (It
+   can't retroactively bust an entry cached *before* the object first became no-store; that
+   only clears on the cache's own TTL.)
 2. `npm run rebuild` does the entire CRM + roster rebuild in a **single process** — one read
    and one write per object, reports rendered from memory — so a bulk import is always
    consistent regardless of the cache.

@@ -58,7 +58,8 @@ export default {
 
     if (!duplicate) {
       const next = `${csv}${email},,,,web,,${ts.slice(0, 10)}\n`;
-      await env.SUBSCRIBERS.put(key, next, { httpMetadata: { contentType: "text/csv" } });
+      // no-store so `wrangler r2 object get` (which caches reads) never serves a stale copy.
+      await env.SUBSCRIBERS.put(key, next, { httpMetadata: { contentType: "text/csv", cacheControl: "no-store, max-age=0" } });
       await notify(env, email).catch((err) => console.error("notify failed:", err));
     }
     return json({ ok: true, duplicate });

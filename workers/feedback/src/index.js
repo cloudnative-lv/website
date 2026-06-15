@@ -54,7 +54,8 @@ export default {
     const existing = await env.FEEDBACK.get(key);
     const csv = existing ? await existing.text() : HEADER;
     const row = `${ts},${overall},${talks},${organization},${q(topics)},${q(comments)}\n`;
-    await env.FEEDBACK.put(key, csv + row, { httpMetadata: { contentType: "text/csv" } });
+    // no-store so `wrangler r2 object get` (which caches reads) never serves a stale copy.
+    await env.FEEDBACK.put(key, csv + row, { httpMetadata: { contentType: "text/csv", cacheControl: "no-store, max-age=0" } });
     return json({ ok: true });
   },
 };
