@@ -1,6 +1,6 @@
 # Tech
 
-[ ] Analyze Cloudflare permissions/add token to Bitwarden/update in Github
+[x] Analyze Cloudflare permissions/add token to Bitwarden/update in Github
 [x] Update instructions about local wrangler — BOOTSTRAP.md + README.md
 [x] Document local operations/docs — README.md "Local operations", BOOTSTRAP.md, ARCH.md
 [x] Per-page SEO review + microformats — Organization/Event/Talk/Person/BreadcrumbList JSON-LD (JsonLd.jsx); prerender bakes JSON-LD into the static HTML

@@ -42,11 +42,11 @@ if (opts.help || !input) {
   process.exit(opts.help ? 0 : 1);
 }
 
-// Derive the event from the filename if not given: `event-<N>.csv` (N = meetup number)
+// Derive the event from the filename if not given: `ocg-event-<N>.csv` (N = meetup number)
 // or `event-<cncf-code>-attendees.csv` (mapped via the event YAML cncfUrl).
 if (!opts.event) {
   const base = path.basename(input);
-  const num = (base.match(/^event-(\d+)\.csv$/i) || [])[1];
+  const num = (base.match(/^ocg-event-(\d+)\.csv$/i) || [])[1];
   const code = (base.match(/event-([a-z0-9]+)-attendees/i) || [])[1];
   if (num) {
     const slug = (await readEvents()).find((e) => +(e.slug.match(/meetup-0*(\d+)/)?.[1]) === +num)?.slug;

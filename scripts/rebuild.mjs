@@ -8,7 +8,7 @@
 //
 // Sources: subscribers.csv (seed) · data/linkedin-followers.html (LI followers) ·
 // data/linkedin-<N>.html (LI event attendees) · data/ocg-followers.txt (OCG members) ·
-// data/event-<N>.csv (OCG event attendees) · data/zoho-campaigns.csv · Eventbrite API.
+// data/ocg-event-<N>.csv (OCG event attendees) · data/zoho-campaigns.csv · Eventbrite API.
 import { readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import { parseCsv, norm, headerFinder, stripBom } from './lib/csv.mjs';
@@ -89,9 +89,9 @@ for (const f of (await readdir(DATA)).filter((x) => /^linkedin-\d+\.html$/i.test
   console.log(`${f} -> ${slug}: ${people.length} LI attendees`);
 }
 
-// 5) Per-event: OCG event attendees (data/event-<N>.csv, emailless Name column)
-for (const f of (await readdir(DATA)).filter((x) => /^event-\d+\.csv$/i.test(x))) {
-  const slug = slugByNum[+f.match(/event-(\d+)/i)[1]];
+// 5) Per-event: OCG event attendees (data/ocg-event-<N>.csv, emailless Name column)
+for (const f of (await readdir(DATA)).filter((x) => /^ocg-event-\d+\.csv$/i.test(x))) {
+  const slug = slugByNum[+f.match(/ocg-event-(\d+)/i)[1]];
   if (!slug) continue;
   const rows = parseCsv(stripBom(await read(f)));
   const ni = headerFinder(rows[0])(['name', 'full name', 'attendee name']);
