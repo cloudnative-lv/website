@@ -20,7 +20,7 @@ export default function SpeakerBanner({ event, talk }) {
       <BannerLogo className="absolute right-10 top-8" u={7.2} />
 
       {/* Speaker photo + name/role boxes (sizing adapts to 1 vs 2 speakers) */}
-      <div className={`absolute left-14 right-20 flex flex-col ${one ? 'top-[27%]' : 'top-[16%] gap-7'}`}>
+      <div className={`absolute left-14 right-20 flex flex-col ${one ? 'top-[27%]' : 'top-[19%] gap-9'}`}>
         {speakers.map((s) => (
           <div key={s.name} className="flex items-center">
             <div className={`z-10 flex shrink-0 items-center justify-center overflow-hidden rounded-full bg-rose-100 ring-[6px] ring-burgundy ${one ? 'h-48 w-48' : 'h-40 w-40'}`}>
@@ -40,8 +40,9 @@ export default function SpeakerBanner({ event, talk }) {
         ))}
       </div>
 
-      {/* Talk title — full-bleed, semi-transparent, floating in the lower third */}
-      <div className="absolute inset-x-0 bottom-[14%] flex items-center justify-center bg-burgundy/90 px-16 py-7">
+      {/* Talk title — full-bleed, semi-transparent, floating in the lower third.
+          Sits lower for two speakers so it clears the taller photo stack. */}
+      <div className={`absolute inset-x-0 ${one ? 'bottom-[14%]' : 'bottom-[8%]'} flex items-center justify-center bg-burgundy/90 px-16 py-7`}>
         <div className="text-center text-4xl font-bold leading-snug text-white">{talk.title}</div>
       </div>
     </BannerFrame>
