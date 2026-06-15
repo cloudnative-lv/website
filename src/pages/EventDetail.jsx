@@ -128,17 +128,15 @@ export default function EventDetail() {
                   <p className="text-sm text-gray-500 uppercase tracking-wide">{t('eventDetail.venue')}</p>
                   <p className="text-burgundy font-medium">{event.venue.name}</p>
                   <p className="text-gray-600 text-sm">{event.venue.address}</p>
-                  {event.venue.mapUrl && (
-                    <a
-                      href={event.venue.mapUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="mt-1 inline-flex items-center gap-1.5 text-sm font-semibold text-pink hover:text-burgundy transition-colors"
-                    >
-                      <MapPinIcon className="w-4 h-4" />
-                      {t('eventDetail.viewMap')}
-                    </a>
-                  )}
+                  <a
+                    href={event.venue.mapUrl || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${event.venue.name}, ${event.venue.address}`)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-1 inline-flex items-center gap-1.5 text-sm font-semibold text-pink hover:text-burgundy transition-colors"
+                  >
+                    <MapPinIcon className="w-4 h-4" />
+                    {t('eventDetail.viewMap')}
+                  </a>
                 </div>
 
                 {event.tags && event.tags.length > 0 && (

@@ -8,11 +8,10 @@ endTime: "21:00"
 eventbriteUrl: "https://www.eventbrite.com/e/1990809756573"
 cncfUrl: "https://ocgroups.dev/cncf/group/xggmcq8/event/qhptsyq"
 photosUrl: "https://photos.app.goo.gl/7RCKDNKkv9Y2yLsGA"
-attendance: 27  # in-room headcount from the event photo (approx)
+attendance: 32  # in-room headcount from the event photo (approx)
 venue:
   name: "GoCardless"
   address: "Marijas iela 2A, Rīga, LV-1050"
-  mapUrl: "https://www.google.com/maps/dir//Marijas%20iela%202A%2C%20R%C4%ABga%2C%20LV-1050"
 description: |
   Two talks on building for AI: not about whether AI will replace your job, but how to build the platforms and identity foundations that AI workloads run on.
 

@@ -6,7 +6,7 @@
 //   - emailless CRM rows whose LinkedIn/name matches a NetHunt email (backfill)
 // Writes a report to data/reports/crm/. With --write it backfills those emails into the
 // CRM (safe enrichment only — it never deletes rows; dedup stays a manual review).
-//   npm run crm:cleanup [-- --nethunt data/nethunt_contacts.csv --write]
+//   npm run crm:cleanup [-- --nethunt data/nethunt-contacts.csv --write]
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { parseCsv, norm, lower, stripBom, headerFinder } from './lib/csv.mjs';
@@ -15,7 +15,7 @@ import { parseCrm, serializeCrm, mergeContacts, CRM_KEY, normLinkedin, splitName
 import { transliterate } from './lib/translit.mjs';
 
 const argv = process.argv.slice(2);
-const opts = { nethunt: 'data/nethunt_contacts.csv', write: false };
+const opts = { nethunt: 'data/nethunt-contacts.csv', write: false };
 for (let i = 0; i < argv.length; i++) {
   const a = argv[i];
   if (a === '--nethunt') opts.nethunt = argv[++i];

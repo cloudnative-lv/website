@@ -1,10 +1,10 @@
-// Parse a LinkedIn FOLLOWERS HTML export into the common CRM (subscribers.csv) and a
-// reviewable data/linkedin_followers.csv. Node port of the old extract_linkedin.py.
+// Parse a LinkedIn FOLLOWERS HTML export into the common CRM (subscribers.csv).
+// Node port of the old extract_linkedin.py (pass --out to also save a reviewable CSV).
 //
 // Manual step: in LinkedIn Page admin -> Analytics -> Followers, open the "All
 // followers" modal and scroll to the bottom so every follower is in the DOM, then save
-// the page as HTML to data/linkined-last.html (the latest export).
-//   npm run import:linkedin [-- --in data/linkined-last.html --dry-run]
+// the page as HTML to data/linkedin-followers.html.
+//   npm run import:linkedin [-- --in data/linkedin-followers.html --out data/linkedin-followers.csv --dry-run]
 // LinkedIn has no email — rows land in the CRM as source=linkedin with the profile URL.
 // (For per-event LinkedIn attendee lists, see import:linkedin-events.)
 import { readFile, writeFile } from 'node:fs/promises';
@@ -13,7 +13,7 @@ import { parseLinkedinHtml } from './lib/linkedin.mjs';
 import { makeContact, upsertCrm } from './lib/crm.mjs';
 
 const argv = process.argv.slice(2);
-const opts = { in: 'data/linkined-last.html', out: 'data/linkedin_followers.csv', dryRun: false, parseOnly: false };
+const opts = { in: 'data/linkedin-followers.html', out: '', dryRun: false, parseOnly: false };
 for (let i = 0; i < argv.length; i++) {
   const a = argv[i];
   if (a === '--in') opts.in = argv[++i];
@@ -34,9 +34,13 @@ if (opts.parseOnly) {
   process.exit(0);
 }
 
-const csv = toCsv([['name', 'headline', 'profile_url'], ...people.map((p) => [p.name, p.headline, p.profile_url])]);
-await writeFile(opts.out, csv);
-console.log(`Parsed ${people.length} followers from ${opts.in} -> ${opts.out}`);
+if (opts.out) {
+  const csv = toCsv([['name', 'headline', 'profile_url'], ...people.map((p) => [p.name, p.headline, p.profile_url])]);
+  await writeFile(opts.out, csv);
+  console.log(`Parsed ${people.length} followers from ${opts.in} -> ${opts.out}`);
+} else {
+  console.log(`Parsed ${people.length} followers from ${opts.in}`);
+}
 
 const crm = upsertCrm(people.map((p) => makeContact({ name: p.name, linkedin: p.profile_url, source: 'linkedin' })), { dryRun: opts.dryRun });
 console.log(`CRM (subscribers.csv): ${crm.before} -> ${crm.after}  (+${crm.added} new, ${crm.updated} enriched)${opts.dryRun ? ' [dry run — R2 not written]' : ''}`);

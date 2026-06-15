@@ -11,7 +11,6 @@ attendance: 30  # in-room headcount from the event photo (approx)
 venue:
   name: "Accenture"
   address: "Brīvības gatve 214, Rīga, LV-1039"
-  mapUrl: "https://www.google.com/maps/dir//Accenture%20214%20Br%C4%ABv%C4%ABbas%20gatve%20R%C4%ABga,%201039"
 description: |
   Join us for a deep dive into lessons learned around self-hosted Kubernetes setup and how to use Karpenter for Greenscaling!
   

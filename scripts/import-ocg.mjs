@@ -1,8 +1,8 @@
 // Parse an OCG / CNCF community MEMBERS export (tab + newline text) into the CRM.
 //
 // Manual step: open the chapter's Members page on the community platform, select the
-// members table and copy it, then paste into data/ocg.txt (screenshots in docs/).
-//   npm run import:ocg [-- --in data/ocg.txt --dry-run]
+// members table and copy it, then paste into data/ocg-followers.txt (screenshots in docs/).
+//   npm run import:ocg [-- --in data/ocg-followers.txt --dry-run]
 // OCG rows carry no email/LinkedIn — they land as source=ocg (name only). A few rows
 // whose name field is actually an email address are captured as email.
 // (For per-event OCG attendee CSVs, see import:attendees.)
@@ -11,7 +11,7 @@ import { parseOcgMembers } from './lib/ocg.mjs';
 import { upsertCrm } from './lib/crm.mjs';
 
 const argv = process.argv.slice(2);
-const opts = { in: 'data/ocg.txt', dryRun: false, parseOnly: false };
+const opts = { in: 'data/ocg-followers.txt', dryRun: false, parseOnly: false };
 for (let i = 0; i < argv.length; i++) {
   const a = argv[i];
   if (a === '--in') opts.in = argv[++i];

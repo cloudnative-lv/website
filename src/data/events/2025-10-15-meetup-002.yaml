@@ -12,7 +12,6 @@ attendance: 28  # in-room headcount from the event photo (approx)
 venue:
   name: "Accenture"
   address: "Brīvības gatve 214, Rīga, LV-1039"
-  mapUrl: "https://www.google.com/maps/dir//Br%C4%ABv%C4%ABbas%20gat.%20214%20214%20Br%C4%ABv%C4%ABbas%20gatve%20R%C4%ABga,%201039"
 description: |
   Deep dive into observability with OpenTelemetry and learn how to implement guardrails for your cloud native applications.
   

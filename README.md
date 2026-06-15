@@ -168,13 +168,13 @@ idempotent per source, so the same person can appear under several sources until
 |---|---|---|---|
 | `npm run import:eventbrite` | Pull every event's attendees from the Eventbrite API | — (token in `.env`) | API → `attendees/<slug>.csv` + CRM |
 | `npm run import:attendees -- --event <slug> --source <name> <file.csv>` | Import one event's attendee CSV | save the export under `data/` | CSV → `attendees/<slug>.csv` + CRM |
-| `npm run import:linkedin` | Parse LinkedIn **followers** → CRM | save the followers page HTML to `data/linkined-last.html` | HTML → `data/linkedin_followers.csv` + CRM (`source=linkedin`) |
+| `npm run import:linkedin` | Parse LinkedIn **followers** → CRM | save the followers page HTML to `data/linkedin-followers.html` | HTML → CRM (`source=linkedin`; `--out` also saves a CSV) |
 | `npm run import:linkedin-events` | Parse LinkedIn **event attendee** lists → per-event rosters + CRM | save each event's attendees page to `data/linkedin-<N>.html` (N = meetup #) | HTML → `attendees/<slug>.csv` + CRM (`source=linkedin`) |
-| `npm run import:ocg` | Parse OCG / CNCF **members** → CRM | copy the members table into `data/ocg.txt` (`docs/ocg_*.png`) | text → CRM (`source=ocg`) |
+| `npm run import:ocg` | Parse OCG / CNCF **members** → CRM | copy the members table into `data/ocg-followers.txt` (`docs/ocg_*.png`) | text → CRM (`source=ocg`) |
 | `npm run import:subscribers -- --source <name> <file.csv>` | Merge a generic contact CSV (e.g. Zoho) into the CRM; `--from-r2-attendees` rolls all rosters in | save the export under `data/` | CSV → `subscribers.csv` |
 | `npm run report:subscribers` | Community & registrations report: size, sources, growth, registrations per event, repeat & duplicate registrations, top fans | — | → `data/reports/subscribers/` |
 | `npm run report:feedback` | Feedback digest: ratings per/over events + word clouds — the local replacement for a "digest worker"; run ~1 day after an event | — | `feedback/*.csv` → `data/reports/feedback/` |
-| `npm run crm:cleanup` | Occasional hygiene — dedupe/discover vs NetHunt; `--write` backfills emails | NetHunt export at `data/nethunt_contacts.csv` | → `data/reports/crm/` |
+| `npm run crm:cleanup` | Occasional hygiene — dedupe/discover vs NetHunt; `--write` backfills emails | NetHunt export at `data/nethunt-contacts.csv` | → `data/reports/crm/` |
 
 Add `--dry-run` to any import to preview without writing to R2.
 
@@ -188,19 +188,20 @@ a time. (It's also the reliable path because `wrangler r2 object get` caches rea
 
 - **LinkedIn followers** — LinkedIn Page admin → Analytics → Followers → _All followers_;
   scroll the modal to the bottom so every follower is in the DOM, then save the page as
-  HTML to `data/linkined-last.html`. Run `npm run import:linkedin`.
+  HTML to `data/linkedin-followers.html`. Run `npm run import:linkedin`.
 - **LinkedIn event attendees** — open each LinkedIn event → Attendees, scroll so all load,
   save as `data/linkedin-<N>.html` (N = meetup number). Run `npm run import:linkedin-events`
   (maps `<N>` → `meetup-00N`).
 - **OCG / CNCF members** — open the chapter's Members page (`docs/ocg_attendees.png`),
-  select the members table and copy it into `data/ocg.txt` (`docs/ocg_email.png`). Run
+  select the members table and copy it into `data/ocg-followers.txt` (`docs/ocg_email.png`). Run
   `npm run import:ocg`.
 - **OCG / CNCF event attendees** — export each event's attendee list as `data/event-<N>.csv`
   (N = meetup number) or `data/event-<cncf-code>-attendees.csv`. `npm run import:attendees
   data/event-<N>.csv` auto-maps `<N>` → `meetup-00N` (the code form maps via the event's
   `cncfUrl`). These lists are emailless (name only).
 - **Zoho / NetHunt** — export contacts as CSV into `data/`. Feed Zoho with
-  `import:subscribers --source zoho data/<file>.csv`; point `crm:cleanup` at the NetHunt file.
+  `import:subscribers --source zoho data/zoho-campaigns.csv`; point `crm:cleanup` at the
+  NetHunt file (`data/nethunt-contacts.csv`).
 
 > The event **publishing flow** (announcements, banners, invite cadence) lives in the
 > **organizer kit**, not here — related, but a different job (see _Publishing an event_).

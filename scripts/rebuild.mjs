@@ -6,9 +6,9 @@
 //
 //   npm run rebuild [-- --dry-run]
 //
-// Sources: subscribers.csv (seed) · data/linkined-last.html (LI followers) ·
-// data/linkedin-<N>.html (LI event attendees) · data/ocg.txt (OCG members) ·
-// data/event-<N>.csv (OCG event attendees) · data/zoho_campaigns.csv · Eventbrite API.
+// Sources: subscribers.csv (seed) · data/linkedin-followers.html (LI followers) ·
+// data/linkedin-<N>.html (LI event attendees) · data/ocg-followers.txt (OCG members) ·
+// data/event-<N>.csv (OCG event attendees) · data/zoho-campaigns.csv · Eventbrite API.
 import { readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import { parseCsv, norm, headerFinder, stripBom } from './lib/csv.mjs';
@@ -46,22 +46,22 @@ const addRoster = (slug, { email = '', name = '', source, added }) => {
 };
 
 // 1) LinkedIn followers (community)
-if (await has('linkined-last.html')) {
-  const people = parseLinkedinHtml(await read('linkined-last.html'));
+if (await has('linkedin-followers.html')) {
+  const people = parseLinkedinHtml(await read('linkedin-followers.html'));
   for (const p of people) contacts.push(makeContact({ name: p.name, linkedin: p.profile_url, source: 'linkedin' }));
   console.log(`LinkedIn followers: ${people.length}`);
 }
 
 // 2) OCG members (community)
-if (await has('ocg.txt')) {
-  const members = parseOcgMembers(await read('ocg.txt'));
+if (await has('ocg-followers.txt')) {
+  const members = parseOcgMembers(await read('ocg-followers.txt'));
   contacts.push(...members);
   console.log(`OCG members: ${members.length}`);
 }
 
 // 3) Zoho contacts (community)
-if (await has('zoho_campaigns.csv')) {
-  const rows = parseCsv(stripBom(await read('zoho_campaigns.csv')));
+if (await has('zoho-campaigns.csv')) {
+  const rows = parseCsv(stripBom(await read('zoho-campaigns.csv')));
   const f = headerFinder(rows[0]);
   const c = {
     email: f(['contact email', 'email', 'e-mail', 'email address']),
