@@ -1,4 +1,5 @@
-import BannerFrame, { BannerLogo, skylineSimple } from './BannerFrame';
+import BannerFrame, { BannerLogo } from './BannerFrame';
+import { skylineSimple } from './skylines';
 
 // Square brand logo (1024×1024 PNG) for profile pictures / organization logos on
 // LinkedIn, Eventbrite, Bluesky, etc. The stacked Cloud Native Latvia lockup centered

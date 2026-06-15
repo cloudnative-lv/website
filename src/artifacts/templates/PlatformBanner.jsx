@@ -1,4 +1,5 @@
-import BannerFrame, { BannerLogo, skylineSimple } from './BannerFrame';
+import BannerFrame, { BannerLogo } from './BannerFrame';
+import { skylineSimple } from './skylines';
 
 // Generic, event-agnostic channel cover for the community's own social profiles:
 // LinkedIn company page (1128×191 strip), Bluesky (1500×500), and the Eventbrite
