@@ -3,7 +3,7 @@ import { getUpcomingEvents, getPastEvents } from '../data/events';
 import EventCard from '../components/EventCard';
 import AnimatedBackground from '../components/AnimatedBackground';
 import SEO from '../components/SEO';
-import { WebPageJsonLd, OrganizationJsonLd } from '../components/JsonLd';
+import { WebPageJsonLd } from '../components/JsonLd';
 import { useLanguage } from '../i18n/useLanguage';
 import { allPartners } from '../data/partners';
 
@@ -22,7 +22,6 @@ export default function Home() {
         path="/"
         image="/images/og/home.png"
       />
-      <OrganizationJsonLd />
       <WebPageJsonLd
         title="Cloud Native Latvia - Kubernetes & DevOps Meetups in Riga"
         description="The Kubernetes and DevOps community in Latvia. Free meetups exploring cloud native technologies, observability, and platform engineering."

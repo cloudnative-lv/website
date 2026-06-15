@@ -3,6 +3,7 @@
 [ ] Analyze Cloudflare permissions/add token to Bitwarden/update in Github
 [x] Update instructions about local wrangler — BOOTSTRAP.md + README.md
 [x] Document local operations/docs — README.md "Local operations", BOOTSTRAP.md, ARCH.md
+[x] Per-page SEO review + microformats — Organization/Event/Talk/Person/BreadcrumbList JSON-LD (JsonLd.jsx); prerender bakes JSON-LD into the static HTML
 [ ] Write sponsor menu one-pager — PDF
 
 # Data
@@ -11,7 +12,7 @@ All contact imports are now local npm ops that build the common CRM (`subscriber
 plus per-event rosters (`attendees/<slug>.csv`). See README.md → Local operations.
 
 [x] Import attendees into R2 — `import:eventbrite` (API) + `import:attendees` (OCG/Bevy event CSVs)
-[x] Extract LinkedIn followers — `import:linkedin` (data/linkedin-last.html)
+[x] Extract LinkedIn followers — `import:linkedin` (data/linkedin-followers.html)
 [x] Extract LinkedIn event attendees — `import:linkedin-events` (data/linkedin-<N>.html)
 [x] Extract Zoho Campaigns emails — `import:subscribers --source zoho` (data/zoho_campaigns.csv)
 [x] Extract OCG/Bevy attendees + members — `import:attendees` (event CSVs) + `import:ocg` (members)
@@ -22,14 +23,14 @@ plus per-event rosters (`attendees/<slug>.csv`). See README.md → Local operati
 [ ] Verify forms round-trip: feedback submit → R2 row (subscribe done ✓); decide if "contact" needs a real form or stays mailto
 
 
-[ ] Map links do not work
+[x] Map links do not work — now generated from the venue address (search pin) in EventDetail + TalkDetail
 
 # Talk page
 
-[ ] Add talk card
-[ ] Add slide deck link
-[ ] Add SEO metadata + social preview
-[ ] Add talk info like time, place, etc. similar to event page
+[x] Add talk card — TalkDetail (about + presented-by + details sidebar)
+[x] Add slide deck link — SlidesLink on the talk page
+[x] Add SEO metadata + social preview — SEO meta + Talk/Person/BreadcrumbList JSON-LD
+[x] Add talk info like time, place, etc. similar to event page — Event Details sidebar (date/time/venue/map)
 
 # Design
 
