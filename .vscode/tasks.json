@@ -2,210 +2,33 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Dev Server",
-      "type": "npm",
-      "script": "dev",
-      "problemMatcher": [],
-      "isBackground": true,
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      },
-      "presentation": {
-        "reveal": "always",
-        "panel": "new"
-      }
-    },
-    {
-      "label": "Build",
+      "label": "Dev: Build",
       "type": "npm",
       "script": "build",
       "problemMatcher": [],
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      }
+      "group": { "kind": "build", "isDefault": true }
     },
     {
-      "label": "Preview",
+      "label": "Dev: Preview",
       "type": "npm",
       "script": "preview",
       "problemMatcher": [],
       "isBackground": true,
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      },
-      "presentation": {
-        "reveal": "always",
-        "panel": "new"
-      }
+      "group": { "kind": "build", "isDefault": true },
+      "presentation": { "reveal": "always", "panel": "new" }
     },
     {
-      "label": "Install Dependencies",
+      "label": "Dev: Server",
       "type": "npm",
-      "script": "install",
-      "problemMatcher": [],
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      }
-    },
-    {
-      "label": "Lint",
-      "type": "npm",
-      "script": "lint",
-      "problemMatcher": ["$eslint-stylish"],
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      }
-    },
-    {
-      "label": "Validate",
-      "type": "npm",
-      "script": "validate",
-      "problemMatcher": [],
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      }
-    },
-    {
-      "label": "E2E Tests",
-      "type": "npm",
-      "script": "test:e2e",
-      "problemMatcher": [],
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      },
-      "dependsOn": ["Build"]
-    },
-    {
-      "label": "E2E Tests (Headed)",
-      "type": "npm",
-      "script": "test:e2e:headed",
-      "problemMatcher": [],
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      },
-      "dependsOn": ["Build"]
-    },
-    {
-      "label": "E2E Tests (UI Mode)",
-      "type": "npm",
-      "script": "test:e2e:ui",
+      "script": "dev",
       "problemMatcher": [],
       "isBackground": true,
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      },
-      "dependsOn": ["Build"],
-      "presentation": {
-        "reveal": "always",
-        "panel": "new"
-      }
-    },
-    {
-      "label": "Show E2E Report",
-      "type": "shell",
-      "command": "npx playwright show-report",
-      "problemMatcher": [],
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      },
-      "presentation": {
-        "reveal": "always",
-        "panel": "new"
-      }
+      "group": { "kind": "build", "isDefault": true },
+      "presentation": { "reveal": "always", "panel": "new" }
     },
 
     {
-      "label": "Ops: Import Eventbrite attendees",
-      "type": "npm",
-      "script": "import:eventbrite",
-      "problemMatcher": [],
-      "group": { "kind": "build", "isDefault": true },
-      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
-    },
-    {
-      "label": "Ops: Import LinkedIn followers",
-      "type": "npm",
-      "script": "import:linkedin",
-      "problemMatcher": [],
-      "group": { "kind": "build", "isDefault": true },
-      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
-    },
-    {
-      "label": "Ops: Import LinkedIn event attendees",
-      "type": "npm",
-      "script": "import:linkedin-events",
-      "problemMatcher": [],
-      "group": { "kind": "build", "isDefault": true },
-      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
-    },
-    {
-      "label": "Ops: Import OCG members",
-      "type": "npm",
-      "script": "import:ocg",
-      "problemMatcher": [],
-      "group": { "kind": "build", "isDefault": true },
-      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
-    },
-    {
-      "label": "Ops: Import attendees (CSV → event roster)",
-      "type": "shell",
-      "command": "npm run import:attendees -- --event ${input:eventSlug} --source ${input:sourceName} ${input:csvPath}",
-      "problemMatcher": [],
-      "group": { "kind": "build", "isDefault": true },
-      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
-    },
-    {
-      "label": "Ops: Import subscribers (CSV → CRM)",
-      "type": "shell",
-      "command": "npm run import:subscribers -- --source ${input:sourceName} ${input:csvPath}",
-      "problemMatcher": [],
-      "group": { "kind": "build", "isDefault": true },
-      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
-    },
-    {
-      "label": "Ops: Rebuild CRM from event rosters",
-      "type": "shell",
-      "command": "npm run import:subscribers -- --from-r2-attendees",
-      "problemMatcher": [],
-      "group": { "kind": "build", "isDefault": true },
-      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
-    },
-    {
-      "label": "Ops: Report subscribers / CRM",
-      "type": "npm",
-      "script": "report:subscribers",
-      "problemMatcher": [],
-      "group": { "kind": "build", "isDefault": true },
-      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
-    },
-    {
-      "label": "Ops: Import feedback (Google Forms → R2)",
-      "type": "npm",
-      "script": "import:feedback",
-      "problemMatcher": [],
-      "group": { "kind": "build", "isDefault": true },
-      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
-    },
-    {
-      "label": "Ops: Report feedback (digest)",
-      "type": "npm",
-      "script": "report:feedback",
-      "problemMatcher": [],
-      "group": { "kind": "build", "isDefault": true },
-      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
-    },
-    {
-      "label": "Ops: CRM cleanup (vs NetHunt)",
+      "label": "Ops: CRM Cleanup",
       "type": "npm",
       "script": "crm:cleanup",
       "problemMatcher": [],
@@ -213,12 +36,173 @@
       "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
     },
     {
-      "label": "Ops: Rebuild CRM + rosters + reports (one pass)",
+      "label": "Ops: CRM Restore (audit log)",
+      "type": "npm",
+      "script": "crm:restore",
+      "problemMatcher": [],
+      "group": { "kind": "build", "isDefault": true },
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+    },
+    {
+      "label": "Ops: Feedback Restore (audit log)",
+      "type": "npm",
+      "script": "feedback:restore",
+      "problemMatcher": [],
+      "group": { "kind": "build", "isDefault": true },
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+    },
+    {
+      "label": "Ops: R2 Verify (health check)",
+      "type": "npm",
+      "script": "r2:verify",
+      "problemMatcher": [],
+      "group": { "kind": "build", "isDefault": true },
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+    },
+    {
+      "label": "Ops: Import Attendees (CSV)",
+      "type": "shell",
+      "command": "npm run import:attendees -- --event ${input:eventSlug} --source ${input:sourceName} ${input:csvPath}",
+      "problemMatcher": [],
+      "group": { "kind": "build", "isDefault": true },
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+    },
+    {
+      "label": "Ops: Import Eventbrite Attendees",
+      "type": "npm",
+      "script": "import:eventbrite",
+      "problemMatcher": [],
+      "group": { "kind": "build", "isDefault": true },
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+    },
+    {
+      "label": "Ops: Import Feedback",
+      "type": "npm",
+      "script": "import:feedback",
+      "problemMatcher": [],
+      "group": { "kind": "build", "isDefault": true },
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+    },
+    {
+      "label": "Ops: Import LinkedIn Event Attendees",
+      "type": "npm",
+      "script": "import:linkedin-events",
+      "problemMatcher": [],
+      "group": { "kind": "build", "isDefault": true },
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+    },
+    {
+      "label": "Ops: Import LinkedIn Followers",
+      "type": "npm",
+      "script": "import:linkedin",
+      "problemMatcher": [],
+      "group": { "kind": "build", "isDefault": true },
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+    },
+    {
+      "label": "Ops: Import OCG Members",
+      "type": "npm",
+      "script": "import:ocg",
+      "problemMatcher": [],
+      "group": { "kind": "build", "isDefault": true },
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+    },
+    {
+      "label": "Ops: Import Subscribers (CSV)",
+      "type": "shell",
+      "command": "npm run import:subscribers -- --source ${input:sourceName} ${input:csvPath}",
+      "problemMatcher": [],
+      "group": { "kind": "build", "isDefault": true },
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+    },
+    {
+      "label": "Ops: Rebuild All",
       "type": "npm",
       "script": "rebuild",
       "problemMatcher": [],
       "group": { "kind": "build", "isDefault": true },
       "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+    },
+    {
+      "label": "Ops: Rebuild CRM from Rosters",
+      "type": "shell",
+      "command": "npm run import:subscribers -- --from-r2-attendees",
+      "problemMatcher": [],
+      "group": { "kind": "build", "isDefault": true },
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+    },
+    {
+      "label": "Ops: Report Feedback",
+      "type": "npm",
+      "script": "report:feedback",
+      "problemMatcher": [],
+      "group": { "kind": "build", "isDefault": true },
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+    },
+    {
+      "label": "Ops: Report Subscribers",
+      "type": "npm",
+      "script": "report:subscribers",
+      "problemMatcher": [],
+      "group": { "kind": "build", "isDefault": true },
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+    },
+
+    {
+      "label": "Setup: Install Dependencies",
+      "type": "npm",
+      "script": "install",
+      "problemMatcher": [],
+      "group": { "kind": "build", "isDefault": true }
+    },
+
+    {
+      "label": "Test: E2E",
+      "type": "npm",
+      "script": "test:e2e",
+      "problemMatcher": [],
+      "group": { "kind": "build", "isDefault": true },
+      "dependsOn": ["Dev: Build"]
+    },
+    {
+      "label": "Test: E2E (Headed)",
+      "type": "npm",
+      "script": "test:e2e:headed",
+      "problemMatcher": [],
+      "group": { "kind": "build", "isDefault": true },
+      "dependsOn": ["Dev: Build"]
+    },
+    {
+      "label": "Test: E2E (Report)",
+      "type": "shell",
+      "command": "npx playwright show-report",
+      "problemMatcher": [],
+      "group": { "kind": "build", "isDefault": true },
+      "presentation": { "reveal": "always", "panel": "new" }
+    },
+    {
+      "label": "Test: E2E (UI Mode)",
+      "type": "npm",
+      "script": "test:e2e:ui",
+      "problemMatcher": [],
+      "isBackground": true,
+      "group": { "kind": "build", "isDefault": true },
+      "dependsOn": ["Dev: Build"],
+      "presentation": { "reveal": "always", "panel": "new" }
+    },
+    {
+      "label": "Test: Lint",
+      "type": "npm",
+      "script": "lint",
+      "problemMatcher": ["$eslint-stylish"],
+      "group": { "kind": "build", "isDefault": true }
+    },
+    {
+      "label": "Test: Validate",
+      "type": "npm",
+      "script": "validate",
+      "problemMatcher": [],
+      "group": { "kind": "build", "isDefault": true }
     }
   ],
   "inputs": [

@@ -38,10 +38,11 @@ flowchart TD
     end
   end
 
-  subgraph ops[Local ops - npm + wrangler, operator laptop]
+  subgraph ops[Local ops - npm via S3 API / wrangler, operator laptop]
     IMP[import:eventbrite / attendees /<br/>linkedin / linkedin-events / ocg / subscribers]
     REP[report:subscribers<br/>report:feedback]
     CLEAN[crm:cleanup]
+    VERIFY[r2:verify<br/>feedback:restore / crm:restore]
     DATA[data - raw exports]
     REPORTS[data/reports - md + PNG]
   end
@@ -78,6 +79,8 @@ flowchart TD
   ATT --> REP
   FBK --> REP
   CRM <--> CLEAN
+  CRM <--> VERIFY
+  FBK <--> VERIFY
   REP --> REPORTS
   CLEAN --> REPORTS
 ```
@@ -114,15 +117,24 @@ flowchart TD
 `wrangler r2 object get` serves a **cached** copy of an object after the first read and does
 not invalidate it on overwrite (even `delete` + `put` within the cache window keeps serving
 the old bytes). Naive read-modify-write across separate op runs can therefore read stale data
-and clobber. Two mitigations in the ops:
+and clobber. Three mitigations in the ops:
 
-1. Every write sets `Cache-Control: no-store` — the local ops (`scripts/lib/r2.mjs`) **and**
-   the subscribe/feedback workers — so reads of those objects stay fresh going forward. (It
-   can't retroactively bust an entry cached *before* the object first became no-store; that
-   only clears on the cache's own TTL.)
-2. `npm run rebuild` does the entire CRM + roster rebuild in a **single process** — one read
+1. **S3 API (preferred).** When the `R2_*` S3 keys are in `.env`, `scripts/lib/r2.mjs` routes
+   every read/write through R2's S3-compatible API (SigV4-signed in `scripts/lib/s3.mjs`,
+   sent with `curl`). The S3 API always returns the **live** object, so this path is
+   cache-immune — it's the default for all local ops and the reason the cache no longer bites.
+   `npm run r2:verify` reads the true bucket state this way.
+2. Every write sets `Cache-Control: no-store` — the local ops **and** the subscribe/feedback
+   workers — so even `wrangler` reads of those objects stay fresh going forward. (It can't
+   retroactively bust an entry cached *before* the object first became no-store; that only
+   clears on the cache's own TTL — which is why the S3 path exists.)
+3. `npm run rebuild` does the entire CRM + roster rebuild in a **single process** — one read
    and one write per object, reports rendered from memory — so a bulk import is always
    consistent regardless of the cache.
+
+The workers write each submission to an immutable `*/incoming/<ts>.json` record **before**
+appending to the aggregate CSV, so `feedback:restore` / `crm:restore` can replay the audit
+log into the CSVs if an append is ever lost.
 
 See **[README.md → Local operations](./README.md#local-operations)** for the op list and
 **[BOOTSTRAP.md](./BOOTSTRAP.md)** for one-time Cloudflare/GitHub setup.

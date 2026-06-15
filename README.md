@@ -153,8 +153,10 @@ downloadable `event-artifacts` workflow artifact.
 ## Local operations
 
 Community/CRM data jobs are **local npm ops** — no extra workers. They read/write the
-`cloudnative-lv` R2 bucket through `wrangler` (run `npx wrangler login` once) and read
-config from `.env` (copy `.env.example`). Every op is also a VS Code build task
+`cloudnative-lv` R2 bucket through its **S3 API** when the `R2_*` S3 keys are in `.env`
+(the cache-immune path — see [ARCH.md](./ARCH.md)), falling back to `wrangler`
+(`npx wrangler login` once) otherwise. Config comes from `.env` (copy `.env.example`).
+Every op is also a VS Code build task
 (⇧⌘B → _Run Build Task_). Raw exports you paste in live under `data/` (gitignored);
 generated reports land in `data/reports/`.
 
@@ -176,14 +178,19 @@ idempotent per source, so the same person can appear under several sources until
 | `npm run report:subscribers` | Community & registrations report: size, sources, growth, registrations per event, repeat & duplicate registrations, top fans | — | → `data/reports/subscribers/` |
 | `npm run report:feedback` | Feedback digest: ratings per/over events + word clouds — the local replacement for a "digest worker"; run ~1 day after an event | — | `feedback/*.csv` → `data/reports/feedback/` |
 | `npm run crm:cleanup` | Occasional hygiene — dedupe/discover vs NetHunt; `--write` backfills emails | NetHunt export at `data/nethunt-contacts.csv` | → `data/reports/crm/` |
+| `npm run r2:verify` | Read-only health check via the S3 API: CRM size + sources, per-event rosters/feedback, audit-log counts | — (needs the `R2_*` S3 keys) | live R2 → stdout |
+| `npm run feedback:restore` | Replay the feedback audit log into `feedback/<slug>.csv` (dedup by timestamp); `--write` applies | — (needs the S3 keys) | `feedback/incoming/*` → `feedback/<slug>.csv` |
+| `npm run crm:restore` | Replay the web-signup audit log into the CRM (idempotent); `--write` applies | — (needs the S3 keys) | `subscribers/incoming/*` → `subscribers.csv` |
 
-Add `--dry-run` to any import to preview without writing to R2.
+Add `--dry-run` to any import to preview without writing to R2; `r2:verify` is always
+read-only and the `*:restore` ops are dry-run unless given `--write`.
 
 **Full rebuild:** `npm run rebuild` re-reads every local source + the Eventbrite API in one
 pass and rewrites `subscribers.csv` + all rosters at once, then renders both reports. Use it
 after dropping a fresh batch of exports; the incremental `import:*` ops are for one source at
-a time. (It's also the reliable path because `wrangler r2 object get` caches reads — see
-[ARCH.md](./ARCH.md) — so rapid back-to-back `import:*` runs can otherwise read stale data.)
+a time. (On the `wrangler` fallback it's also the safest path: `wrangler r2 object get`
+caches reads — see [ARCH.md](./ARCH.md) — so rapid back-to-back `import:*` runs can read
+stale data. The S3 path is cache-immune and avoids that.)
 
 ### Manual exports
 

@@ -3,8 +3,8 @@
 All contact imports are now local npm ops that build the common CRM (`subscribers.csv`)
 plus per-event rosters (`attendees/<slug>.csv`). See README.md → Local operations.
 
-[ ] Run `crm:cleanup` once the wrangler R2 read-cache clears (NetHunt dedup / email backfill report)
-[ ] Verify forms round-trip: feedback submit → R2 row (subscribe done ✓); decide if "contact" needs a real form or stays mailto
+[x] Run `crm:cleanup` — now cache-free via the R2 S3 API; review `data/reports/crm/crm-cleanup.md` before `--write` (149 email backfills, 70 dup clusters, 3071 NetHunt-only)
+[ ] Verify forms round-trip: feedback submit → R2 row (subscribe verified ✓; feedback audit-write + `feedback:restore` verified — real end-to-end form submission still TBD)
 
 # Design
 

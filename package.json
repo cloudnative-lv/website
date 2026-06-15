@@ -29,6 +29,9 @@
     "report:subscribers": "node --env-file-if-exists=.env scripts/report-subscribers.mjs",
     "report:feedback": "node --env-file-if-exists=.env scripts/report-feedback.mjs",
     "crm:cleanup": "node --env-file-if-exists=.env scripts/crm-cleanup.mjs",
+    "crm:restore": "node --env-file-if-exists=.env scripts/crm-restore.mjs",
+    "feedback:restore": "node --env-file-if-exists=.env scripts/feedback-restore.mjs",
+    "r2:verify": "node --env-file-if-exists=.env scripts/r2-verify.mjs",
     "rebuild": "node --env-file-if-exists=.env scripts/rebuild.mjs"
   },
   "dependencies": {
