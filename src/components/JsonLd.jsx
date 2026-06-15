@@ -157,7 +157,8 @@ export function TalkJsonLd({ event, talk }) {
       startDate: rigaIsoString(event.date, event.time || '18:00'),
       url: `${siteConfig.siteUrl}/events/${event.slug}`
     },
-    image: `${siteConfig.siteUrl}/artifacts/${event.id}/og.png`
+    // Talk-specific share image: this talk's speaker banner, not the event OG image.
+    image: `${siteConfig.siteUrl}/artifacts/${event.id}/${talk.index != null ? `speaker-${talk.index + 1}` : 'og'}.png`
   };
   if (talk.slidesUrl) {
     data.workFeatured = {

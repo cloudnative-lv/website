@@ -48,7 +48,7 @@ export default function TalkDetail() {
         description={talk.description ? talk.description.split('\n')[0] : event.title}
         keywords={event.tags || []}
         path={`/events/${event.slug}/talks/${talk.talkSlug}`}
-        image={`/artifacts/${event.id}/og.png`}
+        image={`/artifacts/${event.id}/speaker-${talk.index + 1}.png`}
       />
       <TalkJsonLd event={event} talk={talk} />
       <BreadcrumbJsonLd
