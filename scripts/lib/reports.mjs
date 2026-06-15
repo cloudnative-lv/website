@@ -118,9 +118,10 @@ export async function renderCommunityReport({ crmRows, rostersBySlug, eventMeta 
   // --- Top fans with per-event attendance grid ---
   const allEventLabels = perEvent.map((e) => e.label);
   const organizers = new Set(['andrey adamovich', 'linda arende']);
+  const stripDiacritics = (s) => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
   const topFans = [...eventsByAttendee.entries()]
     .map(([id, set]) => ({ name: nameByAttendee.get(id) || id, count: set.size, attended: new Set(set) }))
-    .filter((f) => f.count >= 2 && !organizers.has(lower(transliterate(f.name))))
+    .filter((f) => f.count >= 2 && !organizers.has(stripDiacritics(lower(transliterate(f.name)))))
     .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name))
     .slice(0, 15);
 
@@ -220,23 +221,43 @@ ${growth.length ? `\n![Growth](growth.png)${bulkNote}` : ''}${regBlock}`;
 }
 
 // feedbackBySlug: Map(slug -> rows[] from parseFeedbackCsv) in chronological order
-export async function renderFeedbackReport({ feedbackBySlug, OUT }) {
+// eventMeta: Map(slug -> {date}) — optional, enriches labels with dates
+// rostersBySlug: Map(slug -> [{email,name}]) — optional, for response-rate calculation
+export async function renderFeedbackReport({ feedbackBySlug, eventMeta = new Map(), rostersBySlug = new Map(), OUT }) {
   await mkdir(OUT, { recursive: true });
   const perEvent = [];
   const dist = [0, 0, 0, 0, 0];
   let topicsText = '', commentsText = '';
+  const perEventText = [];
   for (const [slug, rows] of feedbackBySlug) {
     if (!rows.length) continue;
     const valid = (k) => rows.map((r) => r[k]).filter((v) => v >= 1 && v <= 5);
     for (const v of valid('overall')) dist[v - 1] += 1;
-    for (const r of rows) { topicsText += ' ' + r.topics; commentsText += ' ' + r.comments; }
-    perEvent.push({ label: shortLabel(slug), n: rows.length, overall: avg(valid('overall')), talks: avg(valid('talks')), org: avg(valid('organization')) });
+    const topics = [], comments = [];
+    for (const r of rows) {
+      topicsText += ' ' + r.topics; commentsText += ' ' + r.comments;
+      if (r.topics.trim()) topics.push(r.topics.trim());
+      if (r.comments.trim()) comments.push(r.comments.trim());
+    }
+    const registered = rostersBySlug.get(slug)?.length ?? 0;
+    perEvent.push({ label: shortLabel(slug), slug, n: rows.length, registered, overall: avg(valid('overall')), talks: avg(valid('talks')), org: avg(valid('organization')) });
+    perEventText.push({ label: shortLabel(slug), topics, comments });
   }
   if (!perEvent.length) return { responses: 0, meetups: 0 };
   const totalResponses = perEvent.reduce((a, e) => a + e.n, 0);
   const wmean = (k) => { let s = 0, w = 0; for (const e of perEvent) if (e[k]) { s += e[k] * e.n; w += e.n; } return w ? s / w : 0; };
   const agg = { overall: wmean('overall'), talks: wmean('talks'), org: wmean('org') };
+  const avgResponses = perEvent.length ? totalResponses / perEvent.length : 0;
+  const hasRegistrations = perEvent.some((e) => e.registered > 0);
 
+  const fmtDate = (slug) => {
+    const d = eventMeta.get(slug)?.date;
+    if (!d) return '';
+    const dt = new Date(d + 'T12:00:00');
+    return dt.toLocaleDateString('en', { month: 'short', day: 'numeric', year: 'numeric' });
+  };
+
+  // --- Charts ---
   await svgToPng(barsSvg({ title: 'Ratings by meetup', groups: perEvent.map((e) => e.label), series: [
     { name: 'overall', color: SERIES_COLORS[0], values: perEvent.map((e) => +e.overall.toFixed(2)) },
     { name: 'talks', color: SERIES_COLORS[1], values: perEvent.map((e) => +e.talks.toFixed(2)) },
@@ -244,50 +265,95 @@ export async function renderFeedbackReport({ feedbackBySlug, OUT }) {
   ], yMax: 5, fmt: (v) => v.toFixed(1) }), path.join(OUT, 'ratings-by-meetup.png'));
   await svgToPng(barsSvg({ title: 'Responses by meetup', groups: perEvent.map((e) => e.label), series: [{ name: 'responses', color: SERIES_COLORS[0], values: perEvent.map((e) => e.n) }] }), path.join(OUT, 'responses-by-meetup.png'));
   await svgToPng(barsSvg({ title: 'Overall rating distribution', groups: ['1', '2', '3', '4', '5'], series: [{ name: 'responses', color: SERIES_COLORS[1], values: dist }] }), path.join(OUT, 'overall-distribution.png'));
-  await svgToPng(tableSvg({ title: 'Average scores by meetup', headers: ['Meetup', 'Responses', 'Overall', 'Talks', 'Organization'],
-    rows: [...perEvent.map((e) => [e.label, String(e.n), e.overall.toFixed(2), e.talks.toFixed(2), e.org.toFixed(2)]), ['All', String(totalResponses), agg.overall.toFixed(2), agg.talks.toFixed(2), agg.org.toFixed(2)]], highlightLast: true }), path.join(OUT, 'scores-table.png'));
+  if (perEvent.length >= 2) {
+    await svgToPng(lineSvg({ title: 'Overall score trend', points: perEvent.map((e) => ({ label: e.label, value: +e.overall.toFixed(2) })), yLabel: 'score', fmt: (v) => v.toFixed(1) }), path.join(OUT, 'score-trend.png'));
+  }
+  const tableHeaders = hasRegistrations ? ['Meetup', 'Date', 'Responses', 'Rate', 'Overall', 'Talks', 'Org'] : ['Meetup', 'Date', 'Responses', 'Overall', 'Talks', 'Org'];
+  const tableRows = perEvent.map((e) => {
+    const base = [e.label, fmtDate(e.slug)];
+    if (hasRegistrations) base.push(String(e.n), e.registered ? `${Math.round((e.n / e.registered) * 100)}%` : '\u2013');
+    else base.push(String(e.n));
+    return [...base, e.overall.toFixed(2), e.talks.toFixed(2), e.org.toFixed(2)];
+  });
+  const totalRow = hasRegistrations
+    ? ['All', '', String(totalResponses), '', agg.overall.toFixed(2), agg.talks.toFixed(2), agg.org.toFixed(2)]
+    : ['All', '', String(totalResponses), agg.overall.toFixed(2), agg.talks.toFixed(2), agg.org.toFixed(2)];
+  await svgToPng(tableSvg({ title: 'Average scores by meetup', headers: tableHeaders,
+    rows: [...tableRows, totalRow], highlightLast: true }), path.join(OUT, 'scores-table.png'));
 
-  const STOP = new Set(('the a an and or to of in for on with is are was be it we you they i me my more about how what why some most very our your their them then than this that these those at as by from so if not no yes can could would should will just like also un ir ar uz no par ka kā jo bet vai tā to ko kas ļoti vairāk bija būtu lai gan kad kur').split(/\s+/));
+  // --- Word clouds ---
+  const STOP = new Set(('the a an and or to of in for on with is are was be it we you they i me my more about how what why some most very our your their them then than this that these those at as by from so if not no yes can could would should will just like also un ir ar uz no par ka k\u0101 jo bet vai t\u0101 to ko kas \u013Coti vair\u0101k bija b\u016Btu lai gan kad kur').split(/\s+/));
   const freq = (t) => { const c = {}; for (const w of t.toLowerCase().match(/[\p{L}][\p{L}\-']{2,}/gu) || []) { if (!STOP.has(w)) c[w] = (c[w] || 0) + 1; } return Object.entries(c).sort((a, b) => b[1] - a[1]).slice(0, 120); };
-  let wordclouds = true;
-  try {
-    const wcPath = createRequire(import.meta.url).resolve('wordcloud');
-    await withPage(async (page) => {
-      for (const [words, file] of [[freq(topicsText), 'wordcloud-topics.png'], [freq(commentsText), 'wordcloud-comments.png']]) {
-        if (!words.length) continue;
-        const W = 1200, H = 700, max = words[0][1];
-        await page.setViewportSize({ width: W, height: H });
-        await page.setContent(`<!doctype html><html><body style="margin:0;background:#fff"><canvas id="c" width="${W}" height="${H}"></canvas></body></html>`, { waitUntil: 'load' });
-        await page.addScriptTag({ path: wcPath });
-        await page.evaluate(({ words, max }) => new Promise((resolve) => {
-          const c = document.getElementById('c');
-          c.addEventListener('wordcloudstop', () => resolve(), { once: true });
-          window.WordCloud(c, { list: words, gridSize: 12, rotateRatio: 0.3, shuffle: false, fontFamily: 'Helvetica, Arial, sans-serif', backgroundColor: '#ffffff', weightFactor: (n) => 14 + (n / max) * 80, color: () => ['#8b1538', '#d4567c', '#a83356', '#6f1230'][Math.floor(Math.random() * 4)] });
-          setTimeout(resolve, 8000);
-        }), { words, max });
-        await page.waitForTimeout(150);
-        await writeFile(path.join(OUT, file), await (await page.$('#c')).screenshot({ type: 'png' }));
-      }
-    });
-  } catch { wordclouds = false; }
+  const topicWords = freq(topicsText), commentWords = freq(commentsText);
+  const cloudFiles = [];
+  if (topicWords.length >= 3) cloudFiles.push([topicWords, 'wordcloud-topics.png']);
+  if (commentWords.length >= 3) cloudFiles.push([commentWords, 'wordcloud-comments.png']);
+  let wordclouds = cloudFiles.length > 0;
+  if (wordclouds) {
+    try {
+      const wcPath = createRequire(import.meta.url).resolve('wordcloud');
+      await withPage(async (page) => {
+        for (const [words, file] of cloudFiles) {
+          const W = 1200, H = 700, max = words[0][1];
+          await page.setViewportSize({ width: W, height: H });
+          await page.setContent(`<!doctype html><html><body style="margin:0;background:#fff"><canvas id="c" width="${W}" height="${H}"></canvas></body></html>`, { waitUntil: 'load' });
+          await page.addScriptTag({ path: wcPath });
+          await page.evaluate(({ words, max }) => new Promise((resolve) => {
+            const c = document.getElementById('c');
+            c.addEventListener('wordcloudstop', () => resolve(), { once: true });
+            window.WordCloud(c, { list: words, gridSize: 12, rotateRatio: 0.3, shuffle: false, fontFamily: 'Helvetica, Arial, sans-serif', backgroundColor: '#ffffff', weightFactor: (n) => 14 + (n / max) * 80, color: () => ['#8b1538', '#d4567c', '#a83356', '#6f1230'][Math.floor(Math.random() * 4)] });
+            setTimeout(resolve, 8000);
+          }), { words, max });
+          await page.waitForTimeout(150);
+          await writeFile(path.join(OUT, file), await (await page.$('#c')).screenshot({ type: 'png' }));
+        }
+      });
+    } catch { wordclouds = false; }
+  }
 
-  const md = `# Cloud Native Latvia — feedback report
+  // --- Markdown ---
+  const genDate = new Date().toISOString().slice(0, 10);
+  const responseRateNote = hasRegistrations ? (() => {
+    const withReg = perEvent.filter((e) => e.registered > 0);
+    const avgRate = withReg.length ? withReg.reduce((a, e) => a + e.n / e.registered, 0) / withReg.length : 0;
+    return ` \u00B7 **Avg response rate:** ${Math.round(avgRate * 100)}%`;
+  })() : '';
 
-_Generated from R2 \`feedback/<slug>.csv\`. Curated per-speaker notes are kept separately._
+  const mdTableHeaders = hasRegistrations
+    ? '| Meetup | Date | Responses | Rate | Overall | Talks | Organization |\n|---|---|---:|---:|---:|---:|---:|'
+    : '| Meetup | Date | Responses | Overall | Talks | Organization |\n|---|---|---:|---:|---:|---:|';
+  const mdTableRow = (e) => {
+    const rate = hasRegistrations ? (e.registered ? ` ${Math.round((e.n / e.registered) * 100)}% |` : ' \u2013 |') : '';
+    return `| ${e.label} | ${fmtDate(e.slug)} | ${e.n} |${rate} ${e.overall.toFixed(2)} | ${e.talks.toFixed(2)} | ${e.org.toFixed(2)} |`;
+  };
+  const mdTotalRow = hasRegistrations
+    ? `| **All** | | **${totalResponses}** | | **${agg.overall.toFixed(2)}** | **${agg.talks.toFixed(2)}** | **${agg.org.toFixed(2)}** |`
+    : `| **All** | | **${totalResponses}** | **${agg.overall.toFixed(2)}** | **${agg.talks.toFixed(2)}** | **${agg.org.toFixed(2)}** |`;
 
-- **Responses:** ${totalResponses} across ${perEvent.length} meetups
-- **Overall:** ${agg.overall.toFixed(2)} / 5 · **Talks:** ${agg.talks.toFixed(2)} · **Organization:** ${agg.org.toFixed(2)}
+  const textBlock = perEventText.some((e) => e.topics.length || e.comments.length) ? `
+## Open-ended feedback
 
-| Meetup | Responses | Overall | Talks | Organization |
-|---|---:|---:|---:|---:|
-${perEvent.map((e) => `| ${e.label} | ${e.n} | ${e.overall.toFixed(2)} | ${e.talks.toFixed(2)} | ${e.org.toFixed(2)} |`).join('\n')}
-| **All** | **${totalResponses}** | **${agg.overall.toFixed(2)}** | **${agg.talks.toFixed(2)}** | **${agg.org.toFixed(2)}** |
+${perEventText.filter((e) => e.topics.length || e.comments.length).map((e) => `### ${e.label}
+${e.topics.length ? `\n**Suggested topics:**\n${e.topics.map((t) => `- ${t}`).join('\n')}\n` : ''}${e.comments.length ? `\n**Comments:**\n${e.comments.map((c) => `- ${c}`).join('\n')}\n` : ''}`).join('\n')}` : '';
+
+  const md = `# Cloud Native Latvia \u2014 feedback report
+
+_Generated ${genDate} from R2 \`feedback/<slug>.csv\`._
+
+## Summary
+
+- **Responses:** ${totalResponses} across ${perEvent.length} meetups (avg ${avgResponses.toFixed(1)} per event)${responseRateNote}
+- **Overall:** ${agg.overall.toFixed(2)} / 5 \u00B7 **Talks:** ${agg.talks.toFixed(2)} \u00B7 **Organization:** ${agg.org.toFixed(2)}
+
+${mdTableHeaders}
+${perEvent.map(mdTableRow).join('\n')}
+${mdTotalRow}
 
 ![Scores table](scores-table.png)
 ![Ratings by meetup](ratings-by-meetup.png)
-![Responses by meetup](responses-by-meetup.png)
+${perEvent.length >= 2 ? '![Score trend](score-trend.png)\n' : ''}![Responses by meetup](responses-by-meetup.png)
 ![Overall distribution](overall-distribution.png)
-${wordclouds ? '\n![Topics](wordcloud-topics.png)\n![Comments](wordcloud-comments.png)\n' : ''}`;
+${wordclouds ? cloudFiles.map(([, f]) => `![${f.replace('.png', '').replace('wordcloud-', 'Word cloud: ')}](${f})`).join('\n') + '\n' : ''}${textBlock}`;
   await writeFile(path.join(OUT, 'feedback-summary.md'), md);
   return { responses: totalResponses, meetups: perEvent.length, overall: agg.overall, wordclouds };
 }

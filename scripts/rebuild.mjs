@@ -151,7 +151,7 @@ console.log(`Community report: ${cr.uniquePeople} people (rows ${cr.total}), ${c
 const feedbackBySlug = new Map();
 for (const e of events) { const t = r2ReadText(`feedback/${e.slug}.csv`); if (t) { const rows = parseFeedbackCsv(t); if (rows.length) feedbackBySlug.set(e.slug, rows); } }
 if (feedbackBySlug.size) {
-  const fr = await renderFeedbackReport({ feedbackBySlug, OUT: 'data/reports/feedback' });
+  const fr = await renderFeedbackReport({ feedbackBySlug, eventMeta, rostersBySlug, OUT: 'data/reports/feedback' });
   console.log(`Feedback report: ${fr.responses} responses across ${fr.meetups} meetups, overall ${fr.overall.toFixed(2)}.`);
 }
 console.log('\nDone.');
