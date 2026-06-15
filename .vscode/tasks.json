@@ -28,6 +28,47 @@
     },
 
     {
+      "label": "Generate: Artifacts",
+      "type": "npm",
+      "script": "generate:artifacts",
+      "problemMatcher": [],
+      "group": { "kind": "build", "isDefault": true },
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+    },
+    {
+      "label": "Generate: Brand Assets",
+      "type": "npm",
+      "script": "generate:brand",
+      "problemMatcher": [],
+      "group": { "kind": "build", "isDefault": true },
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+    },
+    {
+      "label": "Generate: RSS Feed",
+      "type": "npm",
+      "script": "generate:rss",
+      "problemMatcher": [],
+      "group": { "kind": "build", "isDefault": true },
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+    },
+    {
+      "label": "Generate: Sponsor PDF",
+      "type": "npm",
+      "script": "generate:sponsor-pdf",
+      "problemMatcher": [],
+      "group": { "kind": "build", "isDefault": true },
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+    },
+    {
+      "label": "Generate: Sponsors Card",
+      "type": "npm",
+      "script": "generate:sponsors-card",
+      "problemMatcher": [],
+      "group": { "kind": "build", "isDefault": true },
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+    },
+
+    {
       "label": "Ops: CRM Cleanup",
       "type": "npm",
       "script": "crm:cleanup",
