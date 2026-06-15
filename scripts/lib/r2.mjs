@@ -22,7 +22,9 @@ const WRANGLER = ['--yes', 'wrangler@4', 'r2', 'object'];
 const NO_STORE = 'no-store, max-age=0';
 
 const isMissing = (msg) => /not exist|not found|404|NoSuchKey/i.test(msg);
-const tmpFor = (tag, key) => path.join(os.tmpdir(), `r2-${tag}-${key.replace(/[/\\]/g, '_')}`);
+// pid + monotonic counter keeps temp paths unique across concurrent ops / parallel calls.
+let tmpSeq = 0;
+const tmpFor = (tag, key) => path.join(os.tmpdir(), `r2-${tag}-${process.pid}-${tmpSeq++}-${key.replace(/[/\\]/g, '_')}`);
 
 // --- S3 transport (curl + SigV4) ---------------------------------------------------
 

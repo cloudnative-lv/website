@@ -79,7 +79,7 @@ export async function renderCommunityReport({ crmRows, rostersBySlug, eventMeta 
   // − 3 organizers − the event's non-organizer speakers (present regardless of registration).
   const actualOf = (slug) => {
     const a = eventMeta.get(slug)?.attendance;
-    return Number.isFinite(a) ? (a + 1) - 3 - speakersNotOrg(slug).length : null;
+    return Number.isFinite(a) ? Math.max(0, (a + 1) - 3 - speakersNotOrg(slug).length) : null;
   };
 
   // --- Per-event analysis (community only) ---

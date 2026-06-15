@@ -12,11 +12,11 @@ function parseSpeakers(txt) {
   const names = new Set();
   let inList = false, listIndent = 0;
   for (const line of txt.split('\n')) {
-    const inline = line.match(/^\s+speakers:\s*\[([^\]]+)\]/);
+    const inline = line.match(/^\s*speakers:\s*\[([^\]]+)\]/);
     if (inline) { for (const m of inline[1].split(',')) { const n = m.trim().replace(/^["']|["']$/g, ''); if (n) names.add(n); } inList = false; continue; }
-    const single = line.match(/^\s+speaker:\s*"?([^"\n]+?)"?\s*$/);
+    const single = line.match(/^\s*speaker:\s*"?([^"\n]+?)"?\s*$/);
     if (single) { names.add(single[1].trim()); inList = false; continue; }
-    const listStart = line.match(/^(\s+)speakers:\s*$/);
+    const listStart = line.match(/^(\s*)speakers:\s*$/);
     if (listStart) { inList = true; listIndent = listStart[1].length; continue; }
     if (inList) {
       const item = line.match(/^(\s+)-\s*"?([^"\n]+?)"?\s*$/);

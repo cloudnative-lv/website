@@ -130,9 +130,9 @@ export async function s3List(prefix = '') {
         lastModified: (m[1].match(/<LastModified>([\s\S]*?)<\/LastModified>/) || [])[1] || '',
       });
     }
-    token = /<IsTruncated>true<\/IsTruncated>/.test(xml)
-      ? (xml.match(/<NextContinuationToken>([\s\S]*?)<\/NextContinuationToken>/) || [])[1]
-      : null;
+    const truncated = /<IsTruncated>true<\/IsTruncated>/.test(xml);
+    token = truncated ? xmlDecode((xml.match(/<NextContinuationToken>([\s\S]*?)<\/NextContinuationToken>/) || [])[1] || '') : null;
+    if (truncated && !token) throw new Error(`S3 LIST ${prefix}: response truncated but NextContinuationToken missing`);
   } while (token);
   return out;
 }

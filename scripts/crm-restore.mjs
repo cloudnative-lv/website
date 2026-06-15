@@ -26,10 +26,14 @@ if (!keys.length) {
 }
 
 const incoming = [];
+let skipped = 0;
 for (const o of keys) {
-  const j = JSON.parse(await s3GetText(o.key));
-  if (j.email) incoming.push(makeContact({ email: j.email, source: j.source || 'web', added: String(j.ts || '').slice(0, 10) || undefined }));
+  const raw = await s3GetText(o.key);
+  let j; try { j = JSON.parse(raw); } catch { j = null; }
+  if (!j || !j.email) { skipped++; continue; }
+  incoming.push(makeContact({ email: j.email, source: j.source || 'web', added: String(j.ts || '').slice(0, 10) || undefined }));
 }
+if (skipped) console.warn(`Skipped ${skipped} unreadable/empty audit record(s).`);
 
 const crm = parseCrm(r2ReadText(CRM_KEY));
 const before = crm.size;

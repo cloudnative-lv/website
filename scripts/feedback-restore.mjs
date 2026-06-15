@@ -21,6 +21,10 @@ if (!s3Available()) {
 
 const WRITE = process.argv.includes('--write');
 const evArg = process.argv.includes('--event') ? process.argv[process.argv.indexOf('--event') + 1] : '';
+if (process.argv.includes('--event') && (!evArg || evArg.startsWith('--'))) {
+  console.error('--event requires a slug value, e.g. --event meetup-006-gpus-ai-agents');
+  process.exit(1);
+}
 const HEADER = ['timestamp', 'overall', 'talks', 'organization', 'topics', 'comments'];
 const rating = (v) => { const s = String(v ?? '').trim(); return /^[1-5]$/.test(s) ? s : ''; };
 
@@ -44,10 +48,12 @@ let totalAdded = 0;
 for (const [event, keys] of [...groups].sort()) {
   if (evArg && event !== evArg) continue;
 
-  // Incoming rows from the audit JSONs.
+  // Incoming rows from the audit JSONs (skip any unreadable/partial record rather than abort).
   const incoming = [];
   for (const k of keys) {
-    const j = JSON.parse(await s3GetText(k));
+    const raw = await s3GetText(k);
+    let j; try { j = JSON.parse(raw); } catch { j = null; }
+    if (!j || !j.ts) { console.warn(`Skipping unreadable audit record: ${k}`); continue; }
     incoming.push([j.ts, rating(j.overall), rating(j.talks), rating(j.organization), norm(j.topics), norm(j.comments)]);
   }
 
@@ -55,6 +61,12 @@ for (const [event, keys] of [...groups].sort()) {
   const all = parseCsv((await s3GetText(`feedback/${event}.csv`)) || '');
   const h = all.length ? all[0].map((s) => String(s).toLowerCase().trim()) : HEADER;
   const col = HEADER.map((c) => h.indexOf(c));
+  // A real CSV missing an expected column would map to index -1 → silently blank that field on
+  // rewrite. Skip the event rather than corrupt it.
+  if (all.length && col.some((i) => i < 0)) {
+    console.warn(`feedback/${event}.csv header missing columns (${HEADER.filter((_, i) => col[i] < 0).join(', ')}) — skipping.`);
+    continue;
+  }
   const existing = all.slice(1).filter((r) => r.length > 1).map((r) => HEADER.map((_, i) => norm(r[col[i]] ?? '')));
 
   const seen = new Set(existing.map((r) => r[0]));
