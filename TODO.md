@@ -10,3 +10,4 @@
 [ ] Add a more complete e2e video run to demonstrate full site in one video 
 [ ] Verify all OG images are correctly generated and displayed
 [ ] Add quiz functionality to event pages
+[ ] Publish search console/google index
