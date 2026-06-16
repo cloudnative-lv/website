@@ -1,0 +1,8 @@
+# https://cloudnative.lv — allow all crawlers, point them at the sitemap + feed.
+User-agent: *
+Allow: /
+
+# Internal, per-event feedback forms are noindex; keep them out of crawl too.
+Disallow: /events/*/feedback
+
+Sitemap: https://cloudnative.lv/sitemap.xml

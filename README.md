@@ -232,7 +232,7 @@ stale data. The S3 path is cache-immune and avoids that.)
 | `npm run generate:rss` | Build the events RSS feed → `dist/feed.xml` |
 | `npm run generate:sponsor-pdf` | Render the sponsor one-pager → `dist/sponsor-onepager.pdf` |
 | `npm run generate:sponsors-card` | Render the partners/supporters social card → `reports/sponsors/` |
-| `npm run prerender` | Bake per-route SEO/OG meta into static HTML (crawlers don't run JS) |
+| `npm run prerender` | Bake per-route SEO/OG meta into static HTML (crawlers don't run JS) + write `dist/sitemap.xml` |
 | `npm run test:unit` | Unit tests (`src/artifacts/*.test.js`) |
 | `npm run test:e2e` | Playwright E2E tests |
 

@@ -79,6 +79,9 @@ const routes = ['/', '/events', '/speakers', '/team', '/swag', '/sponsors', '/pr
 ];
 
 let done = 0;
+// Collect every prerendered URL so the XML sitemap lists exactly what we ship —
+// same source of truth as the static HTML, so the route list can't drift.
+const sitemap = [];
 for (const route of routes) {
   await page.goto(`${BASE}${route}`, { waitUntil: 'networkidle' });
   await page.waitForTimeout(300); // let the SEO effect set route-specific meta
@@ -99,9 +102,24 @@ for (const route of routes) {
   const dir = route === '/' ? DIST : path.join(DIST, route);
   await mkdir(dir, { recursive: true });
   await writeFile(path.join(dir, 'index.html'), inject(template, meta));
+  if (meta.url) sitemap.push({ loc: meta.url, lastmod: (meta.published || '').slice(0, 10) });
   done += 1;
   console.log(`✓ ${route} → og:image ${meta.image.replace(/^https?:\/\/[^/]+/, '')}`);
 }
+
+// Write the XML sitemap from the URLs collected above (lastmod only where the route
+// exposes a publish date, e.g. event/talk pages — Google ignores an empty one).
+const urls = sitemap
+  .map(({ loc, lastmod }) =>
+    `  <url>\n    <loc>${esc(loc)}</loc>${lastmod ? `\n    <lastmod>${lastmod}</lastmod>` : ''}\n  </url>`)
+  .join('\n');
+const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urls}
+</urlset>
+`;
+await writeFile(path.join(DIST, 'sitemap.xml'), xml);
+console.log(`✓ sitemap.xml (${sitemap.length} urls)`);
 
 await browser.close();
 console.log(`\nprerendered ${done} routes`);
