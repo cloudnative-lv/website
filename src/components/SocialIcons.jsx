@@ -88,6 +88,7 @@ export function SocialLink({ href, icon, title, className = "text-gray-400 hover
       rel={href.startsWith('mailto:') ? undefined : 'noopener noreferrer'}
       className={className}
       title={title}
+      aria-label={title}
     >
       {icon}
     </a>

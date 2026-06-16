@@ -54,7 +54,7 @@ export default function Navbar() {
       <div className="max-w-6xl mx-auto px-4">
         <div className="flex items-center gap-4 h-16">
           <Link to="/" className="flex items-center gap-2.5 shrink-0" aria-label="Cloud Native Latvia">
-            <img src="/images/logo.svg" alt="" className="h-9 md:h-10 w-auto shrink-0" />
+            <img src="/images/logo.svg" alt="Cloud Native Latvia logo" className="h-9 md:h-10 w-auto shrink-0" />
             <img
               src="/images/wordmark.svg"
               alt="Cloud Native Latvia"
