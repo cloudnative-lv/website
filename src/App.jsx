@@ -4,6 +4,7 @@ import { LanguageProvider } from './i18n/LanguageContext';
 import ErrorBoundary from './components/ErrorBoundary';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import ScrollToTop from './components/ScrollToTop';
 // Home is the landing route: loading it eagerly avoids a second network
 // round trip and a blank Suspense fallback on the most-visited page.
 import Home from './pages/Home';
@@ -31,6 +32,7 @@ function SiteLayout() {
   const location = useLocation();
   return (
     <div className="flex flex-col min-h-screen">
+      <ScrollToTop />
       <Navbar />
       <main className="grow">
         <Suspense fallback={<div className="min-h-screen bg-pink-light" />}>

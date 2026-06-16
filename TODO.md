@@ -7,7 +7,6 @@
 [ ] Explore using https://buffer.com/api for social media posting
 [ ] Automate campaign preparation for Zoho Campaigns or Send Grid
 [ ] Implement internal mini-crm for tracking leads and contacts deployed to Cloudflare as worker with data in R2/D1
-[ ] When clicking links - navigation stays on the same scroll position
 [ ] Add a more complete e2e video run to demonstrate full site in one video 
 [ ] Verify all OG images are correctly generated and displayed
 [ ] Add quiz functionality to event pages
