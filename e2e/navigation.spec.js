@@ -20,6 +20,19 @@ async function slowScroll(page, steps = 5) {
   await page.waitForTimeout(300);
 }
 
+// Assert a page's <h1> carries the expected title. Home's heading is an image
+// wordmark (<h1><img alt="Cloud Native Latvia"></h1>), so its title lives in the
+// img alt — i.e. the heading's accessible name — not in text content; every other
+// page has a plain text heading. Checking the accessible name covers both.
+async function expectHeading(page, title) {
+  const h1 = page.locator('h1');
+  if (await h1.locator('img').count()) {
+    await expect(h1).toHaveAccessibleName(title);
+  } else {
+    await expect(h1).toContainText(title);
+  }
+}
+
 const pages = [
   { path: '/', enTitle: /Cloud Native/, lvTitle: /Cloud Native/, name: 'Home' },
   { path: '/events', enTitle: 'Events', lvTitle: 'Pasākumi', name: 'Events' },
@@ -71,7 +84,7 @@ test.describe('Site Navigation', () => {
       await page.goto(p.path);
       // Routes are lazy-loaded: assert the page chunk actually mounted before
       // measuring scroll height, or we'd silently scroll the Suspense fallback.
-      await expect(page.locator('h1')).toContainText(p.enTitle);
+      await expectHeading(page, p.enTitle);
       await slowScroll(page, 5);
       await page.waitForTimeout(300);
     }
@@ -85,12 +98,12 @@ test.describe('Site Navigation', () => {
       // Switch to Latvian
       await page.click('button:has-text("LV")');
       await page.waitForTimeout(500);
-      await expect(page.locator('h1')).toContainText(p.lvTitle);
-      
+      await expectHeading(page, p.lvTitle);
+
       // Switch back to English
       await page.click('button:has-text("EN")');
       await page.waitForTimeout(500);
-      await expect(page.locator('h1')).toContainText(p.enTitle);
+      await expectHeading(page, p.enTitle);
     }
   });
 
@@ -100,13 +113,13 @@ test.describe('Site Navigation', () => {
       // English version - scroll
       await page.goto(p.path);
       await page.waitForTimeout(300);
-      await expect(page.locator('h1')).toContainText(p.enTitle);
+      await expectHeading(page, p.enTitle);
       await slowScroll(page, 2);
-      
+
       // Switch to Latvian - scroll
       await page.click('button:has-text("LV")');
       await page.waitForTimeout(300);
-      await expect(page.locator('h1')).toContainText(p.lvTitle);
+      await expectHeading(page, p.lvTitle);
       await slowScroll(page, 2);
       
       // Switch back to English for next page
