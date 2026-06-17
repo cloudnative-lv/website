@@ -130,7 +130,7 @@ export default function KitPage() {
               setHtmlBusy(true);
               try {
                 const { openHtmlDeck } = await import('./htmlDeck');
-                openHtmlDeck(event);
+                await openHtmlDeck(event);
               } finally {
                 setHtmlBusy(false);
               }

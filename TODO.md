@@ -1,6 +1,4 @@
 
-[ ] Generate QR codes for all social links and add them to the opening presentation
-[ ] Align PPTX for opening presentation with HTML opening presentation
 [ ] Document publishing process better on /kit index page
 [ ] Adjust all banners to match original design (maybe)
 [ ] Use OpenAI/Cloudflare Workers AI for generating text copy for events and speakers 

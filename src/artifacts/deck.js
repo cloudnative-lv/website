@@ -1,21 +1,30 @@
 import pptxgen from 'pptxgenjs';
 import { getSpeakerInfo } from '../data/speakers';
-import { meetupNumber, cleanTitle, dateDots, startTime, talkSpeakerNames, speakerRole, eventSchedule } from './fields';
+import { cleanTitle, startTime, talkSpeakerNames, eventSchedule } from './fields';
 import { allPartners } from '../data/partners';
-import { SOCIAL_LINKS } from '../data/socialLinks';
+import { connectSocials } from '../data/socialLinks';
+import { filledIconSvg, emailIconSvg } from './deckIcons';
 import QRCode from 'qrcode';
 
 const BURGUNDY = '8B1538';
 const PINK = 'D4567C';
-const ROSE = 'FDF2F4'; // bg-rose-50, matches the banners/infographics cream
+const ROSE = 'FDF2F4'; // bg-rose-50, the cream backdrop
+const INK = '303030';   // dark heading/body text (matching the original deck)
 const W = 13.333; // LAYOUT_WIDE inches (16:9)
 const H = 7.5;
 const FONT_TITLE = 'Lexend Light';
 const FONT_BODY = 'Lexend';
 
+// Existing brand SVGs, reused so the deck matches the site / banners / HTML deck.
+const SKYLINE = '/images/brand/skyline.svg';
+const LOGO = '/images/logo-stacked.svg';
+const ANDREY = '/images/stickers/sticker_andrey.svg';
+const LINDA = '/images/stickers/sticker_linda.svg';
+
+const socialUrl = (href) => (/^https?:|^mailto:/.test(href) ? href : `https://cloudnative.lv${href}`);
+
 // Fetch an image as a data URL for embedding; returns null on failure so a
-// missing/unsupported asset never breaks the whole deck (e.g. artifacts that
-// only exist after a build, or in dev).
+// missing/unsupported asset never breaks the whole deck.
 async function loadImage(url) {
   try {
     const res = await fetch(url);
@@ -32,9 +41,8 @@ async function loadImage(url) {
   }
 }
 
-// Like loadImage but also returns the image's natural pixel size, so logos can be placed at
-// their true aspect ratio (pptxgenjs `sizing: contain` stretches our wide wordmarks to fill
-// the box instead of honouring the ratio).
+// Like loadImage but also returns the image's natural pixel size, so logos can be
+// placed at their true aspect ratio.
 async function loadImageSized(url) {
   const data = await loadImage(url);
   if (!data) return null;
@@ -47,10 +55,72 @@ async function loadImageSized(url) {
   return { data, ...dims };
 }
 
-// Build and download an opening deck (.pptx) that matches the real Cloud Native
-// Latvia presentation style: Lexend fonts, cream background with Riga skyline,
-// centered headings, time-based agenda, "Next up:" talk slides with speaker
-// photos, social connect slide, and branded feedback QR.
+// Rasterise an SVG (by URL or inline markup) to a PNG data URL at w×h CSS px.
+// `stretch` ignores aspect ratio (used for the skyline strip); otherwise the art
+// is contained, centered. PowerPoint embeds the resulting PNG reliably.
+async function svgToPng(srcOrMarkup, w, h, { stretch = false, markup = false } = {}) {
+  try {
+    const svgText = markup ? srcOrMarkup : await (await fetch(srcOrMarkup)).text();
+    const url = URL.createObjectURL(new Blob([svgText], { type: 'image/svg+xml' }));
+    const img = await new Promise((resolve, reject) => {
+      const i = new Image();
+      i.onload = () => resolve(i);
+      i.onerror = reject;
+      i.src = url;
+    });
+    const scale = 2;
+    const cw = Math.round(w * scale), ch = Math.round(h * scale);
+    const canvas = document.createElement('canvas');
+    canvas.width = cw; canvas.height = ch;
+    const ctx = canvas.getContext('2d');
+    if (stretch) {
+      ctx.drawImage(img, 0, 0, cw, ch);
+    } else {
+      const ar = (img.naturalWidth || 1) / (img.naturalHeight || 1);
+      let dw = cw, dh = cw / ar;
+      if (dh > ch) { dh = ch; dw = ch * ar; }
+      ctx.drawImage(img, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
+    }
+    URL.revokeObjectURL(url);
+    return canvas.toDataURL('image/png');
+  } catch {
+    return null;
+  }
+}
+
+// Agenda rows split into time + label so talks can be coloured burgundy.
+function agendaRows(event, talks) {
+  const sched = eventSchedule(event);
+  if (sched.length >= 3) {
+    return sched.map((s) => ({ time: s.time, label: s.label, isTalk: s.isTalk, isDim: /break|doors\s*close/i.test(s.label) }));
+  }
+  const rows = [];
+  const doorTime = event.time || '18:00';
+  const talkStart = startTime(event) || doorTime;
+  rows.push({ time: doorTime, label: 'Doors open' });
+  rows.push({ time: talkStart, label: 'Welcome by Cloud Native Latvia  ← we are here' });
+  talks.forEach((t, i) => {
+    const names = talkSpeakerNames(t).join(', ');
+    const mins = parseInt(talkStart.split(':')[1] || '0', 10) + 15 + i * 60;
+    const hrs = parseInt(talkStart.split(':')[0] || '18', 10) + Math.floor(mins / 60);
+    const mm = String(mins % 60).padStart(2, '0');
+    rows.push({ time: `${hrs}:${mm}`, label: names ? `${t.title} by ${names}` : t.title, isTalk: true });
+    if (i < talks.length - 1) {
+      const bMins = mins + 45;
+      const bHrs = parseInt(talkStart.split(':')[0] || '18', 10) + Math.floor(bMins / 60);
+      const bMm = String(bMins % 60).padStart(2, '0');
+      rows.push({ time: `${bHrs}:${bMm}`, label: 'Break with snacks', isDim: true });
+    }
+  });
+  rows.push({ time: event.endTime || '21:00', label: 'Doors close', isDim: true });
+  return rows;
+}
+
+// Build and download an opening deck (.pptx) matching the Cloud Native Latvia
+// opening presentation: cream + Riga skyline chrome, Lexend fonts, centered
+// light headings, time-based agenda (talks in burgundy), organizer intro,
+// "Next up:" burgundy speaker cards, sponsors, a "How to connect?" slide with
+// platform icons + QR codes, a feedback QR, and a thank-you.
 export async function downloadDeck(event) {
   const pptx = new pptxgen();
   pptx.layout = 'LAYOUT_WIDE';
@@ -58,218 +128,154 @@ export async function downloadDeck(event) {
   pptx.company = 'Cloud Native Latvia';
   pptx.title = cleanTitle(event.title);
 
-  const base = `/artifacts/${event.id}`;
   const talks = event.talks || [];
 
-  // Shared cream + skyline + logo background for text slides.
-  const deckBg = await loadImage('/artifacts/brand/deck-bg.png');
-  const textSlide = () => {
+  // Pre-rasterise the shared brand SVGs once.
+  const [logoPng, skylineStrip, skylineTall, andreyPng, lindaPng] = await Promise.all([
+    svgToPng(LOGO, 600, 600),
+    svgToPng(SKYLINE, 2400, 420, { stretch: true }),
+    svgToPng(SKYLINE, 2400, 1100, { stretch: true }),
+    svgToPng(ANDREY, 760, 912),
+    svgToPng(LINDA, 760, 912),
+  ]);
+
+  // Cream slide + skyline strip along the foot + stacked logo bottom-right.
+  const SKY_H = 1.55, LOGO_SZ = 1.5;
+  const chrome = (s) => {
+    if (skylineStrip) s.addImage({ data: skylineStrip, x: 0, y: H - SKY_H, w: W, h: SKY_H });
+    if (logoPng) s.addImage({ data: logoPng, x: W - LOGO_SZ - 0.35, y: H - LOGO_SZ - 0.15, w: LOGO_SZ, h: LOGO_SZ });
+  };
+  const contentSlide = () => {
     const s = pptx.addSlide();
     s.background = { color: ROSE };
-    if (deckBg) s.addImage({ data: deckBg, x: 0, y: 0, w: W, h: H });
+    chrome(s);
     return s;
   };
+  const heading = (s, text, opts = {}) => s.addText(text, {
+    x: 0, y: 0.55, w: W, h: 1.0, fontSize: 32, fontFace: FONT_TITLE, color: INK, align: 'center', ...opts,
+  });
 
-  // --- 1) Title — the event banner, full-bleed (fallback: text on cream bg).
-  const titleImg = await loadImage(`${base}/linkedin-event-speakers.png`);
-  if (titleImg) {
-    const t = pptx.addSlide();
-    t.background = { color: ROSE };
-    t.addImage({ data: titleImg, x: 0, y: 0, w: W, h: H });
-  } else {
-    const t = textSlide();
-    t.addText(`Meetup #${meetupNumber(event)}`, {
-      x: 0, y: 1.8, w: W, h: 1.2, fontSize: 48, bold: true, fontFace: FONT_TITLE, color: BURGUNDY, align: 'center',
-    });
-    t.addText(cleanTitle(event.title), {
-      x: 1.5, y: 3.1, w: W - 3, h: 1.0, fontSize: 28, fontFace: FONT_BODY, color: '333333', align: 'center',
-    });
-    t.addText(`${dateDots(event.date)}  ·  ${event.venue?.name || ''}`, {
-      x: 1.5, y: 4.2, w: W - 3, h: 0.5, fontSize: 18, fontFace: FONT_BODY, color: '777777', align: 'center',
-    });
-  }
+  // --- 1) Title — big stacked logo over the skyline (branding only).
+  const t = pptx.addSlide();
+  t.background = { color: ROSE };
+  if (skylineTall) t.addImage({ data: skylineTall, x: 0, y: H - 4.65, w: W, h: 4.65 });
+  if (logoPng) t.addImage({ data: logoPng, x: (W - 5.2) / 2, y: 0.9, w: 5.2, h: 5.2 });
 
-  // --- 2) Agenda — time-based format matching the real deck.
-  const ag = textSlide();
+  // --- 2) Agenda — time-based; talk titles in burgundy.
+  const ag = contentSlide();
   ag.addText([
-    { text: 'AGENDA\n', options: { fontSize: 28, bold: true, color: BURGUNDY, fontFace: FONT_TITLE } },
-    { text: "of today's meetup", options: { fontSize: 14, color: '777777', fontFace: FONT_TITLE } },
-  ], { x: 0, y: 0.4, w: W, h: 1.1, align: 'center' });
-
-  // Build time-based agenda lines from event description or talks.
-  const agendaLines = buildAgendaLines(event, talks);
+    { text: 'AGENDA', options: { fontSize: 34, fontFace: FONT_TITLE, color: INK, breakLine: true } },
+    { text: "of today's meetup", options: { fontSize: 15, italic: true, color: '666666', fontFace: FONT_TITLE } },
+  ], { x: 0, y: 0.45, w: W, h: 1.2, align: 'center' });
+  const rows = agendaRows(event, talks);
   ag.addText(
-    agendaLines.map((line) => ({
-      text: line.text + '\n',
-      options: {
-        fontSize: line.highlight ? 18 : 15,
-        fontFace: line.highlight ? FONT_BODY : FONT_TITLE,
-        bold: line.highlight,
-        color: line.dim ? '999999' : '303030',
-        paraSpaceAfter: 6,
-      },
-    })),
-    { x: 1.8, y: 1.8, w: W - 3.6, h: 5.0, valign: 'top' },
+    rows.flatMap((r) => {
+      const labelColor = r.isTalk ? BURGUNDY : (r.isDim ? '999999' : INK);
+      const [main, here] = r.label.split('←');
+      const runs = [
+        { text: `${r.time}:  `, options: { bold: true, color: r.isDim ? '999999' : INK, fontFace: FONT_BODY } },
+        { text: main.trim(), options: { bold: r.isTalk, color: labelColor, fontFace: r.isTalk ? FONT_BODY : FONT_TITLE } },
+      ];
+      if (here) runs.push({ text: `  ← ${here.trim()}`, options: { italic: true, color: INK, fontFace: FONT_TITLE } });
+      runs[runs.length - 1].options.breakLine = true;
+      runs[runs.length - 1].options.paraSpaceAfter = 10;
+      return runs;
+    }),
+    { x: 1.7, y: 1.95, w: W - 3.0, h: 4.5, fontSize: 17, valign: 'top' },
   );
 
-  // --- 3) "Next up:" slide per talk — speaker photo + title.
-  for (let i = 0; i < talks.length; i++) {
-    const t = talks[i];
-    const names = talkSpeakerNames(t);
+  // --- 3) Organizers intro — Andrey & Linda.
+  const intro = contentSlide();
+  if (andreyPng) intro.addImage({ data: andreyPng, x: 2.7, y: 1.0, w: 3.0, h: 3.6 });
+  if (lindaPng) intro.addImage({ data: lindaPng, x: 7.7, y: 1.0, w: 3.0, h: 3.6 });
+  intro.addText('ANDREY', { x: 2.2, y: 4.7, w: 4.0, h: 0.6, fontSize: 26, bold: true, color: BURGUNDY, fontFace: FONT_BODY, align: 'center' });
+  intro.addText('LINDA', { x: 7.2, y: 4.7, w: 4.0, h: 0.6, fontSize: 26, bold: true, color: PINK, fontFace: FONT_BODY, align: 'center' });
 
-    // Try the generated speaker banner first.
-    const banner = names.length ? await loadImage(`${base}/speaker-${i + 1}.png`) : null;
-    if (banner) {
-      const s = pptx.addSlide();
-      s.background = { color: ROSE };
-      s.addImage({ data: banner, x: 0, y: 0, w: W, h: H });
-    } else {
-      const s = textSlide();
-      // "Next up:" heading
-      s.addText('Next up:', {
-        x: 0, y: 0.5, w: W, h: 0.7, fontSize: 28, fontFace: FONT_TITLE, color: BURGUNDY, align: 'center',
-      });
-      // Talk title
-      s.addText(t.title, {
-        x: 1.5, y: 1.5, w: W - 3, h: 1.2, fontSize: 24, fontFace: FONT_BODY, bold: true, color: '303030', align: 'center',
-      });
-      // Speaker photos + names
-      if (names.length) {
-        const photoSize = names.length === 1 ? 2.2 : 1.8;
-        const totalW = names.length * photoSize + (names.length - 1) * 0.8;
-        const startX = (W - totalW) / 2;
-        const photoY = 3.2;
-
-        for (let j = 0; j < names.length; j++) {
-          const info = getSpeakerInfo(names[j]);
-          const cx = startX + j * (photoSize + 0.8);
-
-          // Try speaker photo
-          if (info.photo) {
-            const photo = await loadImage(info.photo);
-            if (photo) {
-              s.addImage({ data: photo, x: cx, y: photoY, w: photoSize, h: photoSize, rounding: true });
-            }
-          }
-          // Speaker name + role below photo
-          s.addText(names[j], {
-            x: cx - 0.5, y: photoY + photoSize + 0.2, w: photoSize + 1, h: 0.4,
-            fontSize: 14, fontFace: FONT_BODY, bold: true, color: BURGUNDY, align: 'center',
-          });
-          const role = speakerRole(info);
-          if (role) {
-            s.addText(role, {
-              x: cx - 0.5, y: photoY + photoSize + 0.55, w: photoSize + 1, h: 0.35,
-              fontSize: 11, fontFace: FONT_TITLE, italic: true, color: '666666', align: 'center',
-            });
-          }
-        }
-      }
-    }
-  }
-
-  // --- 4) Partners (logos + names).
+  // --- 4) Sponsors.
   if (allPartners.length) {
     const logos = await Promise.all(allPartners.map((p) => loadImageSized(p.logo)));
-    const pa = textSlide();
-    pa.addText('Sponsors', {
-      x: 0, y: 0.5, w: W, h: 0.8, fontSize: 28, fontFace: FONT_TITLE, bold: true, color: BURGUNDY, align: 'center',
-    });
+    const sp = contentSlide();
+    heading(sp, 'Sponsors');
     const cellW = Math.min(3.0, (W - 3) / allPartners.length);
     const totalW = cellW * allPartners.length;
     const startX = (W - totalW) / 2;
-    const boxW = cellW - 0.6, boxH = 1.6, boxY = 2.2;
+    const boxW = cellW - 0.6, boxH = 1.7, boxY = 2.6;
     allPartners.forEach((p, i) => {
       const x = startX + i * cellW;
       const L = logos[i];
       if (L) {
-        // Fit within the cell box at the logo's real aspect ratio, centred.
         const scale = Math.min(boxW / L.w, boxH / L.h);
         const w = L.w * scale, h = L.h * scale;
-        pa.addImage({ data: L.data, x: x + 0.3 + (boxW - w) / 2, y: boxY + (boxH - h) / 2, w, h });
+        sp.addImage({ data: L.data, x: x + 0.3 + (boxW - w) / 2, y: boxY + (boxH - h) / 2, w, h });
       }
-      pa.addText(p.name, { x, y: 4.0, w: cellW, h: 0.4, fontSize: 12, fontFace: FONT_BODY, align: 'center', color: '666666' });
     });
+    sp.addText('Wanna join?', { x: 0, y: 4.7, w: W, h: 0.6, fontSize: 24, bold: true, color: INK, fontFace: FONT_BODY, align: 'center' });
   }
 
-  // --- 5) How to connect? — social links.
-  const co = textSlide();
-  co.addText('How to connect?', {
-    x: 0, y: 0.5, w: W, h: 0.8, fontSize: 28, fontFace: FONT_TITLE, bold: true, color: BURGUNDY, align: 'center',
-  });
-  co.addText('hello@cloudnative.lv', {
-    x: 0, y: 1.5, w: W, h: 0.5, fontSize: 20, fontFace: FONT_TITLE, color: PINK, align: 'center',
-  });
-  const socials = SOCIAL_LINKS.filter((s) => ['linkedin', 'bluesky', 'youtube', 'cncf', 'eventbrite'].includes(s.key));
-  co.addText(
-    socials.flatMap((s, i) => [
-      ...(i ? [{ text: '    ·    ', options: { color: '999999' } }] : []),
-      { text: s.title, options: { color: BURGUNDY, fontFace: FONT_BODY, hyperlink: { url: s.href } } },
-    ]),
-    { x: 1.5, y: 2.6, w: W - 3, h: 0.5, fontSize: 16, align: 'center' },
-  );
-  co.addText('cloudnative.lv', {
-    x: 0, y: 3.5, w: W, h: 0.5, fontSize: 22, fontFace: FONT_BODY, bold: true, color: BURGUNDY, align: 'center',
-    hyperlink: { url: 'https://cloudnative.lv' },
+  // --- 5) How to connect? — email + platform icon/label/QR.
+  const socials = connectSocials();
+  const [iconPngs, qrPngs, emailPng] = await Promise.all([
+    Promise.all(socials.map((s) => svgToPng(filledIconSvg(s.key, '#8B1538', '100'), 100, 100, { markup: true }))),
+    Promise.all(socials.map((s) => QRCode.toDataURL(socialUrl(s.href), { margin: 1, width: 600, color: { dark: `#${BURGUNDY}`, light: '#ffffff' } }).catch(() => null))),
+    svgToPng(emailIconSvg('#8B1538', '100'), 100, 100, { markup: true }),
+  ]);
+  const co = contentSlide();
+  heading(co, 'How to connect?');
+  if (emailPng) co.addImage({ data: emailPng, x: W / 2 - 2.5, y: 1.62, w: 0.42, h: 0.42 });
+  co.addText('hello@cloudnative.lv', { x: W / 2 - 2.0, y: 1.55, w: 4.5, h: 0.6, fontSize: 22, fontFace: FONT_TITLE, color: BURGUNDY, align: 'left', valign: 'middle' });
+  const n = socials.length;
+  const colW = 2.5, qr = 1.5;
+  const rowW = n * colW;
+  const sx = (W - rowW) / 2;
+  socials.forEach((s, i) => {
+    const cx = sx + i * colW + colW / 2;
+    if (iconPngs[i]) co.addImage({ data: iconPngs[i], x: cx - 0.28, y: 2.5, w: 0.56, h: 0.56, hyperlink: { url: socialUrl(s.href) } });
+    co.addText(s.title, { x: cx - colW / 2, y: 3.12, w: colW, h: 0.35, fontSize: 13, bold: true, color: BURGUNDY, fontFace: FONT_BODY, align: 'center', hyperlink: { url: socialUrl(s.href) } });
+    if (qrPngs[i]) co.addImage({ data: qrPngs[i], x: cx - qr / 2, y: 3.55, w: qr, h: qr, hyperlink: { url: socialUrl(s.href) } });
   });
 
-  // --- 6) Feedback QR (optional — skipped if generation fails).
+  // --- 6) "Next up:" per talk — burgundy speaker cards (shown between talks at the event).
+  for (const talk of talks) {
+    const names = talkSpeakerNames(talk);
+    const s = contentSlide();
+    s.addText('Next up:', { x: 0, y: 0.5, w: W, h: 0.7, fontSize: 30, fontFace: FONT_TITLE, color: INK, align: 'center' });
+    s.addText(talk.title, { x: 1.5, y: 1.3, w: W - 3, h: 1.1, fontSize: 24, bold: true, color: INK, fontFace: FONT_BODY, align: 'center' });
+
+    const cardW = 9.4, cardH = 1.45, gap = 0.3;
+    const totalH = names.length * cardH + (names.length - 1) * gap;
+    let cy = 2.7 + Math.max(0, (2.6 - totalH) / 2);
+    for (const name of names) {
+      const info = getSpeakerInfo(name);
+      const cardX = (W - cardW) / 2;
+      s.addShape(pptx.ShapeType.roundRect, { x: cardX + 0.7, y: cy, w: cardW - 0.7, h: cardH, fill: { color: BURGUNDY }, line: { type: 'none' }, rectRadius: 0.12 });
+      const photoD = cardH + 0.2;
+      const photo = info.photo ? await loadImage(info.photo) : null;
+      if (photo) {
+        s.addImage({ data: photo, x: cardX, y: cy + (cardH - photoD) / 2, w: photoD, h: photoD, rounding: true });
+      }
+      const tx = cardX + photoD + 0.35;
+      s.addText(name, { x: tx, y: cy + 0.18, w: cardW - (photoD + 0.6), h: 0.5, fontSize: 20, bold: true, color: 'FFFFFF', fontFace: FONT_BODY, align: 'left', valign: 'middle' });
+      const sub = [info.title, info.company ? `@ ${info.company}` : ''].filter(Boolean).join('\n');
+      if (sub) s.addText(sub, { x: tx, y: cy + 0.66, w: cardW - (photoD + 0.6), h: 0.7, fontSize: 13, italic: true, color: 'F2D3DC', fontFace: FONT_TITLE, align: 'left', valign: 'top', lineSpacingMultiple: 1.05 });
+      cy += cardH + gap;
+    }
+  }
+
+  // --- 7) Feedback QR.
   try {
-    const qr = await QRCode.toDataURL(`https://cloudnative.lv/events/${event.slug}/feedback`, { margin: 1, width: 600, color: { dark: '#8B1538', light: '#ffffff' } });
-    const fb = textSlide();
-    fb.addText('Help us get better for future events!', {
-      x: 1.5, y: 1.0, w: W - 3, h: 0.7, fontSize: 24, fontFace: FONT_TITLE, color: '303030', align: 'center',
-    });
-    fb.addImage({ data: qr, x: (W - 3.0) / 2, y: 2.2, w: 3.0, h: 3.0 });
-    fb.addText(`cloudnative.lv/events/${event.slug}/feedback`, {
-      x: 1.5, y: 5.5, w: W - 3, h: 0.4, fontSize: 12, fontFace: FONT_TITLE, color: '999999', align: 'center',
-    });
+    const fbUrl = `https://cloudnative.lv/events/${event.slug}/feedback`;
+    const qrImg = await QRCode.toDataURL(fbUrl, { margin: 1, width: 600, color: { dark: `#${BURGUNDY}`, light: '#ffffff' } });
+    const fb = contentSlide();
+    fb.addText('Help us get better for future events!', { x: 1.5, y: 0.9, w: W - 3, h: 0.7, fontSize: 26, fontFace: FONT_TITLE, color: INK, align: 'center' });
+    fb.addImage({ data: qrImg, x: (W - 2.6) / 2, y: 1.9, w: 2.6, h: 2.6 });
+    fb.addText(`cloudnative.lv/events/${event.slug}/feedback`, { x: 1.5, y: 4.7, w: W - 3, h: 0.4, fontSize: 13, fontFace: FONT_TITLE, color: '999999', align: 'center' });
   } catch { /* QR optional */ }
 
-  // --- 7) Thank you + event page link.
-  const cl = textSlide();
-  cl.addText('Thank you!', {
-    x: 0, y: 2.4, w: W, h: 1.2, fontSize: 48, fontFace: FONT_TITLE, bold: true, color: BURGUNDY, align: 'center',
-  });
-  cl.addText(`Slides & photos: cloudnative.lv/events/${event.slug}`, {
-    x: 1.5, y: 3.8, w: W - 3, h: 0.5, fontSize: 16, fontFace: FONT_TITLE, color: '777777', align: 'center',
-  });
+  // --- 8) Thank you.
+  const cl = pptx.addSlide();
+  cl.background = { color: BURGUNDY };
+  cl.addText('Thank you!', { x: 0, y: 2.6, w: W, h: 1.2, fontSize: 48, fontFace: FONT_TITLE, color: 'FFFFFF', align: 'center' });
+  cl.addText(`Slides & photos: cloudnative.lv/events/${event.slug}`, { x: 1.5, y: 3.9, w: W - 3, h: 0.5, fontSize: 16, fontFace: FONT_TITLE, color: 'F2D3DC', align: 'center' });
 
   await pptx.writeFile({ fileName: `${event.slug}-deck.pptx` });
-}
-
-// Build time-based agenda lines from the event's structured schedule, or fall back to
-// synthesizing from the talks if an event has none.
-function buildAgendaLines(event, talks) {
-  const sched = eventSchedule(event);
-  if (sched.length >= 3) {
-    return sched.map((s) => ({ text: `${s.time}:  ${s.label}`, highlight: s.isTalk, dim: /break|doors\s*close/i.test(s.label) }));
-  }
-
-  // Fallback: synthesize from event time + talks.
-  const lines = [];
-  const doorTime = event.time || '18:00';
-  const talkStart = startTime(event) || doorTime;
-  lines.push({ text: `${doorTime}:  Doors open`, highlight: false, dim: false });
-  lines.push({ text: `${talkStart}:  Welcome by Cloud Native Latvia  ← we are here`, highlight: true, dim: false });
-
-  talks.forEach((t, i) => {
-    const names = talkSpeakerNames(t).join(', ');
-    const suffix = names ? ` by ${names}` : '';
-    // Estimate time offset (15 min welcome + 45 min per talk + 15 min break).
-    const mins = parseInt(talkStart.split(':')[1] || '0', 10) + 15 + i * 60;
-    const hrs = parseInt(talkStart.split(':')[0] || '18', 10) + Math.floor(mins / 60);
-    const mm = String(mins % 60).padStart(2, '0');
-    lines.push({ text: `${hrs}:${mm}:  ${t.title}${suffix}`, highlight: false, dim: false });
-    if (i < talks.length - 1) {
-      const bMins = mins + 45;
-      const bHrs = parseInt(talkStart.split(':')[0] || '18', 10) + Math.floor(bMins / 60);
-      const bMm = String(bMins % 60).padStart(2, '0');
-      lines.push({ text: `${bHrs}:${bMm}:  Break with snacks`, highlight: false, dim: true });
-    }
-  });
-
-  const endTime = event.endTime || '21:00';
-  lines.push({ text: `${endTime}:  Doors close`, highlight: false, dim: true });
-  return lines;
 }
