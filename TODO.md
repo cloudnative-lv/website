@@ -1,6 +1,7 @@
 
 [ ] Document publishing process better on /kit index page
 [ ] Adjust all banners to match original design (maybe)
+[ ] Simplify technical documentation for publishing process/architecture
 [ ] Use OpenAI/Cloudflare Workers AI for generating text copy for events and speakers 
 [ ] Explore using https://buffer.com/api for social media posting
 [ ] Automate campaign preparation for Zoho Campaigns or Send Grid

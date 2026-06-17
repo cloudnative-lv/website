@@ -19,14 +19,15 @@ const LINDA = `${SITE}/images/stickers/sticker_linda.svg`;
 const abs = (href) => (/^https?:/.test(href) ? href : `${SITE}${href}`);
 const socialUrl = (href) => (/^https?:|^mailto:/.test(href) ? href : `${SITE}${href}`);
 
-// The skyline as an inline <svg><image preserveAspectRatio="none"> so it stretches
-// to fill its box (the source SVG's own preserveAspectRatio would otherwise letterbox
-// it). `extraClass` lets the title slide use a taller strip.
-const skylineEl = (extraClass = '') => `<svg class="skyline ${extraClass}" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><image href="${SKYLINE}" x="0" y="0" width="100" height="100" preserveAspectRatio="none"/></svg>`;
+// Content slides use the wide, short skyline composition (buildings on the left,
+// room for the logo on the right) — it sits as a thin footer strip without the
+// distortion a tall skyline would suffer when squeezed. The title slide uses the
+// tall skyline.svg at its natural proportions.
+const WIDE_SKYLINE = `${SITE}/images/brand/skyline-wide.png`;
 
 // Shared bottom chrome on content slides: the Riga skyline strip + the stacked logo
 // bottom-right, mirroring the original opening deck.
-const chrome = () => `${skylineEl()}<img class="deck-logo" src="${LOGO}" alt="Cloud Native Latvia" aria-hidden="true">`;
+const chrome = () => `<img class="skyline" src="${WIDE_SKYLINE}" alt="" aria-hidden="true"><img class="deck-logo" src="${LOGO}" alt="Cloud Native Latvia" aria-hidden="true">`;
 
 // Inline SVG QR for a connect link; embeds directly so the deck stays a single
 // self-contained file with no network dependency.
@@ -97,7 +98,7 @@ async function buildHtmlDeck(event) {
   const slides = [];
 
   // 1) Title — big centered logo over the skyline (branding only, like the original).
-  slides.push(`<section class="title"><img class="title-logo" src="${LOGO}" alt="Cloud Native Latvia">${skylineEl('title-skyline')}</section>`);
+  slides.push(`<section class="title"><img class="title-logo" src="${LOGO}" alt="Cloud Native Latvia"><img class="skyline title-skyline" src="${SKYLINE}" alt="" aria-hidden="true"></section>`);
 
   // 2) Agenda — time-based; talk titles in burgundy.
   slides.push(`<section class="agenda"><div class="content"><h1>AGENDA</h1><p class="sub">of today's meetup</p><ul>${agendaHtml(event, talks)}</ul></div>${chrome()}</section>`);
@@ -128,8 +129,9 @@ async function buildHtmlDeck(event) {
   const fbQr = await qrSvg(fbUrl);
   slides.push(`<section class="feedback"><div class="content"><h1>Help us get better for future events!</h1><div class="fb-qr">${fbQr}</div><p class="qr-url">${esc(`cloudnative.lv/events/${event.slug}/feedback`)}</p></div>${chrome()}</section>`);
 
-  // 8) Thank you
-  slides.push(`<section class="closing"><div class="content"><h1>Thank you!</h1><p class="dim">Slides &amp; photos: cloudnative.lv/events/${esc(event.slug)}</p></div></section>`);
+  // 8) Thank you — QR to the event page (slides & photos).
+  const eventQr = await qrSvg(`${SITE}/events/${event.slug}`);
+  slides.push(`<section class="closing"><div class="content"><h1>Thank you!</h1><div class="fb-qr">${eventQr}</div><p class="dim">Slides &amp; photos: cloudnative.lv/events/${esc(event.slug)}</p></div></section>`);
 
   const nav = "document.addEventListener('keydown',function(e){var s=[].slice.call(document.querySelectorAll('section'));var i=s.findIndex(function(el){return el.getBoundingClientRect().top>=-innerHeight/2});if(e.key==='ArrowRight'||e.key==='ArrowDown'||e.key===' '){e.preventDefault();(s[i+1]||s[i]).scrollIntoView({behavior:'smooth'})}if(e.key==='ArrowLeft'||e.key==='ArrowUp'){e.preventDefault();(s[Math.max(0,i-1)]).scrollIntoView({behavior:'smooth'})}});";
 
@@ -141,9 +143,9 @@ async function buildHtmlDeck(event) {
 body{font-family:'Lexend',system-ui,sans-serif;color:var(--ink);background:var(--rose);scroll-snap-type:y mandatory;overflow-y:scroll}
 section{position:relative;min-height:100vh;scroll-snap-align:start;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:7vh 8vw;text-align:center;overflow:hidden}
 .content{position:relative;z-index:2;width:100%;display:flex;flex-direction:column;align-items:center}
-/* Content slides: a short skyline strip along the bottom, stretched full-width
-   (vertically compressed, like the original deck). */
-.skyline{position:absolute;left:0;right:0;bottom:0;width:100%;height:clamp(108px,20vh,190px);z-index:0;pointer-events:none;user-select:none}
+/* Content slides: the wide skyline as a short footer strip (buildings to the
+   left, the logo sits over the open right side). */
+.skyline{position:absolute;left:0;right:0;bottom:0;width:100%;height:32vh;object-fit:fill;object-position:bottom;z-index:0;pointer-events:none;user-select:none}
 .deck-logo{position:absolute;right:3.5vw;bottom:3vh;width:clamp(96px,9vw,150px);height:auto;z-index:1;pointer-events:none}
 /* Section headings use Lexend Light (300), near-black — matching the original deck. */
 h1{font-size:clamp(30px,4.6vw,54px);font-weight:300;color:var(--ink);margin-bottom:.5em}
@@ -151,9 +153,9 @@ h1{font-size:clamp(30px,4.6vw,54px);font-weight:300;color:var(--ink);margin-bott
 /* Title */
 section.title{justify-content:center;padding:0 0 15vh}
 .title-logo{width:clamp(320px,46vw,720px);height:auto;z-index:2}
-/* Title skyline: full width along the bottom ~62% (so the wordmark clears the
-   building tops, like the original). */
-.title-skyline{height:62vh}
+/* Title skyline: the tall skyline.svg at its natural proportions, full width,
+   anchored to the bottom (overflow clipped) — undistorted, like the original. */
+.title-skyline{height:auto;object-fit:initial}
 /* Agenda */
 .agenda .sub{font-style:italic;color:#555;font-size:clamp(15px,1.7vw,21px);margin-top:-.4em;margin-bottom:1.6em}
 .agenda ul{list-style:none;text-align:left;font-size:clamp(15px,1.85vw,23px);line-height:1.85;max-width:64ch}
@@ -172,8 +174,10 @@ section.title{justify-content:center;padding:0 0 15vh}
 .next-label{font-size:clamp(22px,3.4vw,40px);font-weight:300;color:var(--ink);margin-bottom:.4em}
 .talk-title{font-size:clamp(22px,3vw,38px);font-weight:700;color:var(--ink);margin-bottom:1.1em;max-width:24ch;line-height:1.15}
 .cards{display:flex;flex-direction:column;gap:clamp(14px,2vh,26px);width:100%;max-width:760px}
-.spk-card{display:flex;align-items:center;gap:clamp(16px,2vw,30px);background:var(--burgundy);border-radius:14px;padding:clamp(12px,1.6vh,20px) clamp(24px,2.6vw,38px) clamp(12px,1.6vh,20px) clamp(120px,13vw,180px);position:relative;min-height:clamp(108px,16vh,160px)}
-.spk-photo{position:absolute;left:clamp(-30px,-2vw,-20px);width:clamp(104px,12vw,160px);height:clamp(104px,12vw,160px);border-radius:50%;object-fit:cover;border:4px solid var(--rose);box-shadow:0 3px 12px rgba(0,0,0,.25)}
+.spk-card{--ph:clamp(120px,13vw,172px);display:flex;align-items:center;background:var(--burgundy);border-radius:14px;padding:clamp(10px,1.4vh,16px) clamp(24px,2.6vw,38px) clamp(10px,1.4vh,16px) calc(var(--ph) / 2 + 28px);position:relative;min-height:clamp(92px,13vh,132px)}
+/* Photo centered on the card's left edge (half over the card, half over cream)
+   and a touch taller than the bar, so no burgundy corner peeks past the circle. */
+.spk-photo{position:absolute;left:calc(var(--ph) / -2);top:50%;transform:translateY(-50%);width:var(--ph);height:var(--ph);border-radius:50%;object-fit:cover;border:4px solid var(--rose);box-shadow:0 3px 12px rgba(0,0,0,.25)}
 .spk-photo--blank{background:#b07487}
 .spk-meta{text-align:left;color:#fff}
 .spk-name{font-size:clamp(18px,2.2vw,30px);font-weight:700}

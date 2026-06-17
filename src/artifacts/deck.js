@@ -16,7 +16,8 @@ const FONT_TITLE = 'Lexend Light';
 const FONT_BODY = 'Lexend';
 
 // Existing brand SVGs, reused so the deck matches the site / banners / HTML deck.
-const SKYLINE = '/images/brand/skyline.svg';
+const SKYLINE = '/images/brand/skyline.svg';      // tall skyline (title slide, natural aspect)
+const WIDE_SKYLINE = '/images/brand/skyline-wide.png'; // wide skyline (content footer strips)
 const LOGO = '/images/logo-stacked.svg';
 const ANDREY = '/images/stickers/sticker_andrey.svg';
 const LINDA = '/images/stickers/sticker_linda.svg';
@@ -130,19 +131,21 @@ export async function downloadDeck(event) {
 
   const talks = event.talks || [];
 
-  // Pre-rasterise the shared brand SVGs once.
-  const [logoPng, skylineStrip, skylineTall, andreyPng, lindaPng] = await Promise.all([
+  // Pre-rasterise the shared brand art once. The content strips use the wide
+  // skyline PNG (short, undistorted); the title uses the tall skyline at its
+  // natural proportions.
+  const [logoPng, skylineWide, skylineTall, andreyPng, lindaPng] = await Promise.all([
     svgToPng(LOGO, 600, 600),
-    svgToPng(SKYLINE, 2400, 420, { stretch: true }),
-    svgToPng(SKYLINE, 2400, 1100, { stretch: true }),
+    loadImage(WIDE_SKYLINE),
+    svgToPng(SKYLINE, 2000, 1333),
     svgToPng(ANDREY, 760, 912),
     svgToPng(LINDA, 760, 912),
   ]);
 
-  // Cream slide + skyline strip along the foot + stacked logo bottom-right.
-  const SKY_H = 1.55, LOGO_SZ = 1.5;
+  // Cream slide + wide skyline strip along the foot + stacked logo bottom-right.
+  const SKY_H = 2.4, LOGO_SZ = 1.5;
   const chrome = (s) => {
-    if (skylineStrip) s.addImage({ data: skylineStrip, x: 0, y: H - SKY_H, w: W, h: SKY_H });
+    if (skylineWide) s.addImage({ data: skylineWide, x: 0, y: H - SKY_H, w: W, h: SKY_H });
     if (logoPng) s.addImage({ data: logoPng, x: W - LOGO_SZ - 0.35, y: H - LOGO_SZ - 0.15, w: LOGO_SZ, h: LOGO_SZ });
   };
   const contentSlide = () => {
@@ -155,10 +158,12 @@ export async function downloadDeck(event) {
     x: 0, y: 0.55, w: W, h: 1.0, fontSize: 32, fontFace: FONT_TITLE, color: INK, align: 'center', ...opts,
   });
 
-  // --- 1) Title — big stacked logo over the skyline (branding only).
+  // --- 1) Title — big stacked logo over the skyline (branding only). The tall
+  // skyline sits full-width at natural proportions, anchored to the bottom.
   const t = pptx.addSlide();
   t.background = { color: ROSE };
-  if (skylineTall) t.addImage({ data: skylineTall, x: 0, y: H - 4.65, w: W, h: 4.65 });
+  const skyTallH = W / 1.5; // natural aspect of skyline.svg (1.5:1)
+  if (skylineTall) t.addImage({ data: skylineTall, x: 0, y: H - skyTallH, w: W, h: skyTallH });
   if (logoPng) t.addImage({ data: logoPng, x: (W - 5.2) / 2, y: 0.9, w: 5.2, h: 5.2 });
 
   // --- 2) Agenda — time-based; talk titles in burgundy.
@@ -241,22 +246,26 @@ export async function downloadDeck(event) {
     s.addText('Next up:', { x: 0, y: 0.5, w: W, h: 0.7, fontSize: 30, fontFace: FONT_TITLE, color: INK, align: 'center' });
     s.addText(talk.title, { x: 1.5, y: 1.3, w: W - 3, h: 1.1, fontSize: 24, bold: true, color: INK, fontFace: FONT_BODY, align: 'center' });
 
-    const cardW = 9.4, cardH = 1.45, gap = 0.3;
+    const cardW = 9.0, cardH = 1.35, gap = 0.28;
+    const photoD = cardH + 0.35; // circle is taller than the bar, like the original
     const totalH = names.length * cardH + (names.length - 1) * gap;
-    let cy = 2.7 + Math.max(0, (2.6 - totalH) / 2);
+    let cy = 2.5 + Math.max(0, (2.5 - totalH) / 2);
     for (const name of names) {
       const info = getSpeakerInfo(name);
       const cardX = (W - cardW) / 2;
-      s.addShape(pptx.ShapeType.roundRect, { x: cardX + 0.7, y: cy, w: cardW - 0.7, h: cardH, fill: { color: BURGUNDY }, line: { type: 'none' }, rectRadius: 0.12 });
-      const photoD = cardH + 0.2;
+      const photoX = cardX - photoD / 2; // photo centered on the card's left edge
+      const photoY = cy + (cardH - photoD) / 2;
+      s.addShape(pptx.ShapeType.roundRect, { x: cardX, y: cy, w: cardW, h: cardH, fill: { color: BURGUNDY }, line: { type: 'none' }, rectRadius: 0.12 });
       const photo = info.photo ? await loadImage(info.photo) : null;
       if (photo) {
-        s.addImage({ data: photo, x: cardX, y: cy + (cardH - photoD) / 2, w: photoD, h: photoD, rounding: true });
+        s.addShape(pptx.ShapeType.ellipse, { x: photoX - 0.05, y: photoY - 0.05, w: photoD + 0.1, h: photoD + 0.1, fill: { color: ROSE }, line: { type: 'none' } });
+        s.addImage({ data: photo, x: photoX, y: photoY, w: photoD, h: photoD, rounding: true });
       }
-      const tx = cardX + photoD + 0.35;
-      s.addText(name, { x: tx, y: cy + 0.18, w: cardW - (photoD + 0.6), h: 0.5, fontSize: 20, bold: true, color: 'FFFFFF', fontFace: FONT_BODY, align: 'left', valign: 'middle' });
+      const tx = cardX + photoD / 2 + 0.35;
+      const tw = cardW - (photoD / 2 + 0.6);
+      s.addText(name, { x: tx, y: cy + 0.16, w: tw, h: 0.5, fontSize: 20, bold: true, color: 'FFFFFF', fontFace: FONT_BODY, align: 'left', valign: 'middle' });
       const sub = [info.title, info.company ? `@ ${info.company}` : ''].filter(Boolean).join('\n');
-      if (sub) s.addText(sub, { x: tx, y: cy + 0.66, w: cardW - (photoD + 0.6), h: 0.7, fontSize: 13, italic: true, color: 'F2D3DC', fontFace: FONT_TITLE, align: 'left', valign: 'top', lineSpacingMultiple: 1.05 });
+      if (sub) s.addText(sub, { x: tx, y: cy + 0.62, w: tw, h: 0.7, fontSize: 13, italic: true, color: 'F2D3DC', fontFace: FONT_TITLE, align: 'left', valign: 'top', lineSpacingMultiple: 1.05 });
       cy += cardH + gap;
     }
   }
@@ -271,11 +280,17 @@ export async function downloadDeck(event) {
     fb.addText(`cloudnative.lv/events/${event.slug}/feedback`, { x: 1.5, y: 4.7, w: W - 3, h: 0.4, fontSize: 13, fontFace: FONT_TITLE, color: '999999', align: 'center' });
   } catch { /* QR optional */ }
 
-  // --- 8) Thank you.
+  // --- 8) Thank you — QR to the event page (slides & photos).
   const cl = pptx.addSlide();
   cl.background = { color: BURGUNDY };
-  cl.addText('Thank you!', { x: 0, y: 2.6, w: W, h: 1.2, fontSize: 48, fontFace: FONT_TITLE, color: 'FFFFFF', align: 'center' });
-  cl.addText(`Slides & photos: cloudnative.lv/events/${event.slug}`, { x: 1.5, y: 3.9, w: W - 3, h: 0.5, fontSize: 16, fontFace: FONT_TITLE, color: 'F2D3DC', align: 'center' });
+  cl.addText('Thank you!', { x: 0, y: 1.1, w: W, h: 1.1, fontSize: 44, fontFace: FONT_TITLE, color: 'FFFFFF', align: 'center' });
+  try {
+    const evQr = await QRCode.toDataURL(`https://cloudnative.lv/events/${event.slug}`, { margin: 1, width: 600, color: { dark: `#${BURGUNDY}`, light: '#ffffff' } });
+    const qrSz = 2.3, qrX = (W - qrSz) / 2, qrY = 2.5;
+    cl.addShape(pptx.ShapeType.roundRect, { x: qrX - 0.14, y: qrY - 0.14, w: qrSz + 0.28, h: qrSz + 0.28, fill: { color: 'FFFFFF' }, line: { type: 'none' }, rectRadius: 0.1 });
+    cl.addImage({ data: evQr, x: qrX, y: qrY, w: qrSz, h: qrSz });
+  } catch { /* QR optional */ }
+  cl.addText(`Slides & photos: cloudnative.lv/events/${event.slug}`, { x: 1.5, y: 5.3, w: W - 3, h: 0.5, fontSize: 15, fontFace: FONT_TITLE, color: 'F2D3DC', align: 'center' });
 
   await pptx.writeFile({ fileName: `${event.slug}-deck.pptx` });
 }
