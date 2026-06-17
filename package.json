@@ -34,7 +34,8 @@
     "crm:restore": "node --env-file-if-exists=.env scripts/crm-restore.mjs",
     "feedback:restore": "node --env-file-if-exists=.env scripts/feedback-restore.mjs",
     "r2:verify": "node --env-file-if-exists=.env scripts/r2-verify.mjs",
-    "rebuild": "node --env-file-if-exists=.env scripts/rebuild.mjs"
+    "rebuild": "node --env-file-if-exists=.env scripts/rebuild.mjs",
+    "fetch:fonts": "node scripts/fetch-fonts.mjs"
   },
   "dependencies": {
     "jszip": "^3.10.1",
